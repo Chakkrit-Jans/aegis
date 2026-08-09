@@ -41,8 +41,8 @@
   <h2>1. <span class="th">สิ่งที่ต้องมีก่อน</span><span class="en">Prerequisites</span></h2>
   <ol class="steps">
     <li><span class="th"><b>เป้าหมายรันอยู่</b>และ worker ยิงถึง — ทำตาม Book 02 หัวข้อ 7–8 (curl เห็น 200)</span><span class="en"><b>Targets are running</b> and reachable from the worker — follow Book 02 §7–8 (curl returns 200).</span></li>
-    <li><span class="th"><b>AI Provider</b> มีตัว default และกด Test ผ่านแล้ว (Book 01 §5)</span><span class="en"><b>AI Provider</b> has a default set and passes Test (Book 01 §5).</span></li>
-    <li><span class="th"><b>Worker</b> กด Health แล้วเห็นเครื่องมือครบ (Book 01 §6)</span><span class="en"><b>Worker</b> Health check shows the full toolset (Book 01 §6).</span></li>
+    <li><span class="th"><b>AI Provider</b> มีตัว default และกด Test ผ่านแล้ว (Book 01 §6)</span><span class="en"><b>AI Provider</b> has a default set and passes Test (Book 01 §6).</span></li>
+    <li><span class="th"><b>Worker</b> กด Health แล้วเห็นเครื่องมือครบ (Book 01 §7)</span><span class="en"><b>Worker</b> Health check shows the full toolset (Book 01 §7).</span></li>
   </ol>
   </section>
 
@@ -63,14 +63,14 @@
   <p><span class="th">ให้ AI ทำ recon แล้วสแกนช่องโหว่เว็บ — ครอบคลุมเฟส RECON และ VULN SCAN</span><span class="en">Have the AI recon then scan the web app — this covers the RECON and VULN SCAN phases.</span></p>
   <p><b><span class="th">วาง objective นี้:</span><span class="en">Paste this objective:</span></b></p>
   <pre><code>Assess the web application at host.docker.internal:3000 (OWASP Juice Shop,
-authorized lab). Do passive recon (dns, http probe, whatweb), map open ports
+authorized lab). Do recon (DNS lookup, HTTP probe), map open ports
 and services, then run a web vulnerability scan. For every issue call
 save_finding with evidence, business impact, a risk rating and a concrete
 remediation, then call generate_report.</code></pre>
   <ol class="steps">
     <li><span class="th">กด <span class="btn p">▶ Spawn session</span> — แผงขวาเริ่มสตรีมว่า AI อยู่เฟสไหน</span><span class="en">Press <span class="btn p">▶ Spawn session</span> — the right panel streams which phase the AI is in.</span></li>
     <li><span class="th">เมื่อถึง <code>nmap_scan</code> / <code>web_vuln_scan</code> จะมี<b>การ์ดอนุมัติเหลือง</b> — อ่านเหตุผล + คำสั่ง แล้วกด <span class="btn g">APPROVE</span></span><span class="en">On <code>nmap_scan</code> / <code>web_vuln_scan</code> a <b>yellow approval card</b> appears — read the rationale and command, then <span class="btn g">APPROVE</span>.</span></li>
-    <li><span class="th">passive tool (http_probe, whatweb) จะรันเองโดยไม่ขออนุมัติ</span><span class="en">Passive tools (http_probe, whatweb) run without asking.</span></li>
+    <li><span class="th">เฉพาะ tool ที่เป็น <b>passive</b> (<code>dns_lookup</code>) เท่านั้นที่รันเองโดยไม่ขออนุมัติ — <code>http_probe</code> เป็น <b>active</b> จึงมีการ์ดอนุมัติเช่นกัน</span><span class="en">Only <b>passive</b> tools (<code>dns_lookup</code>) run without asking — <code>http_probe</code> is <b>active</b>, so it also shows an approval card.</span></li>
   </ol>
   <figure class="screen">
     <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3000 · Session</span></div>

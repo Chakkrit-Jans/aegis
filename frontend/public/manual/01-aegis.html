@@ -141,7 +141,7 @@
   <section id="screens">
   <h2>5. <span class="th">แท็บหน้าจอทั้ง 5</span><span class="en">The five tabs</span></h2>
   <div class="cols">
-    <div class="card"><h4>Dashboard</h4><p><span class="th">หน้าแรกหลัง login — สรุปข้ามทุก engagement: KPI, findings แยก severity, งานรออนุมัติ, session ล่าสุด, worker health, กิจกรรมล่าสุด (auto-refresh 20 วิ) กดที่การ์ดเพื่อกระโดดไปงานนั้นใน Console</span><span class="en">The landing page — a cross-engagement overview: KPIs, findings by severity, pending approvals, recent sessions, worker health, recent activity (auto-refreshes every 20s). Click a card to jump to that engagement in the Console.</span></p></div>
+    <div class="card"><h4>Dashboard</h4><p><span class="th">หน้าแรกหลัง login — สรุปข้ามทุก engagement: KPI, โดนัท 3 วง (findings แยก severity/confidence + sessions แยก status), งานรออนุมัติ, session ล่าสุด, worker health, กิจกรรมล่าสุด (auto-refresh 20 วิ) กดที่รายการ pending approval หรือ recent session เพื่อกระโดดไปงานนั้นใน Console</span><span class="en">The landing page — a cross-engagement overview: KPIs, 3 donuts (findings by severity/confidence + sessions by status), pending approvals, recent sessions, worker health, recent activity (auto-refreshes every 20s). Click a pending-approval or recent-session item to jump to that engagement in the Console.</span></p></div>
     <div class="card"><h4>Console</h4><p><span class="th">ศูนย์กลาง: engagement, objective, spawn/stop, อนุมัติ, findings, รายงาน, ประวัติ</span><span class="en">The hub: engagements, objective, spawn/stop, approvals, findings, report, history.</span></p></div>
     <div class="card"><h4>Terminal</h4><p><span class="th">เชลล์ของ operator บน worker — ทุกคำสั่งถูก audit และยังอยู่ในขอบเขต</span><span class="en">An operator shell on the worker — every command is audited and stays in scope.</span></p></div>
     <div class="card"><h4>Desktop</h4><p><span class="th">เดสก์ท็อป XFCE ของ Kali ผ่าน noVNC (Burp, Firefox, GUI)</span><span class="en">The Kali XFCE desktop over noVNC (Burp, Firefox, GUI tools).</span></p></div>
@@ -165,21 +165,41 @@
         <div class="card" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--amber)">1</div><div class="muted" style="font-size:11px">Pending approvals</div></div>
         <div class="card" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--green)">15</div><div class="muted" style="font-size:11px">Total findings</div></div>
       </div>
-      <div class="grid2">
-        <div class="box" style="margin:0"><b style="color:var(--cyan);font-size:12px">Findings by confidence</b>
-          <div style="display:flex;gap:14px;align-items:center;margin-top:8px">
-            <svg width="90" height="90" viewBox="0 0 150 150" style="flex:none"><circle cx="75" cy="75" r="63" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="24"/><path d="M 75 12 A 63 63 0 1 1 49.4 17.4" fill="none" stroke="#39ff88" stroke-width="24"/><path d="M 49.4 17.4 A 63 63 0 0 1 75 12" fill="none" stroke="#ffb547" stroke-width="24"/><text x="75" y="72" text-anchor="middle" font-size="28" font-weight="700" fill="#e6f6ff">15</text><text x="75" y="90" text-anchor="middle" font-size="10" fill="#6b8299">FINDINGS</text></svg>
-            <div style="font-size:12px"><div>🟢 Certain <b>14</b> <span class="muted">93%</span></div><div>🟡 Firm <b>1</b> <span class="muted">7%</span></div><div style="opacity:.4">⚪ Tentative <b>0</b></div></div>
-          </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+        <div class="box" style="margin:0;flex:1;min-width:150px;text-align:center"><b style="color:var(--cyan);font-size:11px">Findings by severity</b>
+          <div style="margin-top:6px"><svg width="76" height="76" viewBox="0 0 150 150"><circle cx="75" cy="75" r="63" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="24"/><path d="M 75 12 A 63 63 0 1 1 28.2 32.8" fill="none" stroke="#ffb547" stroke-width="24"/><path d="M 28.2 32.8 A 63 63 0 0 1 75 12" fill="none" stroke="#39ff88" stroke-width="24"/><text x="75" y="86" text-anchor="middle" font-size="32" font-weight="700" fill="#e6f6ff">15</text></svg></div>
+          <div style="font-size:11px"><span style="color:#ffb547">●</span> Medium 13 · <span style="color:#39ff88">●</span> Low 2</div>
         </div>
+        <div class="box" style="margin:0;flex:1;min-width:150px;text-align:center"><b style="color:var(--cyan);font-size:11px">Findings by confidence</b>
+          <div style="margin-top:6px"><svg width="76" height="76" viewBox="0 0 150 150"><circle cx="75" cy="75" r="63" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="24"/><path d="M 75 12 A 63 63 0 1 1 49.4 17.4" fill="none" stroke="#39ff88" stroke-width="24"/><path d="M 49.4 17.4 A 63 63 0 0 1 75 12" fill="none" stroke="#ffb547" stroke-width="24"/><text x="75" y="86" text-anchor="middle" font-size="32" font-weight="700" fill="#e6f6ff">15</text></svg></div>
+          <div style="font-size:11px"><span style="color:#39ff88">●</span> Certain 14 · <span style="color:#ffb547">●</span> Firm 1</div>
+        </div>
+        <div class="box" style="margin:0;flex:1;min-width:150px;text-align:center"><b style="color:var(--cyan);font-size:11px">Sessions by status</b>
+          <div style="margin-top:6px"><svg width="76" height="76" viewBox="0 0 150 150"><circle cx="75" cy="75" r="63" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="24"/><path d="M 75 12 A 63 63 0 1 1 23.2 39.2" fill="none" stroke="#39ff88" stroke-width="24"/><path d="M 23.2 39.2 A 63 63 0 0 1 75 12" fill="none" stroke="#6b8299" stroke-width="24"/><text x="75" y="86" text-anchor="middle" font-size="32" font-weight="700" fill="#e6f6ff">13</text></svg></div>
+          <div style="font-size:11px"><span style="color:#39ff88">●</span> Done 11 · <span style="color:#6b8299">●</span> Stopped 2</div>
+        </div>
+      </div>
+      <div class="grid2">
         <div class="box" style="margin:0"><b style="color:var(--cyan);font-size:12px">⚠ Pending approvals</b>
           <div class="callout" style="margin-top:8px"><b>tcp_scan</b> · Post-AMS<br/><span style="font-size:11px">baseline port/service map…</span></div>
           <div class="muted" style="font-size:11px;margin-top:6px">คลิกเพื่อเปิดใน Console · click to open in Console</div>
         </div>
+        <div class="box" style="margin:0"><b style="color:var(--cyan);font-size:12px">Recent sessions</b>
+          <div class="rowline" style="border:none;font-size:12px"><span>Vuln Labs</span><span class="pill ok" style="font-size:10px">done</span></div>
+          <div class="rowline" style="font-size:12px"><span>Post-AMS</span><span class="pill warn" style="font-size:10px">waiting_approval</span></div>
+        </div>
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="box" style="margin:0"><b style="color:var(--cyan);font-size:12px">Worker health</b>
+          <div class="rowline" style="border:none;font-size:12px"><span>Primary Kali</span><span class="pill ok" style="font-size:10px">OK · 12 tools</span></div>
+        </div>
+        <div class="box" style="margin:0"><b style="color:var(--cyan);font-size:12px">Recent activity</b>
+          <div style="font-size:11px;margin-top:6px"><span class="muted">20:14 · admin</span><br/><b>approval.approve</b> <span class="muted">→ nmap_scan</span></div>
+        </div>
       </div>
     </div>
   </figure>
-  <figcaption><span class="th">Dashboard — KPI + โดนัท (ตัวอย่าง Findings by confidence) + งานรออนุมัติ</span><span class="en">The Dashboard — KPIs + donuts (Findings by confidence shown) + pending approvals</span></figcaption>
+  <figcaption><span class="th">Dashboard — KPI 4 การ์ด + โดนัท 3 วง (severity · confidence · sessions) + pending approvals / recent sessions / worker health / recent activity</span><span class="en">The Dashboard — 4 KPI cards + 3 donuts (severity · confidence · sessions) + pending approvals / recent sessions / worker health / recent activity</span></figcaption>
 
   <h3><span class="th">ปุ่ม ⓘ About — เวอร์ชัน, License &amp; บัญชี</span><span class="en">The ⓘ About button — versions, license &amp; account</span></h3>
   <p><span class="th">กลุ่มปุ่มมุมขวาบนคือ <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span> · กด <span class="btn">ⓘ About</span> เปิดหน้าต่างสรุปทั้งระบบ ซึ่ง<b>รวมการจัดการ Edition &amp; License ไว้ที่นี่</b> (ย้ายมาจากหน้า Settings) และดึงเวอร์ชันสด ๆ ตอนเปิด</span>
@@ -262,7 +282,7 @@
   <h2>8. <span class="th">ตั้งค่าเสริม — Proxy &amp; Telegram</span><span class="en">Optional — Proxy &amp; Telegram</span></h2>
   <p class="muted"><span class="th">สองตัวนี้เป็นตัวเลือกเสริม (ไม่ตั้งก็เดินงานได้) อยู่ในหน้า <span class="btn">Settings</span> เช่นกัน</span><span class="en">Both are optional (engagements run fine without them) and live in <span class="btn">Settings</span> too.</span></p>
 
-  <h3><span class="th">7.1 Proxy · Burp / Caido</span><span class="en">7.1 Proxy · Burp / Caido</span></h3>
+  <h3><span class="th">8.1 Proxy · Burp / Caido</span><span class="en">8.1 Proxy · Burp / Caido</span></h3>
   <p><span class="th">ส่ง web tool ที่เป็น active (<b>nuclei</b> และ <b>ffuf</b>) ผ่าน proxy ดักจับ เพื่อให้เห็น/บันทึกทุก request ใน Burp หรือ Caido — เครื่องมืออื่น (nmap, hydra, http_probe) ไม่ถูก route ผ่าน proxy</span>
   <span class="en">Route the active web tools (<b>nuclei</b> and <b>ffuf</b>) through an intercepting proxy so every request is visible/logged in Burp or Caido — other tools (nmap, hydra, http_probe) are not proxied.</span></p>
   <ol class="steps">
@@ -282,7 +302,7 @@
   <figcaption><span class="th">แผง Proxy — ชี้ nuclei/ffuf ไปที่ Burp บนเครื่อง host</span><span class="en">The Proxy panel — pointing nuclei/ffuf at Burp on the host</span></figcaption>
   <div class="box warn"><span class="tag">⚠ <span class="th">เข้าถึง host</span><span class="en">Reaching the host</span></span><span class="th"><code>host.docker.internal</code> คือชื่อที่ container ใช้เรียกเครื่อง host — ต้องเปิด Burp/Caido ให้ listen ที่ <code>0.0.0.0</code> (หรือ all interfaces) ไม่ใช่แค่ <code>127.0.0.1</code> ไม่งั้น worker จะต่อไม่ติด</span><span class="en"><code>host.docker.internal</code> is how a container addresses the host — set Burp/Caido to listen on <code>0.0.0.0</code> (all interfaces), not just <code>127.0.0.1</code>, or the worker can't connect.</span></div>
 
-  <h3><span class="th">7.2 Telegram Gateway</span><span class="en">7.2 Telegram Gateway</span></h3>
+  <h3><span class="th">8.2 Telegram Gateway</span><span class="en">8.2 Telegram Gateway</span></h3>
   <p><span class="th">รับการ์ดอนุมัติบนมือถือ พร้อมปุ่ม <b>✅ Approve / ⛔ Reject</b> — กดจากที่ไหนก็ได้ ไม่ต้องเปิดหน้าจอค้างไว้</span>
   <span class="en">Get approval cards on your phone with <b>✅ Approve / ⛔ Reject</b> buttons — act from anywhere without staying at the console.</span></p>
   <ol class="steps">
@@ -424,7 +444,7 @@
   <figure class="screen">
     <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3000 · Console</span></div>
     <div class="body">
-      <div class="ui-nav"><span class="ui-brand">AEGIS</span><span class="btn p">Console</span><span class="btn">Terminal</span><span class="btn">Desktop</span><span class="btn">Settings</span></div>
+      <div class="ui-nav"><span class="ui-brand">AEGIS</span><span class="btn">Dashboard</span><span class="btn p">Console</span><span class="btn">Terminal</span><span class="btn">Desktop</span><span class="btn">Settings</span></div>
       <div class="grid2">
         <div>
           <div class="rowline" style="border:none"><b>acme-staging</b><span class="btn r" style="font-size:11px">🗑 Delete engagement</span></div>
@@ -450,10 +470,10 @@
   <h2>13. <span class="th">เครื่องมือที่ AI เรียกใช้ได้</span><span class="en">Tools the agent can call</span></h2>
   <table>
     <tr><th>Tool</th><th><span class="th">ระดับ</span><span class="en">Risk</span></th><th><span class="th">ทำอะไร</span><span class="en">Purpose</span></th></tr>
-    <tr><td>dns_lookup · http_probe · whatweb</td><td><span class="pill pas">passive</span></td><td><span class="th">เก็บข้อมูลเบื้องต้น ไม่ยิงหนัก</span><span class="en">Light recon, no heavy traffic.</span></td></tr>
-    <tr><td>tcp_scan · nmap_scan · dir_enum · web_vuln_scan</td><td><span class="pill act">active</span></td><td><span class="th">สแกนพอร์ต/บริการ/ไดเรกทอรี/ช่องโหว่เว็บ</span><span class="en">Scan ports/services/dirs/web vulns.</span></td></tr>
+    <tr><td>dns_lookup · exploit_search</td><td><span class="pill pas">passive</span></td><td><span class="th">เก็บข้อมูล/ค้นฐาน exploit — รันเองไม่ต้องอนุมัติ</span><span class="en">Passive recon / exploit-DB lookup — run without approval.</span></td></tr>
+    <tr><td>http_probe · tcp_scan · nmap_scan · dir_enum · web_vuln_scan</td><td><span class="pill act">active</span></td><td><span class="th">โพรบ HTTP/สแกนพอร์ต/บริการ/ไดเรกทอรี/ช่องโหว่เว็บ — ต้องอนุมัติ + อยู่ใน scope</span><span class="en">HTTP probe / scan ports/services/dirs/web vulns — needs approval + in scope.</span></td></tr>
     <tr><td>cred_test · run_command</td><td><span class="pill intr">intrusive</span></td><td><span class="th">ทดสอบรหัสผ่าน / รันคำสั่งเชลล์เดี่ยวเพื่อยืนยันช่องโหว่</span><span class="en">Test credentials / run one shell command to validate a finding.</span></td></tr>
-    <tr><td>exploit_search · save_finding · generate_report</td><td><span class="pill pas">passive</span></td><td><span class="th">ค้นฐาน exploit / บันทึกผล / สร้างรายงาน</span><span class="en">Search exploit DB / record findings / build the report.</span></td></tr>
+    <tr><td>save_finding · generate_report · update_feeds · feed_status</td><td><span class="pill pas">passive</span></td><td><span class="th">บันทึกผล / สร้างรายงาน / อัปเดต-เช็ค vuln feed</span><span class="en">Record findings / build the report / update &amp; check vuln feeds.</span></td></tr>
   </table>
   </section>
 
