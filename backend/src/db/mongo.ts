@@ -32,6 +32,7 @@ const EngagementSchema = new Schema(
         {
           title: String,
           severity: { type: String, default: "info" },
+          confidence: { type: String, default: "certain" }, // certain | firm | tentative (Burp-style)
           asset: String,
           detail: String,
           createdAt: { type: Date, default: Date.now },

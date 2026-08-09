@@ -276,9 +276,10 @@ const saveFinding: ToolDef = {
     parameters: {
       type: "object",
       properties: {
-        title: { type: "string" },
+        title: { type: "string", description: "Issue type/name — reuse the SAME title for the same issue on different assets so the report groups them." },
         severity: { type: "string", description: "info|low|medium|high|critical" },
-        asset: { type: "string" },
+        confidence: { type: "string", description: "How sure you are it is exploitable: certain|firm|tentative (default certain)" },
+        asset: { type: "string", description: "Affected asset/URL/path" },
         detail: { type: "string", description: "Evidence + impact + remediation recommendation" },
       },
       required: ["title", "severity", "detail"],
@@ -292,6 +293,7 @@ const saveFinding: ToolDef = {
           findings: {
             title: str(args.title),
             severity: str(args.severity, "info"),
+            confidence: str(args.confidence, "certain"),
             asset: str(args.asset),
             detail: str(args.detail),
           },
@@ -420,6 +422,7 @@ const generateReport: ToolDef = {
 interface ReportFinding {
   title?: string | null;
   severity?: string | null;
+  confidence?: string | null;
   asset?: string | null;
   detail?: string | null;
 }
@@ -448,6 +451,7 @@ export function renderReport(eng: ReportEngagement): string {
   for (const f of findings) {
     lines.push(`### [${sev(f).toUpperCase()}] ${f.title ?? "(untitled)"}`);
     if (f.asset) lines.push(`**Asset:** ${f.asset}`);
+    lines.push(`**Confidence:** ${(f.confidence ?? "certain").replace(/^\w/, (c) => c.toUpperCase())}`);
     lines.push("", f.detail ?? "", "");
   }
   return lines.join("\n");

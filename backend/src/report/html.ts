@@ -1,6 +1,7 @@
 interface RFinding {
   title?: string | null;
   severity?: string | null;
+  confidence?: string | null;
   asset?: string | null;
   detail?: string | null;
 }
@@ -26,19 +27,29 @@ const COLOR: Record<string, string> = {
   low: "#2f6f4f",
   info: "#5a6b7a",
 };
+const CONF_ORDER = ["certain", "firm", "tentative"];
 
 function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 const sevOf = (f: RFinding) => (f.severity ?? "info").toLowerCase();
+const confOf = (f: RFinding) => {
+  const c = (f.confidence ?? "certain").toLowerCase();
+  return CONF_ORDER.includes(c) ? c : "certain";
+};
+const cap = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 
 /** A polished, print-ready HTML client report. The browser's "Save as PDF" turns it into a PDF.
  * `branding` (Enterprise only) white-labels the cover, accent colour and footer. */
 export function renderReportHtml(eng: REngagement, dateStr: string, branding?: ReportBranding | null): string {
-  const accent = branding?.primaryColor || "${accent}";
+  const accent = branding?.primaryColor || "#0b7285";
   const findings = [...(eng.findings ?? [])].sort((a, b) => ORDER.indexOf(sevOf(a)) - ORDER.indexOf(sevOf(b)));
   const counts: Record<string, number> = { critical: 0, high: 0, medium: 0, low: 0, info: 0 };
   for (const f of findings) counts[sevOf(f)] = (counts[sevOf(f)] ?? 0) + 1;
+  const confCounts: Record<string, number> = { certain: 0, firm: 0, tentative: 0 };
+  for (const f of findings) confCounts[confOf(f)] = (confCounts[confOf(f)] ?? 0) + 1;
+  const uniqueAssets = new Set(findings.map((f) => (f.asset ?? "").trim()).filter(Boolean)).size;
+
   const overall =
     counts.critical > 0 ? "CRITICAL" : counts.high > 0 ? "HIGH" : counts.medium > 0 ? "MEDIUM" : counts.low > 0 ? "LOW" : "INFORMATIONAL";
   const overallColor =
@@ -46,8 +57,60 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
 
   const summaryRows = ORDER.map(
     (s) =>
-      `<tr><td><span class="dot" style="background:${COLOR[s]}"></span>${s[0].toUpperCase() + s.slice(1)}</td><td style="text-align:right;font-weight:600">${counts[s]}</td></tr>`
+      `<tr><td><span class="dot" style="background:${COLOR[s]}"></span>${cap(s)}</td><td style="text-align:right;font-weight:600">${counts[s]}</td></tr>`
   ).join("");
+
+  // Scan statistics (Burp-style): high-level counts for the assessment.
+  const statRows = [
+    ["Total issues", String(findings.length)],
+    ["Unique affected assets", String(uniqueAssets)],
+    ["Highest severity", overall],
+    ["Confidence — Certain", String(confCounts.certain)],
+    ["Confidence — Firm", String(confCounts.firm)],
+    ["Confidence — Tentative", String(confCounts.tentative)],
+  ]
+    .map(([k, v]) => `<tr><td>${k}</td><td style="text-align:right;font-weight:600">${esc(v)}</td></tr>`)
+    .join("");
+
+  // "Issues found" — group findings by type (title), Burp-style, most severe group first.
+  const groups = new Map<string, RFinding[]>();
+  for (const f of findings) {
+    const key = (f.title ?? "(untitled finding)").trim();
+    (groups.get(key) ?? groups.set(key, []).get(key)!).push(f);
+  }
+  const groupSev = (list: RFinding[]) => Math.min(...list.map((f) => ORDER.indexOf(sevOf(f))));
+  const sortedGroups = [...groups.entries()].sort((a, b) => groupSev(a[1]) - groupSev(b[1]));
+
+  const issuesFound =
+    findings.length === 0
+      ? `<p class="muted">No issues were recorded for this engagement.</p>`
+      : sortedGroups
+          .map(([title, list]) => {
+            const top = list.slice().sort((a, b) => ORDER.indexOf(sevOf(a)) - ORDER.indexOf(sevOf(b)))[0];
+            const gsev = sevOf(top);
+            const rows = list
+              .slice()
+              .sort((a, b) => ORDER.indexOf(sevOf(a)) - ORDER.indexOf(sevOf(b)))
+              .map((f) => {
+                const sev = sevOf(f);
+                return `<tr>
+        <td>${esc(f.asset || "—")}</td>
+        <td><span class="pill" style="background:${COLOR[sev]}">${sev.toUpperCase()}</span></td>
+        <td>${cap(confOf(f))}</td>
+      </tr>`;
+              })
+              .join("\n");
+            return `<div class="isstype">
+      <span class="badge" style="background:${COLOR[gsev]}">${gsev.toUpperCase()}</span>
+      <span class="isstitle">${esc(title)}</span>
+      <span class="isscount">${list.length} instance${list.length === 1 ? "" : "s"}</span>
+    </div>
+    <table class="issdetail">
+      <tr><th>Affected asset</th><th style="width:110px">Severity</th><th style="width:110px">Confidence</th></tr>
+      ${rows}
+    </table>`;
+          })
+          .join("\n");
 
   const findingBlocks =
     findings.length === 0
@@ -59,6 +122,7 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
       <div class="fhead">
         <span class="badge" style="background:${COLOR[sev]}">${sev.toUpperCase()}</span>
         <span class="ftitle">${i + 1}. ${esc(f.title ?? "(untitled finding)")}</span>
+        <span class="fconf">Confidence: ${cap(confOf(f))}</span>
       </div>
       ${f.asset ? `<div class="asset"><b>Affected asset:</b> ${esc(f.asset)}</div>` : ""}
       <div class="detail">${esc(f.detail ?? "").replace(/\n/g, "<br/>")}</div>
@@ -83,10 +147,20 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
   td, th { border:1px solid #e2e8f0; padding:7px 10px; }
   th { background:#f1f5f9; text-align:left; }
   .dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px; vertical-align:middle; }
+  .cols { display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; }
+  .cols > div { flex:1; min-width:260px; }
+  .cols h3 { font-size:13px; margin:0 0 4px; color:#5a6b7a; text-transform:uppercase; letter-spacing:.5px; }
+  .isstype { display:flex; align-items:center; gap:10px; margin:14px 0 0; padding:6px 0; border-top:1px solid #e2e8f0; page-break-after: avoid; }
+  .isstitle { font-weight:700; color:${accent}; }
+  .isscount { color:#8a99a8; font-size:11px; margin-left:auto; }
+  table.issdetail { margin-top:4px; page-break-inside: avoid; }
+  table.issdetail td, table.issdetail th { padding:5px 9px; font-size:12px; }
+  .pill { color:#fff; font-size:10px; font-weight:700; padding:1px 7px; border-radius:10px; }
   .finding { border:1px solid #e2e8f0; border-radius:8px; padding:14px 16px; margin:12px 0; page-break-inside: avoid; }
   .fhead { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
   .badge { color:#fff; font-size:11px; font-weight:700; letter-spacing:.5px; padding:2px 8px; border-radius:4px; }
   .ftitle { font-size:15px; font-weight:700; color:${accent}; }
+  .fconf { margin-left:auto; color:#8a99a8; font-size:11px; }
   .asset { color:#5a6b7a; margin:4px 0; }
   .detail { white-space:normal; margin-top:6px; }
   .muted { color:#5a6b7a; }
@@ -114,10 +188,22 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
   <h2>Executive Summary</h2>
   <p>This report presents the results of an authorized security assessment of <b>${esc(eng.name)}</b>.
   A total of <b>${findings.length}</b> finding(s) were identified. The overall risk rating is
-  <b style="color:${overallColor}">${overall}</b>. Severity breakdown:</p>
-  <table style="max-width:340px"><tr><th>Severity</th><th style="text-align:right">Count</th></tr>${summaryRows}</table>
+  <b style="color:${overallColor}">${overall}</b>.</p>
+  <div class="cols">
+    <div>
+      <h3>Issues by severity</h3>
+      <table><tr><th>Severity</th><th style="text-align:right">Count</th></tr>${summaryRows}</table>
+    </div>
+    <div>
+      <h3>Scan statistics</h3>
+      <table>${statRows}</table>
+    </div>
+  </div>
   <p class="muted">Each finding below includes evidence, impact, the risk it poses, and a concrete
   remediation recommendation. Remediate higher-severity issues first.</p>
+
+  <h2>Issues found on ${esc((eng.scope?.include ?? []).join(", ") || eng.name)}</h2>
+  ${issuesFound}
 
   <h2>Findings &amp; Remediation</h2>
   ${findingBlocks}

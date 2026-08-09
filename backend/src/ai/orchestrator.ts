@@ -25,6 +25,9 @@ phases, in order, and narrate which phase you are in:
    confirm it stays in scope. Prefer minimal proof-of-concept over full compromise;
    do not chain destructive actions.
 5. REPORTING — record each confirmed issue with save_finding, then generate_report.
+   Set a confidence on every finding (certain = proven/exploited, firm = strong
+   evidence, tentative = suspected). Reuse the SAME title for the same issue type
+   seen on different assets so the report groups them (one row per affected asset).
 6. REMEDIATION — every finding you save MUST include, in its detail: evidence,
    impact, a concrete fix, and incident-response guidance (what to do if this was
    already exploited: contain, collect logs/evidence, what data to request).
