@@ -34,7 +34,10 @@ const EngagementSchema = new Schema(
           severity: { type: String, default: "info" },
           confidence: { type: String, default: "certain" }, // certain | firm | tentative (Burp-style)
           asset: String,
-          detail: String,
+          description: String, // what the issue is (problem summary)
+          impact: String, // the risk / business impact if exploited
+          remediation: String, // concrete fix / prevention guidance
+          detail: String, // legacy / extra evidence & notes (fallback for old findings)
           createdAt: { type: Date, default: Date.now },
         },
       ],

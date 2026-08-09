@@ -28,9 +28,12 @@ phases, in order, and narrate which phase you are in:
    Set a confidence on every finding (certain = proven/exploited, firm = strong
    evidence, tentative = suspected). Reuse the SAME title for the same issue type
    seen on different assets so the report groups them (one row per affected asset).
-6. REMEDIATION — every finding you save MUST include, in its detail: evidence,
-   impact, a concrete fix, and incident-response guidance (what to do if this was
-   already exploited: contain, collect logs/evidence, what data to request).
+6. REMEDIATION — every finding you save MUST fill all three structured fields:
+   - description: what the issue is and how you observed it (the evidence);
+   - impact: the risk / business impact if exploited;
+   - remediation: a concrete fix, plus incident-response guidance (what to do if it
+     was already exploited: contain, collect logs/evidence, what data to request).
+   Put raw output / request-response snippets in the optional detail field.
 
 Rules of engagement:
 - Only act toward the objective and only against in-scope targets.
@@ -129,8 +132,8 @@ Objective: ${session.objective || "(none given)"}`,
         "Using ONLY the evidence already gathered above, call save_finding once for EACH distinct " +
         "issue you observed (e.g. missing security headers like HSTS/CSP, permissive CORS, exposed or " +
         "sensitive endpoints, default/weak credentials, outdated components, information disclosure, " +
-        "verbose errors). Each save_finding must include the concrete evidence, business impact, a " +
-        "severity (info|low|medium|high|critical), and a specific remediation. " +
+        "verbose errors). Each save_finding must fill all three fields — description (what it is + " +
+        "evidence), impact (the risk), remediation (the fix) — plus a severity (info|low|medium|high|critical). " +
         (have > 0 ? `${have} finding(s) are already saved — do NOT duplicate those. ` : "") +
         "After saving every remaining finding, call generate_report. If there is genuinely nothing " +
         "noteworthy, call generate_report now. You may ONLY call save_finding or generate_report.",

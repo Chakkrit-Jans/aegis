@@ -272,7 +272,7 @@ const saveFinding: ToolDef = {
   risk: "passive",
   schema: {
     name: "save_finding",
-    description: "Record a confirmed finding with remediation guidance into the engagement report.",
+    description: "Record a confirmed finding into the engagement report. Fill the structured fields — the report renders each as its own labelled section (Description / Impact / Remediation).",
     parameters: {
       type: "object",
       properties: {
@@ -280,9 +280,12 @@ const saveFinding: ToolDef = {
         severity: { type: "string", description: "info|low|medium|high|critical" },
         confidence: { type: "string", description: "How sure you are it is exploitable: certain|firm|tentative (default certain)" },
         asset: { type: "string", description: "Affected asset/URL/path" },
-        detail: { type: "string", description: "Evidence + impact + remediation recommendation" },
+        description: { type: "string", description: "Problem summary: what the vulnerability is and how it was observed (evidence)." },
+        impact: { type: "string", description: "The risk / business impact if this is exploited." },
+        remediation: { type: "string", description: "Concrete fix and prevention guidance (and, if relevant, what to do if already exploited)." },
+        detail: { type: "string", description: "Optional extra evidence or notes (raw output, request/response snippets)." },
       },
-      required: ["title", "severity", "detail"],
+      required: ["title", "severity", "description", "impact", "remediation"],
     },
   },
   async run(args, ctx) {
@@ -295,6 +298,9 @@ const saveFinding: ToolDef = {
             severity: str(args.severity, "info"),
             confidence: str(args.confidence, "certain"),
             asset: str(args.asset),
+            description: str(args.description),
+            impact: str(args.impact),
+            remediation: str(args.remediation),
             detail: str(args.detail),
           },
         },
@@ -424,6 +430,9 @@ interface ReportFinding {
   severity?: string | null;
   confidence?: string | null;
   asset?: string | null;
+  description?: string | null;
+  impact?: string | null;
+  remediation?: string | null;
   detail?: string | null;
 }
 interface ReportEngagement {
@@ -452,7 +461,15 @@ export function renderReport(eng: ReportEngagement): string {
     lines.push(`### [${sev(f).toUpperCase()}] ${f.title ?? "(untitled)"}`);
     if (f.asset) lines.push(`**Asset:** ${f.asset}`);
     lines.push(`**Confidence:** ${(f.confidence ?? "certain").replace(/^\w/, (c) => c.toUpperCase())}`);
-    lines.push("", f.detail ?? "", "");
+    lines.push("");
+    if (f.description || f.impact || f.remediation) {
+      if (f.description) lines.push(`**Description:** ${f.description}`, "");
+      if (f.impact) lines.push(`**Impact / Risk:** ${f.impact}`, "");
+      if (f.remediation) lines.push(`**Remediation:** ${f.remediation}`, "");
+      if (f.detail) lines.push(`**Evidence / Notes:** ${f.detail}`, "");
+    } else {
+      lines.push(f.detail ?? "", ""); // legacy findings: single detail blob
+    }
   }
   return lines.join("\n");
 }

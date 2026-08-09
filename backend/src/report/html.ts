@@ -3,6 +3,9 @@ interface RFinding {
   severity?: string | null;
   confidence?: string | null;
   asset?: string | null;
+  description?: string | null;
+  impact?: string | null;
+  remediation?: string | null;
   detail?: string | null;
 }
 interface REngagement {
@@ -118,6 +121,16 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
       : findings
           .map((f, i) => {
             const sev = sevOf(f);
+            const para = (s?: string | null) => esc(s ?? "").replace(/\n/g, "<br/>");
+            const block = (label: string, s?: string | null, cls = "") =>
+              s ? `<div class="rblock"><span class="rlabel${cls}">${label}</span><div class="rtext">${para(s)}</div></div>` : "";
+            const structured = f.description || f.impact || f.remediation;
+            const body = structured
+              ? block("Description", f.description) +
+                block("Impact / Risk", f.impact, " risk") +
+                block("Remediation", f.remediation, " fix") +
+                block("Evidence / Notes", f.detail)
+              : `<div class="detail">${para(f.detail)}</div>`; // legacy single-blob finding
             return `<div class="finding">
       <div class="fhead">
         <span class="badge" style="background:${COLOR[sev]}">${sev.toUpperCase()}</span>
@@ -125,7 +138,7 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
         <span class="fconf">Confidence: ${cap(confOf(f))}</span>
       </div>
       ${f.asset ? `<div class="asset"><b>Affected asset:</b> ${esc(f.asset)}</div>` : ""}
-      <div class="detail">${esc(f.detail ?? "").replace(/\n/g, "<br/>")}</div>
+      ${body}
     </div>`;
           })
           .join("\n");
@@ -163,6 +176,11 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
   .fconf { margin-left:auto; color:#8a99a8; font-size:11px; }
   .asset { color:#5a6b7a; margin:4px 0; }
   .detail { white-space:normal; margin-top:6px; }
+  .rblock { margin-top:8px; }
+  .rlabel { display:block; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:#5a6b7a; margin-bottom:2px; }
+  .rlabel.risk { color:${overallColor}; }
+  .rlabel.fix { color:#2f6f4f; }
+  .rtext { white-space:normal; }
   .muted { color:#5a6b7a; }
   .foot { margin-top:30px; color:#8a99a8; font-size:11px; border-top:1px solid #e2e8f0; padding-top:10px; }
   .cover { border-left:4px solid ${overallColor}; padding-left:14px; }
