@@ -141,7 +141,7 @@ export interface Me {
 
 export interface DashboardData {
   engagements: number;
-  findings: { total: number; bySeverity: Record<string, number> };
+  findings: { total: number; bySeverity: Record<string, number>; byConfidence: Record<string, number> };
   sessions: { total: number; byStatus: Record<string, number> };
   pendingApprovals: { id: string; tool: string; rationale: string; sessionId: string; slug: string; name: string; createdAt: string }[];
   recentSessions: { id: string; objective: string; status: string; slug: string; name: string; updatedAt: string }[];

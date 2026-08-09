@@ -6,6 +6,7 @@ import { workerHealth } from "../worker/exec.js";
 export const dashboardRouter = Router();
 
 const SEVS = ["critical", "high", "medium", "low", "info"];
+const CONFS = ["certain", "firm", "tentative"];
 
 /** Best-effort worker health with a short cap so a down worker can't stall the page. */
 async function health(ref: { url: string; token: string }): Promise<{ ok: boolean; tools: number; error: string }> {
@@ -34,13 +35,16 @@ dashboardRouter.get("/", async (_req, res) => {
     return { slug: e?.slug ?? "", name: e?.name ?? "(deleted)" };
   };
 
-  // Findings rolled up by severity across every engagement.
+  // Findings rolled up by severity and confidence across every engagement.
   const bySeverity: Record<string, number> = { critical: 0, high: 0, medium: 0, low: 0, info: 0 };
+  const byConfidence: Record<string, number> = { certain: 0, firm: 0, tentative: 0 };
   let findingsTotal = 0;
   for (const e of engagements)
     for (const f of e.findings ?? []) {
       const s = String(f.severity ?? "info").toLowerCase();
       bySeverity[SEVS.includes(s) ? s : "info"]++;
+      const cf = String(f.confidence ?? "certain").toLowerCase();
+      byConfidence[CONFS.includes(cf) ? cf : "certain"]++;
       findingsTotal++;
     }
 
@@ -60,7 +64,7 @@ dashboardRouter.get("/", async (_req, res) => {
 
   res.json({
     engagements: engagements.length,
-    findings: { total: findingsTotal, bySeverity },
+    findings: { total: findingsTotal, bySeverity, byConfidence },
     sessions: { total: sessionsTotal, byStatus },
     pendingApprovals: pending.map((a) => ({
       id: String(a._id),

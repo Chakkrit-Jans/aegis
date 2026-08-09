@@ -10,6 +10,13 @@ const SEV = [
   { k: "info", label: "Info", c: "#6b8299" },
 ];
 
+// Finding confidence — certain (proven) → tentative (suspected).
+const CONF = [
+  { k: "certain", label: "Certain", c: "#39ff88" },
+  { k: "firm", label: "Firm", c: "#ffb547" },
+  { k: "tentative", label: "Tentative", c: "#6b8299" },
+];
+
 // Session statuses — colours mirror the .status-* classes in globals.css.
 const SESS = [
   { k: "running", label: "Running", c: "#22e0ff" },
@@ -128,11 +135,18 @@ export function Dashboard({ onOpen }: { onOpen: (slug: string) => void }) {
         ))}
       </div>
 
-      {/* Findings by severity + Sessions by status — donuts */}
+      {/* Findings by severity + confidence + Sessions by status — donuts */}
       <div style={twoCol}>
         <DonutPanel
           title="Findings by severity"
           items={SEV.map((s) => ({ ...s, n: d.findings.bySeverity[s.k] ?? 0 }))}
+          total={d.findings.total}
+          center="FINDINGS"
+          empty="No findings recorded yet."
+        />
+        <DonutPanel
+          title="Findings by confidence"
+          items={CONF.map((s) => ({ ...s, n: d.findings.byConfidence[s.k] ?? 0 }))}
           total={d.findings.total}
           center="FINDINGS"
           empty="No findings recorded yet."
