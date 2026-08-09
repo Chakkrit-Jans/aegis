@@ -151,16 +151,24 @@ Save findings with remediation, then generate_report.</code></pre>
     <div class="body" style="background:#fff;color:#1a2430">
       <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #e2e8f0;padding-bottom:6px"><b style="color:#0b7285">Penetration Test Report — juice-lab</b><span style="background:#d9480f;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">HIGH</span></div>
       <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px;margin:10px 0 3px">Issues found</div>
-      <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:90px">Confidence</th></tr>
-        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">/rest/user/login (SQLi auth bypass)</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
-        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">Missing CSP header</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Firm</td></tr>
-      </table>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">SQL injection → admin auth bypass</td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">Missing CSP header</td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Firm</td></tr>
+      </table></div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
-        <div style="font-weight:700;color:#0b7285;font-size:12px">1. SQL injection → admin auth bypass</div>
+        <div style="font-weight:700;color:#0b7285;font-size:12px">1. SQL injection → admin auth bypass &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
+        <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000/rest/user/login</span></div>
         <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#5a6b7a">Description</span><span style="font-size:12px">' OR 1=1-- in the login field returns an admin session token.</span></div>
         <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#d9480f">Impact / Risk</span><span style="font-size:12px">Full authentication bypass → admin account takeover.</span></div>
         <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#2f6f4f">Remediation</span><span style="font-size:12px">Use parameterized queries; never build SQL from input.</span></div>
+      </div>
+      <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
+        <div style="font-weight:700;color:#0b7285;font-size:12px">2. Missing CSP header &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Firm</span></div>
+        <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#5a6b7a">Description</span><span style="font-size:12px">Responses do not set a Content-Security-Policy header.</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#b8860b">Impact / Risk</span><span style="font-size:12px">Weaker XSS defence — injected scripts can run unrestricted.</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#2f6f4f">Remediation</span><span style="font-size:12px">Add a restrictive CSP header (e.g. default-src 'self') at the reverse proxy.</span></div>
       </div>
     </div>
   </figure>
