@@ -5,6 +5,7 @@ import { createContext, useContext, type ReactNode } from "react";
 // [English, Thai] for each UI string.
 const S: Record<string, [string, string]> = {
   tagline: ["autonomous pentest orchestration · human-in-the-loop", "ระบบสั่งการ pentest อัตโนมัติ · มีคนอนุมัติทุกขั้น"],
+  "nav.dashboard": ["Dashboard", "แดชบอร์ด"],
   "nav.console": ["Console", "คอนโซล"],
   "nav.terminal": ["Terminal", "เทอร์มินัล"],
   "nav.desktop": ["Desktop", "เดสก์ท็อป"],

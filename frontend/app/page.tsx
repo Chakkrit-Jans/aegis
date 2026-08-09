@@ -18,13 +18,14 @@ import {
 } from "../lib/api";
 import { Terminal } from "./Terminal";
 import { Settings } from "./Settings";
+import { Dashboard } from "./Dashboard";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { builtinList, buildObjective, type Level } from "./objectiveTemplates";
 import type { CustomTemplate, OrgTemplate } from "../lib/api";
 import { useT } from "./i18n";
 import { About } from "./About";
 
-type View = "console" | "terminal" | "desktop" | "settings";
+type View = "dashboard" | "console" | "terminal" | "desktop" | "settings";
 
 const VNC_URL =
   process.env.NEXT_PUBLIC_VNC_URL ?? "http://localhost:6080/vnc.html?autoconnect=1&resize=scale";
@@ -47,7 +48,7 @@ export default function Console() {
   const { t } = useT();
   const [me, setMe] = useState<Me | null>(null);
   const [booting, setBooting] = useState(true);
-  const [view, setView] = useState<View>("console");
+  const [view, setView] = useState<View>("dashboard");
   const [engagements, setEngagements] = useState<Engagement[]>([]);
   const [active, setActive] = useState<Engagement | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -335,7 +336,7 @@ export default function Console() {
         </div>
         <div className="row" style={{ flex: "none", gap: 12, alignItems: "center" }}>
           <nav className="row" style={{ flex: "none", gap: 6 }}>
-            {(["console", "terminal", "desktop", "settings"] as View[]).map((v) => (
+            {(["dashboard", "console", "terminal", "desktop", "settings"] as View[]).map((v) => (
               <button key={v} className={view === v ? "primary" : ""} onClick={() => setView(v)}>
                 {t(`nav.${v}`)}
               </button>
@@ -351,6 +352,15 @@ export default function Console() {
       {showAbout && <About me={me} onClose={() => setShowAbout(false)} onEditionChange={(e) => setEdition(e as "community" | "enterprise")} />}
 
       <ErrorBoundary key={view}>
+      {view === "dashboard" && (
+        <Dashboard
+          onOpen={(slug) => {
+            const e = engagements.find((x) => x.slug === slug);
+            if (e) setActive(e);
+            setView("console");
+          }}
+        />
+      )}
       {view === "terminal" && <Terminal engagementSlug={active?.slug ?? null} />}
       {view === "settings" && <Settings me={me} />}
       {view === "desktop" && (

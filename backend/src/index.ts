@@ -12,6 +12,7 @@ import { updatesRouter } from "./routes/updates.js";
 import { authRouter } from "./routes/auth.js";
 import { usersRouter } from "./routes/users.js";
 import { auditRouter } from "./routes/audit.js";
+import { dashboardRouter } from "./routes/dashboard.js";
 import { shellRouter } from "./routes/shell.js";
 import { integrationsRouter } from "./routes/integrations.js";
 import { workersRouter } from "./routes/workers.js";
@@ -71,6 +72,7 @@ async function main() {
   app.use("/api/about", requireAuth, aboutRouter);
   app.use("/api/users", requireAuth, usersRouter);
   app.use("/api/audit", requireAuth, auditRouter);
+  app.use("/api/dashboard", requireAuth, dashboardRouter);
 
   // Open-core: load the Enterprise overlay if it's present in this build.
   // The `ee/` folder is absent from the public Community repo (import fails →

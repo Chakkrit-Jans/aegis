@@ -139,6 +139,16 @@ export interface Me {
   role: string;
 }
 
+export interface DashboardData {
+  engagements: number;
+  findings: { total: number; bySeverity: Record<string, number> };
+  sessions: { total: number; byStatus: Record<string, number> };
+  pendingApprovals: { id: string; tool: string; rationale: string; sessionId: string; slug: string; name: string; createdAt: string }[];
+  recentSessions: { id: string; objective: string; status: string; slug: string; name: string; updatedAt: string }[];
+  workers: { id: string; name: string; url: string; ok: boolean; tools: number; error: string }[];
+  recentAudit: { actor: string; action: string; target: string; createdAt: string }[];
+}
+
 export interface TemplateLevels {
   basic: string;
   medium: string;
@@ -294,6 +304,9 @@ export const api = {
   me: () => get<Me>("/api/auth/me"),
   changePassword: (current: string, next: string) =>
     post<{ ok: boolean }>("/api/auth/change-password", { current, next }),
+
+  // dashboard
+  getDashboard: () => get<DashboardData>("/api/dashboard"),
 
   // engagements
   listEngagements: () => get<Engagement[]>("/api/engagements"),
