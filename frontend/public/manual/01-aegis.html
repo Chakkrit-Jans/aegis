@@ -530,6 +530,24 @@
         <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">https://app.acme.test/login</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
         <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">https://app.acme.test/app</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Firm</td></tr>
       </table>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:10px">
+        <span style="background:#2f6f4f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">LOW</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Missing HSTS header</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:90px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:90px">Confidence</th></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">https://app.acme.test</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
+      </table>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:10px">
+        <span style="background:#5a6b7a;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">INFO</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Directory listing enabled</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:90px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:90px">Confidence</th></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">https://app.acme.test/backup/</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#5a6b7a;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">INFO</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
+      </table>
       <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:16px 0 8px">Findings &amp; Remediation</div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px">
         <div style="display:flex;align-items:center;gap:8px"><span style="background:#d9480f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">HIGH</span><span style="font-weight:700;color:#0b7285;font-size:13px">1. TLS cookie without secure flag</span><span style="color:#8a99a8;font-size:11px;margin-left:auto">Confidence: Certain</span></div>
@@ -537,6 +555,20 @@
         <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#5a6b7a">Description</span><div style="font-size:12px">Session cookie set over HTTPS without the Secure attribute.</div></div>
         <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#d9480f">Impact / Risk</span><div style="font-size:12px">An on-path attacker can capture the cookie over cleartext and hijack the session.</div></div>
         <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#2f6f4f">Remediation</span><div style="font-size:12px">Set Secure + HttpOnly + SameSite on all session cookies; rotate secrets if already exploited.</div></div>
+      </div>
+      <div style="border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin-top:10px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="background:#2f6f4f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">LOW</span><span style="font-weight:700;color:#0b7285;font-size:13px">2. Missing HSTS header</span><span style="color:#8a99a8;font-size:11px;margin-left:auto">Confidence: Certain</span></div>
+        <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> https://app.acme.test</div>
+        <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#5a6b7a">Description</span><div style="font-size:12px">Responses do not send a Strict-Transport-Security header.</div></div>
+        <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#2f6f4f">Impact / Risk</span><div style="font-size:12px">A user can be downgraded to HTTP via SSL-strip, exposing session cookies.</div></div>
+        <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#2f6f4f">Remediation</span><div style="font-size:12px">Send Strict-Transport-Security: max-age=31536000; includeSubDomains over HTTPS.</div></div>
+      </div>
+      <div style="border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin-top:10px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="background:#5a6b7a;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">INFO</span><span style="font-weight:700;color:#0b7285;font-size:13px">3. Directory listing enabled</span><span style="color:#8a99a8;font-size:11px;margin-left:auto">Confidence: Certain</span></div>
+        <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> https://app.acme.test/backup/</div>
+        <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#5a6b7a">Description</span><div style="font-size:12px">GET /backup/ returns a browsable directory index.</div></div>
+        <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#5a6b7a">Impact / Risk</span><div style="font-size:12px">Exposes internal file/folder structure and may reveal backups or config.</div></div>
+        <div style="margin-top:8px"><span style="display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#2f6f4f">Remediation</span><div style="font-size:12px">Disable directory indexing (autoindex off) and restrict access.</div></div>
       </div>
     </div>
   </figure>
