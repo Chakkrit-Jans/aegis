@@ -1,134 +1,139 @@
-# Aegis — Autonomous Pentest Orchestration Console
+<div align="center">
 
-Aegis is an AI-driven penetration-testing **orchestration platform**. An LLM
-reasoning core plans engagements and drives security tooling, streamed live to a
-web console — but **every active/offensive action passes through a human
-approval gate** and is locked behind recorded authorization + scope.
+# 🛡️ AEGIS
+
+### Autonomous, human-in-the-loop AI penetration-testing orchestration
+
+An LLM plans and drives an **authorized** engagement — but every active/offensive
+action passes a **scope gate** and a **human approval gate** — and the result is a
+client-ready report with evidence, impact and remediation.
+
+![Open-core](https://img.shields.io/badge/model-open--core-22e0ff?style=flat-square)
+![License MIT](https://img.shields.io/badge/license-MIT%20(Community)-3da639?style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Next.js 14](https://img.shields.io/badge/Next.js%2014-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![Node 22](https://img.shields.io/badge/Node%2022-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Human-in-the-loop](https://img.shields.io/badge/human--in--the--loop-%E2%9C%94-39ff88?style=flat-square)
+
+</div>
 
 > ⚠️ **Authorized testing only.** Aegis refuses to run any active tool unless the
 > target is (a) covered by recorded written authorization and (b) inside the
 > engagement scope. Only test systems you own or have **written permission** to
 > assess. You are responsible for compliance with all applicable laws.
 
+---
+
+## Why Aegis
+
+Most "autonomous pentest" tools are a black box that runs whatever they want.
+Aegis is the opposite: the AI is fast and tireless, but **you stay in control**.
+
+| | |
+| --- | --- |
+| 🧠 **AI-driven** | An agent loop plans in phases (recon → scan → credential test → validate → report), calls real Kali tools, reads results, and continues. |
+| 🚦 **Scope gate** | Recorded authorization + include/exclude rules are enforced before any network action — out-of-scope targets are blocked, always. |
+| ✋ **Approval gate** | Passive tools run freely; every **active/intrusive** tool (port scan, dir enum, shell, exploit PoC) pauses for an explicit operator `approve` — the exact command is shown first. |
+| 🧾 **Audit + RBAC** | Admin/operator roles; every approval, command and config change is written to an immutable audit log. |
+| 📄 **Client report** | Findings become a print-ready HTML report (cover, overall risk, severity summary, evidence/impact/risk/remediation) → one-click **Save as PDF**. |
+
 ## Architecture
 
+```mermaid
+flowchart LR
+  U([Operator]) -->|approve / reject| C[Web Console<br/>Next.js]
+  C <-->|WebSocket / REST| B[Backend<br/>Express + AI orchestrator]
+  B --> DB[(MongoDB<br/>sessions · findings)]
+  B --> RS[(Redis<br/>durable approvals)]
+  B --> G{Scope + Approval Gate}
+  G -->|in-scope &amp; approved| W[Kali worker<br/>nmap · nuclei · ffuf · hydra …]
+  W --> T([In-scope target])
+  B --> RPT[[Client report + PDF]]
 ```
-Next.js console  ──WS/REST──►  Express backend  ──►  AI orchestrator (agent loop)
- (neon UI)                        │                     │  plans + calls tools
-                                  │                     ▼
-                             MongoDB + Redis      Tool registry (recon / shell)
-                             (sessions, memory)   every ACTIVE tool → approval gate
-```
 
-- **Autonomous orchestration** — the agent loop plans, calls tools, reads
-  results, and continues — with the operator approving each active step.
-- **Approval gate** — passive tools (dns, http headers) run freely; active tools
-  (port scan, shell, exploit) require an explicit operator `approve` in the UI.
-- **Scope gate** — authorization + include/exclude rules enforced before any
-  network action.
-- **Session history** — every session (with its full transcript) and all findings
-  are persisted in MongoDB. The console lists an engagement's past sessions, reopens
-  any transcript read-only, and renders the Markdown report — nothing is lost on
-  reload.
-- **Objective templates** — pick a target category (Web, Network, OS/Host, Database,
-  Firewall, Full engagement, or Exploitation & Post-Exploitation) and a level
-  (Basic / Medium / Advanced) to auto-fill a well-formed objective; `<TARGET>` is
-  filled from the first in-scope target, and every template ends by requiring
-  findings (impact + risk + remediation) and a report.
-- **Client report + PDF export** — a print-ready HTML report (cover, overall risk,
-  severity summary, and every finding with evidence/impact/risk/remediation);
-  "Export PDF" opens it and the browser saves a clean PDF.
-- **Kali workers (multi-worker)** — real tooling (nmap, nuclei, hydra, ffuf,
-  searchsploit) runs in isolated Kali containers reached only over the internal
-  network via a token-gated exec agent. Run several workers in parallel and
-  assign each engagement to a specific worker (isolation per client / reach
-  different networks); the agent, shell, and tools all route to the engagement's
-  worker. Managed from **Settings → Kali Workers**.
-- **Live vuln feeds (all workers)** — nuclei templates, Exploit-DB, and nmap NSE
-  scripts stay current via **manual** ("Update all" / per-feed) or **automatic**
-  (scheduled) updates that run on **every enabled worker in parallel**, with
-  status shown per worker. The agent can also refresh/check feeds itself
-  (`update_feeds`, `feed_status`).
-- **Operator terminal** — a live shell on the worker, scoped to an authorized
-  engagement and fully audit-logged. The agent can also request a single command
-  (`run_command`), which is approval-gated like any other intrusive step.
-- **Kali desktop (VNC)** — a full XFCE desktop on the worker, in a browser tab,
-  for GUI tools (Burp, Firefox) and hands-on work alongside the agent.
-- **Telegram gateway** — receive approval requests on your phone with inline
-  Approve/Reject buttons; decisions flow straight back into the running session.
-- **Burp / Caido integration** — route active web tools (nuclei, ffuf) through an
-  intercepting proxy so every request is visible in your proxy of choice.
-- **RBAC + audit log** — admin/operator roles, admin-managed accounts, and an
-  immutable audit trail of logins, approvals, shell commands, and config changes.
-- **Provider-pluggable AI** — DeepSeek, Anthropic (Claude), or any
-  OpenAI-compatible / local endpoint (Ollama, vLLM).
+The **worker** is the only component that touches the target, and it only runs a
+tool after the gate passes. Sessions and pending approvals are durable (MongoDB +
+Redis), so a backend restart never loses an in-flight engagement.
 
-## Requirements
-
-- Docker Engine 24+ with Docker Compose v2
-- 4+ GB RAM, ~10 GB disk
-- Node.js 22+ (local dev only)
-- One AI provider API key (or a local OpenAI-compatible server)
-
-## Quick start (Docker)
+## Quick start
 
 ```bash
-cp .env.example .env      # set AI_PROVIDER + key
+git clone https://github.com/Chakkrit-Jans/aegis.git
+cd aegis
+cp .env.example .env         # set JWT_SECRET and WORKER_TOKEN
 docker compose up -d --build
 ```
 
-- Web console: http://localhost:3000
-- Backend API: http://localhost:8080
-- Health check: http://localhost:8080/health
+Open **http://localhost:3000**, sign in with `admin` / `admin1234` (change it
+immediately), add an AI provider in **Settings → AI Providers**, then:
 
-## Production deployment
-
-Deploying to a server (Ubuntu, HTTPS, reverse proxy, firewall, backups):
-see **[docs/deploy.md](docs/deploy.md)**. In short:
-
-```bash
-cp .env.example .env   # set provider key, WORKER_TOKEN, PUBLIC_DOMAIN, PUBLIC_URL
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+```mermaid
+flowchart LR
+  N[New engagement] --> A[Record authorization] --> S[Set scope]
+  S --> O[Pick objective] --> SP[Spawn session]
+  SP --> AP{Approve / Stop} --> RE[Report + PDF]
 ```
 
-The prod overlay binds the database/backend ports to `127.0.0.1` and puts a Caddy
-reverse proxy (automatic HTTPS) in front of the console.
+> Everything is configured in the UI and stored in MongoDB — only bootstrap
+> secrets (`JWT_SECRET`, `WORKER_TOKEN`, `MONGO_URL`) live in `.env`. A production
+> overlay with automatic HTTPS is in [`docs/deploy.md`](docs/deploy.md).
 
-## Local development
+## Features
 
-```bash
-# backend
-cd backend && npm install && npm run dev
-# frontend
-cd frontend && npm install && npm run dev
-```
+- **Multi-worker** — real tooling runs in isolated Kali containers over a
+  token-gated exec agent; assign each engagement its own worker.
+- **Live vuln feeds** — nuclei templates, Exploit-DB and nmap NSE stay current
+  (manual on every enabled worker).
+- **Operator terminal + Kali desktop (noVNC)** — a scoped, audited shell and a
+  full XFCE desktop (Burp, Firefox) in the browser.
+- **Telegram gateway** — approve/reject from your phone.
+- **Burp / Caido proxy** — route active web tools through your intercepting proxy.
+- **Objective templates** — 7 categories × 3 levels, plus your own custom templates.
+- **Provider-pluggable AI** — DeepSeek, Anthropic (Claude), or any
+  OpenAI-compatible / local endpoint (Ollama, vLLM).
 
-## Authentication
+## Editions
 
-The console has a login gate (JWT + bcrypt); every API route and the websocket
-require a valid token. On first boot an admin account is seeded from `ADMIN_EMAIL`
-/ `ADMIN_PASSWORD` (default **`admin` / `admin1234`**). If `ADMIN_PASSWORD` is left
-blank, a random one is generated and printed to the backend logs. Sign in, then
-change the password from the console header — always change it beyond local use.
+Aegis is **open-core**. This repository is the free **Community Edition** — a
+complete platform for a solo tester or small team. **Enterprise** adds
+organization-grade capabilities, unlocked by an **Ed25519-signed license key**
+pasted in **ⓘ About → Edition & License**:
 
-## Usage workflow
+| Capability | Community | Enterprise |
+| --- | :---: | :---: |
+| Full AI engagements · scope/approval gates · audit · reports · PDF | ✅ | ✅ |
+| Personal objective templates · manual vuln-feed updates | ✅ | ✅ |
+| AI providers · Kali workers | 1 each | multiple |
+| SSO / OIDC · white-label reports · audit export & SIEM | 🔒 | ✅ |
+| Scheduled feed updates · signed org template library | 🔒 | ✅ |
 
-1. Sign in, then create an **engagement**.
-2. Record **authorization** and define **scope** (in-scope / excluded targets).
-3. Spawn a **session** and give the agent an objective
-   (e.g. "enumerate the web tier of staging.acme.test").
-4. Watch the agent reason and propose actions. **Approve or reject** each active
-   tool call from the console.
-5. Findings and the full attack-chain transcript are saved to the engagement.
+Safety features (scope gate, approval gate, audit) are **free forever** and never
+gated.
 
-## Safety & ethics
+## Documentation
 
-- The scope gate + approval gate are the single chokepoints for all active
-  network actions.
-- The orchestrator is prompted for methodology-level guidance and authorized
-  testing; it will not pursue targets outside the recorded scope.
-- Engagement data lives in MongoDB and is never committed to git.
+A three-book bilingual (EN/TH) manual ships with the app — open the **📖 Docs**
+button in the console, or browse [`frontend/public/manual/`](frontend/public/manual):
+
+1. **Aegis User Guide** — setup, workflow, editions, troubleshooting
+2. **WebGoat & Juice Shop** — install the practice targets
+3. **Testing Aegis** — step-by-step scenarios against those targets
+
+## Tech stack
+
+Next.js (App Router) · Express + Socket.IO · MongoDB · Redis · Docker Compose ·
+a token-gated Kali worker (nmap, nuclei, ffuf, gobuster, nikto, whatweb, hydra,
+dig) with an XFCE desktop over noVNC.
 
 ## License
 
-MIT — intended for authorized security testing and education.
+The **Community Edition** (this repository) is released under the **MIT License** —
+see [`LICENSE`](LICENSE). The Enterprise overlay and license-signing keys are
+proprietary and are **not** part of this edition.
+
+---
+
+<div align="center">
+<sub><b>Aegis</b> — for authorized penetration testing only.</sub>
+</div>
