@@ -12,6 +12,38 @@ const SEV = [
 
 const twoCol = { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16 } as const;
 
+/** A dependency-free SVG donut: one stroked arc per non-zero severity. */
+function Donut({ data, total, size = 150, stroke = 24 }: { data: { k: string; c: string; n: number }[]; total: number; size?: number; stroke?: number }) {
+  const r = (size - stroke) / 2;
+  const c = size / 2;
+  const TAU = Math.PI * 2;
+  const pt = (a: number): [number, number] => [c + r * Math.cos(a), c + r * Math.sin(a)];
+  const segs = data.filter((d) => d.n > 0);
+  const single = segs.length === 1 ? segs[0] : null;
+  let cum = 0;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Findings by severity donut" style={{ flex: "none" }}>
+      <circle cx={c} cy={c} r={r} fill="none" stroke="rgba(255,255,255,.06)" strokeWidth={stroke} />
+      {single ? (
+        <circle cx={c} cy={c} r={r} fill="none" stroke={single.c} strokeWidth={stroke} />
+      ) : (
+        segs.map((d) => {
+          const frac = d.n / total;
+          const a0 = -Math.PI / 2 + TAU * cum;
+          const a1 = -Math.PI / 2 + TAU * (cum + frac);
+          cum += frac;
+          const [x0, y0] = pt(a0);
+          const [x1, y1] = pt(a1);
+          const large = a1 - a0 > Math.PI ? 1 : 0;
+          return <path key={d.k} d={`M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}`} fill="none" stroke={d.c} strokeWidth={stroke} strokeLinecap="butt" />;
+        })
+      )}
+      <text x={c} y={c - 3} textAnchor="middle" fontSize="28" fontWeight="700" fill="#e6f6ff">{total}</text>
+      <text x={c} y={c + 15} textAnchor="middle" fontSize="10" letterSpacing="1.5" fill="#6b8299">FINDINGS</text>
+    </svg>
+  );
+}
+
 /** Cross-engagement overview — the landing tab. Read-only; refreshes every 20s. */
 export function Dashboard({ onOpen }: { onOpen: (slug: string) => void }) {
   const [d, setD] = useState<DashboardData | null>(null);
@@ -36,7 +68,6 @@ export function Dashboard({ onOpen }: { onOpen: (slug: string) => void }) {
   if (!d) return null;
 
   const running = d.sessions.byStatus.running ?? 0;
-  const maxSev = Math.max(1, ...SEV.map((s) => d.findings.bySeverity[s.k] ?? 0));
   const kpis = [
     { label: "Engagements", value: d.engagements, c: "var(--cyan)" },
     { label: "Running sessions", value: running, c: "var(--cyan)" },
@@ -58,24 +89,29 @@ export function Dashboard({ onOpen }: { onOpen: (slug: string) => void }) {
         ))}
       </div>
 
-      {/* Findings by severity */}
+      {/* Findings by severity — donut + legend */}
       <div className="panel" style={{ margin: 0 }}>
         <h2>Findings by severity</h2>
         {d.findings.total === 0 ? (
           <div className="muted">No findings recorded yet.</div>
         ) : (
-          SEV.map((s) => {
-            const n = d.findings.bySeverity[s.k] ?? 0;
-            return (
-              <div key={s.k} style={{ display: "flex", alignItems: "center", gap: 10, margin: "6px 0" }}>
-                <div style={{ width: 64, fontSize: 12 }}>{s.label}</div>
-                <div style={{ flex: 1, background: "rgba(255,255,255,.04)", borderRadius: 4, height: 16 }}>
-                  <div style={{ width: `${(n / maxSev) * 100}%`, background: s.c, height: "100%", borderRadius: 4, minWidth: n ? 3 : 0 }} />
-                </div>
-                <div style={{ width: 30, textAlign: "right", fontWeight: 700, fontSize: 13 }}>{n}</div>
-              </div>
-            );
-          })
+          <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
+            <Donut data={SEV.map((s) => ({ k: s.k, c: s.c, n: d.findings.bySeverity[s.k] ?? 0 }))} total={d.findings.total} />
+            <div style={{ flex: 1, minWidth: 200 }}>
+              {SEV.map((s) => {
+                const n = d.findings.bySeverity[s.k] ?? 0;
+                const pct = Math.round((n / d.findings.total) * 100);
+                return (
+                  <div key={s.k} style={{ display: "flex", alignItems: "center", gap: 10, margin: "5px 0", opacity: n ? 1 : 0.4 }}>
+                    <span style={{ display: "inline-block", width: 11, height: 11, borderRadius: 3, background: s.c, flex: "none" }} />
+                    <span style={{ flex: 1, fontSize: 13 }}>{s.label}</span>
+                    <span style={{ fontWeight: 700, fontSize: 13 }}>{n}</span>
+                    <span className="muted" style={{ width: 42, textAlign: "right", fontSize: 12 }}>{pct}%</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         )}
       </div>
 
