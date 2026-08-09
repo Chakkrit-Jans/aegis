@@ -10,10 +10,20 @@ const SEV = [
   { k: "info", label: "Info", c: "#6b8299" },
 ];
 
+// Session statuses — colours mirror the .status-* classes in globals.css.
+const SESS = [
+  { k: "running", label: "Running", c: "#22e0ff" },
+  { k: "waiting_approval", label: "Waiting approval", c: "#ffb547" },
+  { k: "done", label: "Done", c: "#39ff88" },
+  { k: "stopped", label: "Stopped", c: "#6b8299" },
+  { k: "error", label: "Error", c: "#ff4d6d" },
+  { k: "idle", label: "Idle", c: "#3a4b5b" },
+];
+
 const twoCol = { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 16 } as const;
 
-/** A dependency-free SVG donut: one stroked arc per non-zero severity. */
-function Donut({ data, total, size = 150, stroke = 24 }: { data: { k: string; c: string; n: number }[]; total: number; size?: number; stroke?: number }) {
+/** A dependency-free SVG donut: one stroked arc per non-zero slice. */
+function Donut({ data, total, label, size = 150, stroke = 24 }: { data: { k: string; c: string; n: number }[]; total: number; label: string; size?: number; stroke?: number }) {
   const r = (size - stroke) / 2;
   const c = size / 2;
   const TAU = Math.PI * 2;
@@ -39,8 +49,37 @@ function Donut({ data, total, size = 150, stroke = 24 }: { data: { k: string; c:
         })
       )}
       <text x={c} y={c - 3} textAnchor="middle" fontSize="28" fontWeight="700" fill="#e6f6ff">{total}</text>
-      <text x={c} y={c + 15} textAnchor="middle" fontSize="10" letterSpacing="1.5" fill="#6b8299">FINDINGS</text>
+      <text x={c} y={c + 15} textAnchor="middle" fontSize="10" letterSpacing="1.5" fill="#6b8299">{label}</text>
     </svg>
+  );
+}
+
+/** A titled panel with a donut + legend (count + %). Reused for findings and sessions. */
+function DonutPanel({ title, items, total, center, empty }: { title: string; items: { k: string; label: string; c: string; n: number }[]; total: number; center: string; empty: string }) {
+  return (
+    <div className="panel" style={{ margin: 0 }}>
+      <h2>{title}</h2>
+      {total === 0 ? (
+        <div className="muted">{empty}</div>
+      ) : (
+        <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
+          <Donut data={items} total={total} label={center} />
+          <div style={{ flex: 1, minWidth: 190 }}>
+            {items.map((s) => {
+              const pct = Math.round((s.n / total) * 100);
+              return (
+                <div key={s.k} style={{ display: "flex", alignItems: "center", gap: 10, margin: "5px 0", opacity: s.n ? 1 : 0.4 }}>
+                  <span style={{ display: "inline-block", width: 11, height: 11, borderRadius: 3, background: s.c, flex: "none" }} />
+                  <span style={{ flex: 1, fontSize: 13 }}>{s.label}</span>
+                  <span style={{ fontWeight: 700, fontSize: 13 }}>{s.n}</span>
+                  <span className="muted" style={{ width: 42, textAlign: "right", fontSize: 12 }}>{pct}%</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -89,30 +128,22 @@ export function Dashboard({ onOpen }: { onOpen: (slug: string) => void }) {
         ))}
       </div>
 
-      {/* Findings by severity — donut + legend */}
-      <div className="panel" style={{ margin: 0 }}>
-        <h2>Findings by severity</h2>
-        {d.findings.total === 0 ? (
-          <div className="muted">No findings recorded yet.</div>
-        ) : (
-          <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
-            <Donut data={SEV.map((s) => ({ k: s.k, c: s.c, n: d.findings.bySeverity[s.k] ?? 0 }))} total={d.findings.total} />
-            <div style={{ flex: 1, minWidth: 200 }}>
-              {SEV.map((s) => {
-                const n = d.findings.bySeverity[s.k] ?? 0;
-                const pct = Math.round((n / d.findings.total) * 100);
-                return (
-                  <div key={s.k} style={{ display: "flex", alignItems: "center", gap: 10, margin: "5px 0", opacity: n ? 1 : 0.4 }}>
-                    <span style={{ display: "inline-block", width: 11, height: 11, borderRadius: 3, background: s.c, flex: "none" }} />
-                    <span style={{ flex: 1, fontSize: 13 }}>{s.label}</span>
-                    <span style={{ fontWeight: 700, fontSize: 13 }}>{n}</span>
-                    <span className="muted" style={{ width: 42, textAlign: "right", fontSize: 12 }}>{pct}%</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+      {/* Findings by severity + Sessions by status — donuts */}
+      <div style={twoCol}>
+        <DonutPanel
+          title="Findings by severity"
+          items={SEV.map((s) => ({ ...s, n: d.findings.bySeverity[s.k] ?? 0 }))}
+          total={d.findings.total}
+          center="FINDINGS"
+          empty="No findings recorded yet."
+        />
+        <DonutPanel
+          title="Sessions by status"
+          items={SESS.map((s) => ({ ...s, n: d.sessions.byStatus[s.k] ?? 0 }))}
+          total={d.sessions.total}
+          center="SESSIONS"
+          empty="No sessions yet."
+        />
       </div>
 
       {/* Pending approvals + recent sessions */}
