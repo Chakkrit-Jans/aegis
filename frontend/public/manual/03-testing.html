@@ -21,7 +21,8 @@
     <li><a href="#auto">7. <span class="th">Auto-approve ในแล็บ</span><span class="en">Auto-approve in the lab</span></a></li>
     <li><a href="#report">8. <span class="th">รายงาน + PDF</span><span class="en">Report + PDF</span></a></li>
     <li><a href="#validate">9. <span class="th">ผลลัพธ์ที่ควรได้</span><span class="en">Expected results</span></a></li>
-    <li><a href="#tshoot">10. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></a></li>
+    <li><a href="#cases">10. <span class="th">Case Studies (OWASP)</span><span class="en">Case Studies (OWASP)</span></a></li>
+    <li><a href="#tshoot">11. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></a></li>
   </ol>
 </nav>
 
@@ -180,8 +181,78 @@ Save findings with remediation, then generate_report.</code></pre>
   </section>
 
   <!-- 10 -->
+  <section id="cases">
+  <h2>10. <span class="th">Case Studies — WebGoat lesson map (OWASP)</span><span class="en">Case Studies — WebGoat lesson map (OWASP)</span></h2>
+  <p><span class="th">ส่วนนี้จับหมวดช่องโหว่ตาม <b>WebGoat lesson map</b> (อ้างอิง OWASP Top-10) มาเป็น case study — แต่ละหมวดบอกว่า <b>ควรเจออะไร</b>, <b>เครื่องมืออัตโนมัติของ Aegis เจอจริงไหม</b> (จากการรันจริง), และ<b>วิธีตรวจว่ารายงานตรงกับโจทย์</b> · ผมสร้าง engagement ไว้ให้ตามหัวข้อแล้ว (ชื่อขึ้นต้น <code>Case ·</code> ใน Console) พร้อม scope <code>juiceshop:3000</code> + <code>webgoat:8080</code> · หมวดที่ซ้ำกับ Scenario เดิมถูกรวมไว้ที่นี่ (Injection = <a href="#sC">§5 SQLi</a>, Sensitive Data = <a href="#sB">§4 Dir Enum</a>) โดยมองในมุม OWASP + มีรายงานจริง</span>
+  <span class="en">This section turns the <b>WebGoat lesson map</b> (mapped to the OWASP Top-10) into case studies — each says <b>what you should find</b>, <b>whether Aegis's automated tools actually find it</b> (from real runs), and <b>how to check the report against the objective</b> · one engagement per category is pre-created (names start with <code>Case ·</code> in the Console) scoped to <code>juiceshop:3000</code> + <code>webgoat:8080</code> · categories that overlap earlier scenarios are consolidated here (Injection = <a href="#sC">§5 SQLi</a>, Sensitive Data = <a href="#sB">§4 Dir Enum</a>) viewed through OWASP + with a real report.</span></p>
+
+  <div class="box warn"><span class="tag">⚠ <span class="th">ความจริงที่ต้องเข้าใจ</span><span class="en">The honest reality</span></span><span class="th">เครื่องมืออัตโนมัติ (http_probe, nmap, dir_enum, web_vuln_scan/nuclei, run_command) เก่งเรื่อง<b>ผิวเผินและ endpoint จริง</b> — header ที่ขาด, ไดเรกทอรีเปิด, เวอร์ชันล้าสมัย, และช่องโหว่ที่ยิงยืนยันได้ตรง ๆ (เช่น SQLi ที่ Juice Shop) · แต่บทเรียน WebGoat ส่วนใหญ่<b>ต้อง login + ทำเป็นขั้นตอน (IDOR, stored XSS, XXE, CSRF, SSRF, JWT)</b> — พวกนี้ทำมือผ่านแท็บ Desktop ระบบจะไม่เจอเอง</span><span class="en">Automated tools (http_probe, nmap, dir_enum, web_vuln_scan/nuclei, run_command) excel at <b>surface + real endpoints</b> — missing headers, exposed directories, outdated versions, and directly-verifiable flaws (e.g. SQLi on Juice Shop). But most WebGoat lessons are <b>authenticated, multi-step (IDOR, stored XSS, XXE, CSRF, SSRF, JWT)</b> — those are done by hand via the Desktop tab; the scanner won't find them on its own.</span></div>
+
+  <h3><span class="th">ตารางสรุป: หมวด × เจอจริงไหม</span><span class="en">Summary: category × can Aegis find it</span></h3>
+  <table>
+    <tr><th><span class="th">หมวด</span><span class="en">Category</span></th><th>OWASP</th><th><span class="th">ควรเจอ</span><span class="en">Should find</span></th><th><span class="th">Aegis อัตโนมัติ</span><span class="en">Aegis (auto)</span></th></tr>
+    <tr><td><b>Injection</b></td><td>A03</td><td><span class="th">SQLi (auth bypass), Path Traversal</span><span class="en">SQLi (auth bypass), Path Traversal</span></td><td><span class="pill ok">✅ <span class="th">ยืนยันจริง</span><span class="en">confirmed</span></span> <span class="th">— SQLi ที่ Juice Shop</span><span class="en"> — SQLi on Juice Shop</span></td></tr>
+    <tr><td><b>Broken Auth</b></td><td>A07</td><td><span class="th">Auth bypass, JWT, password reset</span><span class="en">Auth bypass, JWT, password reset</span></td><td><span class="pill ok">✅</span> <span class="th">auth bypass (=SQLi) · JWT/reset</span><span class="en">auth bypass (=SQLi) · JWT/reset</span> <span class="pill warn">✋ <span class="th">ทำมือ</span><span class="en">manual</span></span></td></tr>
+    <tr><td><b>Access Control</b></td><td>A01</td><td><span class="th">IDOR, Missing Function-Level AC</span><span class="en">IDOR, Missing Function-Level AC</span></td><td><span class="pill warn">◐</span> <span class="th">dir_enum เจอ endpoint admin · ยืนยัน IDOR ทำมือ</span><span class="en">dir_enum finds admin endpoints · IDOR needs manual</span></td></tr>
+    <tr><td><b>XSS</b></td><td>A03</td><td><span class="th">Reflected / DOM / Stored</span><span class="en">Reflected / DOM / Stored</span></td><td><span class="pill warn">◐</span> <span class="th">nuclei อาจ flag reflected · DOM/Stored ทำมือ</span><span class="en">nuclei may flag reflected · DOM/Stored manual</span></td></tr>
+    <tr><td><b>Sensitive Data / XXE</b></td><td>A02 / A05</td><td><span class="th">ไฟล์/ไดเรกทอรีหลุด, XXE</span><span class="en">Exposed files/dirs, XXE</span></td><td><span class="pill ok">✅ <span class="th">/ftp เปิด</span><span class="en">/ftp exposed</span></span> <span class="th">+ CORS * · XXE ทำมือ</span><span class="en">+ CORS * · XXE manual</span></td></tr>
+    <tr><td><b>Request Forgery</b></td><td>A01 / A10</td><td><span class="th">CSRF, SSRF</span><span class="en">CSRF, SSRF</span></td><td><span class="pill warn">✋ <span class="th">ส่วนใหญ่ทำมือ</span><span class="en">mostly manual</span></span></td></tr>
+    <tr><td><b>Vulnerable Components</b></td><td>A06</td><td><span class="th">ไลบรารี/เฟรมเวิร์กเวอร์ชันเก่า</span><span class="en">Outdated libs / frameworks</span></td><td><span class="pill warn">◐</span> <span class="th">nmap/nuclei/http_probe fingerprint เวอร์ชัน</span><span class="en">nmap/nuclei/http_probe fingerprint versions</span></td></tr>
+  </table>
+  <p class="muted"><span class="th"><b>✅ ยืนยันจริง</b> = รันแล้วเจอและยืนยันได้ · <b>◐</b> = ทำได้ถ้าใช้ objective เจาะจง/บาง endpoint · <b>✋</b> = ต้องทำมือ (บทเรียนต้อง login/หลายขั้น)</span><span class="en"><b>✅</b> = ran it and confirmed · <b>◐</b> = doable with a directive objective / on some endpoints · <b>✋</b> = manual (authenticated, multi-step lessons).</span></p>
+
+  <h3><span class="th">ตัวอย่างจริง: Injection (A03) — จากโจทย์ถึงรายงาน</span><span class="en">Worked example: Injection (A03) — objective to report</span></h3>
+  <p><span class="th">โจทย์นี้สั่งให้ <b>ยืนยัน</b> ช่องโหว่ (ไม่ใช่แค่สแกนผ่าน ๆ) — เคล็ดลับคือระบุให้ใช้ <code>run_command</code> ยิงจริงและบอกว่า “อะไรคือหลักฐานที่พิสูจน์ได้”:</span><span class="en">This objective tells the agent to <b>confirm</b> the flaw (not just scan) — the trick is to name <code>run_command</code> and state “what proves it”:</span></p>
+  <pre><code>Validate two issues on juiceshop:3000 using run_command, then report.
+(1) SQL injection auth bypass at POST /rest/user/login — email = ' OR 1=1--
+    password = x. If the JSON response contains an authentication token,
+    it is CONFIRMED (critical, certain).
+(2) Exposed directory /ftp/ — if GET returns HTTP 200 it is exposed
+    (medium, certain). Also record missing CSP/HSTS (low).
+save_finding (description, impact, remediation, confidence) each, then
+generate_report.</code></pre>
+  <div class="box tip"><span class="tag">💡 <span class="th">เกร็ดจากการรันจริง</span><span class="en">From the real run</span></span><span class="th">worker <b>ไม่มี <code>curl</code></b> — agent สลับไปใช้ <code>python3</code> เองในการยิง POST/GET แล้วเห็น token กลับมา ⇒ ยืนยัน SQLi ได้ · ถ้าใช้ objective กว้าง ๆ (“ทำ pentest ให้ครบ”) agent มักเข้าสู่ reporting phase เร็วและได้แค่ finding header — <b>ยิ่งโจทย์ชัด ผลยิ่งตรง</b></span><span class="en">The worker has <b>no <code>curl</code></b> — the agent switched to <code>python3</code> to POST/GET and saw the token ⇒ SQLi confirmed · with a broad objective (“do a full pentest”) the agent often enters the reporting phase early and only records the header finding — <b>the sharper the objective, the truer the result</b>.</span></div>
+
+  <p><span class="th">รายงานจริงที่ระบบสร้าง (ย่อจาก report ของ engagement <code>case-injection-a03</code>):</span><span class="en">The real report the system produced (condensed from the <code>case-injection-a03</code> engagement):</span></p>
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Case: Injection (A03)</span></div>
+    <div class="body" style="background:#fff;color:#1a2430">
+      <div style="border-left:4px solid #b30021;padding-left:12px;margin-bottom:10px">
+        <div style="font-size:18px;font-weight:700;color:#0b7285">Penetration Test Report</div>
+        <div style="font-size:12px;color:#5a6b7a">Case: Injection (A03) · Client: WebGoat lesson map</div>
+        <div style="margin-top:6px;font-size:12px"><b style="color:#0b7285">Scope:</b> juiceshop:3000, webgoat:8080 &nbsp;·&nbsp; <b style="color:#0b7285">Overall risk:</b> <span style="background:#b30021;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">CRITICAL</span></div>
+      </div>
+      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px">Issues found</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:4px 0 10px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Confidence</th></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">/rest/user/login</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#b30021;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">CRITICAL</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">/ftp/</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">juiceshop:3000 (headers)</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Firm</td></tr>
+      </table>
+      <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px">
+        <div style="font-weight:700;color:#0b7285;font-size:12px">1. SQL Injection Authentication Bypass in /rest/user/login &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#5a6b7a">Description</span><span style="font-size:12px">email = <code>' OR 1=1--</code> bypasses auth; POST returned HTTP 200 with a JWT that decodes to admin@juice-sh.op (role admin).</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#b30021">Impact / Risk</span><span style="font-size:12px">Full unauthenticated auth bypass → admin account takeover and all admin functions (OWASP A03).</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#2f6f4f">Remediation</span><span style="font-size:12px">Parameterized queries/prepared statements; strict input validation; least-privilege DB user. If exploited: rotate admin creds, revoke leaked tokens, review auth logs.</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#5a6b7a">Evidence</span><span style="font-size:12px;font-family:monospace">POST /rest/user/login {"email":"' OR 1=1--"} → 200 {"authentication":{"token":"eyJ0eXAiOiJKV1Qi…"}}</span></div>
+      </div>
+    </div>
+  </figure>
+  <figcaption><span class="th">รายงานจริงจากระบบ — finding #1 (SQLi) มีหลักฐาน token จริงที่ยิงยืนยัน</span><span class="en">The real system report — finding #1 (SQLi) with the real token from a confirmed request</span></figcaption>
+
+  <h3><span class="th">ตรวจว่ารายงาน “ตรงกับโจทย์” อย่างไร</span><span class="en">How to check the report matches the objective</span></h3>
+  <ol class="steps">
+    <li><span class="th"><b>โจทย์สั่งหาอะไร → รายงานมีไหม</b> — objective บอก “SQLi + /ftp” รายงานต้องมี finding ทั้งสอง · ถ้ามีแค่ header = <b>ไม่ครบตามโจทย์</b> (agent เข้าสู่ reporting เร็วไป)</span><span class="en"><b>What the objective asked for → is it in the report?</b> The objective said “SQLi + /ftp”, so both findings must be present · if only headers appear, the report <b>does not match</b> (the agent reported too early).</span></li>
+    <li><span class="th"><b>มีหลักฐานจริงไหม</b> — แต่ละ finding ต้องมี <b>Evidence</b> ที่พิสูจน์ได้ (เช่น token จริงจาก request) ไม่ใช่แค่คำอธิบายลอย ๆ</span><span class="en"><b>Is there real evidence?</b> Each finding must carry provable <b>Evidence</b> (e.g. the actual token from the request), not just prose.</span></li>
+    <li><span class="th"><b>Confidence เหมาะสมไหม</b> — <code>certain</code> ควรมาจากการยิงยืนยัน (run_command เห็นผล) · <code>firm/tentative</code> = ยังไม่ยืนยัน ควรตามต่อ</span><span class="en"><b>Is the Confidence right?</b> <code>certain</code> should come from a confirmed request (run_command saw it) · <code>firm/tentative</code> = not yet proven, follow up.</span></li>
+    <li><span class="th"><b>Severity สมเหตุผลไหม</b> — auth bypass = critical, ไดเรกทอรีหลุด = medium, header ขาด = low · เทียบกับ Dashboard (โดนัท severity/confidence) ว่าขยับตรงกับที่ควรเป็น</span><span class="en"><b>Is the Severity sensible?</b> auth bypass = critical, exposed dir = medium, missing header = low · cross-check the Dashboard (severity/confidence donuts) moved to match.</span></li>
+    <li><span class="th"><b>ถ้าไม่ครบ</b> — ปรับ objective ให้เจาะจง (ระบุ endpoint + run_command + “อะไรคือหลักฐาน”) แล้วรันใหม่ หรือทำมือผ่าน Desktop สำหรับบทเรียนที่ต้อง login</span><span class="en"><b>If incomplete</b> — sharpen the objective (name the endpoint + run_command + “what proves it”) and re-run, or do it by hand via Desktop for authenticated lessons.</span></li>
+  </ol>
+  </section>
+
+  <!-- 11 -->
   <section id="tshoot">
-  <h2>10. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></h2>
+  <h2>11. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></h2>
   <table>
     <tr><th><span class="th">อาการ</span><span class="en">Symptom</span></th><th><span class="th">วิธีแก้</span><span class="en">Fix</span></th></tr>
     <tr><td><span class="th">tool ล้มด้วย connection refused/timeout</span><span class="en">Tools fail with connection refused/timeout</span></td><td><span class="th">worker ยิงเป้าไม่ถึง — curl ทดสอบจากแท็บ Terminal (Book 02 §8); ใช้ <code>host.docker.internal</code> ไม่ใช่ <code>localhost</code></span><span class="en">The worker can't reach the target — curl-test from the Terminal tab (Book 02 §8); use <code>host.docker.internal</code>, not <code>localhost</code>.</span></td></tr>
