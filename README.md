@@ -38,6 +38,19 @@ Aegis is the opposite: the AI is fast and tireless, but **you stay in control**.
 | 🧾 **Audit + RBAC** | Admin/operator roles; every approval, command and config change is written to an immutable audit log. |
 | 📄 **Client report** | Findings become a print-ready HTML report (cover, overall risk, severity summary, evidence/impact/risk/remediation) → one-click **Save as PDF**. |
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screenshots/console.png" width="100%" alt="Console"/><br/><sub><b>Console</b> — the agent reasons and runs tools, findings stream in, and each active tool waits for your approval.</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/report.png" width="100%" alt="Client report"/><br/><sub><b>Client report</b> — overall risk, severity summary, and every finding with evidence, impact & remediation → Save as PDF.</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screenshots/about.png" width="100%" alt="About dialog"/><br/><sub><b>About</b> — edition &amp; license, plus live MongoDB/Redis and Kali worker tool versions.</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/login.png" width="100%" alt="Sign in"/><br/><sub><b>Sign in</b> — every route and the websocket sit behind JWT auth.</sub></td>
+  </tr>
+</table>
+
 ## Architecture
 
 ```mermaid
