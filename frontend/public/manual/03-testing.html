@@ -151,10 +151,23 @@ Save findings with remediation, then generate_report.</code></pre>
     <div class="body" style="background:#fff;color:#1a2430">
       <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #e2e8f0;padding-bottom:6px"><b style="color:#0b7285">Penetration Test Report — juice-lab</b><span style="background:#d9480f;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">HIGH</span></div>
       <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px;margin:10px 0 3px">Issues found</div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
-        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">SQL injection → admin auth bypass</td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
-        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">Missing CSP header</td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Firm</td></tr>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#d9480f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">HIGH</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">SQL injection → admin auth bypass</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
+      </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Missing CSP header</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Firm</td></tr>
       </table></div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">1. SQL injection → admin auth bypass &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
@@ -239,35 +252,42 @@ Save findings with remediation, then generate_report.</code></pre>
         <div style="font-size:12px;color:#5a6b7a">Injection (A03) · Client: WebGoat lesson map</div>
         <div style="margin-top:6px;font-size:12px"><b style="color:#0b7285">Scope:</b> juiceshop:3000, webgoat:8080 &nbsp;·&nbsp; <b style="color:#0b7285">Overall risk:</b> <span style="background:#b30021;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">CRITICAL</span> &nbsp;·&nbsp; 3 findings</div>
       </div>
-      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px">Issues found</div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:4px 0 6px">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">SQL Injection Authentication Bypass in /rest/user/login</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b30021;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">CRITICAL</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Exposed Directory Listing: /ftp</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/ftp/</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Missing HTTP Strict Transport Security (HSTS) and Content Security Policy (CSP) headers</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Firm</td>
-        </tr>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:6px 0 4px">Issues found on juiceshop:3000</div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b30021;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">CRITICAL</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">SQL Injection Authentication Bypass in /rest/user/login</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b30021;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">CRITICAL</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
       </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Exposed Directory Listing: /ftp</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/ftp/</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
+      </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#2f6f4f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">LOW</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Missing HTTP Strict Transport Security (HSTS) and Content Security Policy (CSP) headers</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Firm</td></tr>
+      </table></div>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:16px 0 4px">Findings &amp; Remediation</div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">1. SQL Injection Authentication Bypass in /rest/user/login &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
         <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000/rest/user/login</span></div>
         <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#5a6b7a">Description</span><span style="font-size:12px">The JSON login endpoint /rest/user/login accepts a crafted email value of ' OR 1=1-- to bypass authentication entirely. POST body {"email": "' OR 1=1--", "password": "x"} with Content-Type application/json returned HTTP 200 with a JSON authentication token. The token decodes (JWT) to the application's built-in admin account (email admin@juice-sh.op, role "admin"). This proves the SQL WHERE clause is built from unsanitized user input, allowing boolean-based injection to short-circuit the password check.</span></div>
         <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#b30021">Impact / Risk</span><span style="font-size:12px">Full unauthenticated authentication bypass. An attacker can log in as the administrative user without any valid credentials, gaining access to all admin-only functionality, sensitive data, and the ability to perform privileged actions. This is a critical compromise of the application's access control (OWASP A03 Injection).</span></div>
         <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#2f6f4f">Remediation</span><span style="font-size:12px">Use parameterized queries / prepared statements for the login lookup so user-supplied values are treated strictly as data, never as executable SQL. Validate and normalize email input (reject quotes/whitespace-control characters, or use a strict email format validator). Apply the principle of least privilege to the DB user the app connects as. IF ALREADY EXPLOITED: rotate/revoke the admin account credentials and any leaked session tokens, review access logs for logins originating from this payload, audit admin session activity around the compromise window, and enable audit logging for authentication events.</span></div>
-        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#5a6b7a">Evidence</span><span style="font-size:12px">Request: POST /rest/user/login {"email": "' OR 1=1--", "password": "x"} HTTP/1.1\nContent-Type: application/json\n\nResponse: HTTP 200\n{"authentication":{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...","bid":1,"umail":"admin@juice-sh.op"}}\n\nDecoded JWT payload includes: {"data":{"id":1,"email":"admin@juice-sh.op",</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#5a6b7a">Evidence</span><span style="font-size:12px">Request: POST /rest/user/login {"email": "' OR 1=1--", "password": "x"} HTTP/1.1<br/>Content-Type: application/json<br/><br/>Response: HTTP 200<br/>{"authentication":{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...","bid":1,"umail":"admin@juice-sh.op"}}<br/><br/>Decoded JWT payload includes: {"data":{"id":1,"email":"admin@juice-sh.op",</span></div>
       </div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">2. Exposed Directory Listing: /ftp &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
@@ -300,22 +320,26 @@ Save findings with remediation, then generate_report.</code></pre>
         <div style="font-size:12px;color:#5a6b7a">Broken Auth (A07) · Client: WebGoat lesson map</div>
         <div style="margin-top:6px;font-size:12px"><b style="color:#0b7285">Scope:</b> juiceshop:3000, webgoat:8080 &nbsp;·&nbsp; <b style="color:#0b7285">Overall risk:</b> <span style="background:#b30021;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">CRITICAL</span> &nbsp;·&nbsp; 2 findings</div>
       </div>
-      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px">Issues found</div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:4px 0 6px">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">SQL Injection Authentication Bypass at /rest/user/login (Broken Authentication)</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b30021;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">CRITICAL</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Authentication token JWT discloses full account profile including admin password hash</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:6px 0 4px">Issues found on juiceshop:3000</div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b30021;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">CRITICAL</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">SQL Injection Authentication Bypass at /rest/user/login (Broken Authentication)</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b30021;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">CRITICAL</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
       </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#d9480f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">HIGH</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Authentication token JWT discloses full account profile including admin password hash</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/user/login</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
+      </table></div>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:16px 0 4px">Findings &amp; Remediation</div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">1. SQL Injection Authentication Bypass at /rest/user/login (Broken Authentication) &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
         <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000/rest/user/login</span></div>
@@ -346,22 +370,26 @@ Save findings with remediation, then generate_report.</code></pre>
         <div style="font-size:12px;color:#5a6b7a">Access Control (A01) · Client: WebGoat lesson map</div>
         <div style="margin-top:6px;font-size:12px"><b style="color:#0b7285">Scope:</b> juiceshop:3000, webgoat:8080 &nbsp;·&nbsp; <b style="color:#0b7285">Overall risk:</b> <span style="background:#b8860b;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">MEDIUM</span> &nbsp;·&nbsp; 2 findings</div>
       </div>
-      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px">Issues found</div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:4px 0 6px">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Missing function-level access control / data exposure on /api/Feedbacks</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/api/Feedbacks</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Missing HTTP Strict-Transport-Security (HSTS) header</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Tentative</td>
-        </tr>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:6px 0 4px">Issues found on juiceshop:3000</div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Missing function-level access control / data exposure on /api/Feedbacks</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/api/Feedbacks</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
       </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#2f6f4f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">LOW</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Missing HTTP Strict-Transport-Security (HSTS) header</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Tentative</td></tr>
+      </table></div>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:16px 0 4px">Findings &amp; Remediation</div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">1. Missing function-level access control / data exposure on /api/Feedbacks &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
         <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000/api/Feedbacks</span></div>
@@ -393,16 +421,17 @@ Save findings with remediation, then generate_report.</code></pre>
         <div style="font-size:12px;color:#5a6b7a">XSS (A03) · Client: WebGoat lesson map</div>
         <div style="margin-top:6px;font-size:12px"><b style="color:#0b7285">Scope:</b> juiceshop:3000, webgoat:8080 &nbsp;·&nbsp; <b style="color:#0b7285">Overall risk:</b> <span style="background:#b8860b;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">MEDIUM</span> &nbsp;·&nbsp; 1 findings</div>
       </div>
-      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px">Issues found</div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:4px 0 6px">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Missing Content-Security-Policy (CSP) header — increases XSS impact</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:6px 0 4px">Issues found on juiceshop:3000</div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Missing Content-Security-Policy (CSP) header — increases XSS impact</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
       </table></div>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:16px 0 4px">Findings &amp; Remediation</div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">1. Missing Content-Security-Policy (CSP) header — increases XSS impact &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
         <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000</span></div>
@@ -426,28 +455,35 @@ Save findings with remediation, then generate_report.</code></pre>
         <div style="font-size:12px;color:#5a6b7a">Sensitive Data / XXE (A02/A05) · Client: WebGoat lesson map</div>
         <div style="margin-top:6px;font-size:12px"><b style="color:#0b7285">Scope:</b> juiceshop:3000, webgoat:8080 &nbsp;·&nbsp; <b style="color:#0b7285">Overall risk:</b> <span style="background:#b8860b;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">MEDIUM</span> &nbsp;·&nbsp; 3 findings</div>
       </div>
-      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px">Issues found</div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:4px 0 6px">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Browsable /ftp/ directory (information disclosure)</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/ftp/</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Sensitive file exposure in /ftp/ directory</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/ftp/acquisitions.md</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Tentative</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Missing HTTP Content-Security-Policy (CSP) header</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:6px 0 4px">Issues found on juiceshop:3000</div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Browsable /ftp/ directory (information disclosure)</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/ftp/</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
       </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Sensitive file exposure in /ftp/ directory</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/ftp/acquisitions.md</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Tentative</td></tr>
+      </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Missing HTTP Content-Security-Policy (CSP) header</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
+      </table></div>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:16px 0 4px">Findings &amp; Remediation</div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">1. Browsable /ftp/ directory (information disclosure) &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
         <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000/ftp/</span></div>
@@ -486,34 +522,44 @@ Save findings with remediation, then generate_report.</code></pre>
         <div style="font-size:12px;color:#5a6b7a">Request Forgery (A01/A10) · Client: WebGoat lesson map</div>
         <div style="margin-top:6px;font-size:12px"><b style="color:#0b7285">Scope:</b> juiceshop:3000, webgoat:8080 &nbsp;·&nbsp; <b style="color:#0b7285">Overall risk:</b> <span style="background:#b8860b;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">MEDIUM</span> &nbsp;·&nbsp; 4 findings</div>
       </div>
-      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px">Issues found</div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:4px 0 6px">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Permissive CORS Access-Control-Allow-Origin: *</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Profile image-URL SSRF surface (needs authenticated session + out-of-band callback for confirmation)</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">CSRF surface on authenticated state-changing endpoints (needs authenticated session for confirmation)</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Tentative</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Missing security headers (HSTS / Content-Security-Policy)</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:6px 0 4px">Issues found on juiceshop:3000</div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Permissive CORS Access-Control-Allow-Origin: *</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
       </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Profile image-URL SSRF surface (needs authenticated session + out-of-band callback for confirmation)</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
+      </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">CSRF surface on authenticated state-changing endpoints (needs authenticated session for confirmation)</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Tentative</td></tr>
+      </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#b8860b;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">MEDIUM</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Missing security headers (HSTS / Content-Security-Policy)</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
+      </table></div>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:16px 0 4px">Findings &amp; Remediation</div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">1. Permissive CORS Access-Control-Allow-Origin: * &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
         <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000</span></div>
@@ -558,22 +604,26 @@ Save findings with remediation, then generate_report.</code></pre>
         <div style="font-size:12px;color:#5a6b7a">Vulnerable Components (A06) · Client: WebGoat lesson map</div>
         <div style="margin-top:6px;font-size:12px"><b style="color:#0b7285">Scope:</b> juiceshop:3000, webgoat:8080 &nbsp;·&nbsp; <b style="color:#0b7285">Overall risk:</b> <span style="background:#2f6f4f;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">LOW</span> &nbsp;·&nbsp; 2 findings</div>
       </div>
-      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px">Issues found</div>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:4px 0 6px">
-        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Issue</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:72px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:78px">Confidence</th></tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Application version disclosure (vulnerable/outdated components)</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/admin/application-version</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px">Server-side missing HTTP security headers (HSTS / CSP / X-Content-Type-Options)</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td>
-          <td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Tentative</td>
-        </tr>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:6px 0 4px">Issues found on juiceshop:3000</div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#2f6f4f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">LOW</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Application version disclosure (vulnerable/outdated components)</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000/rest/admin/application-version</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Certain</td></tr>
       </table></div>
+      <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:8px">
+        <span style="background:#2f6f4f;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px">LOW</span>
+        <span style="font-weight:700;color:#0b7285;font-size:13px">Server-side missing HTTP security headers (HSTS / CSP / X-Content-Type-Options)</span>
+        <span style="color:#8a99a8;font-size:11px;margin-left:auto">1 instance</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin-top:4px">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:84px">Confidence</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:4px 8px;font-family:monospace;font-size:11px;color:#0b7285;word-break:break-all">juiceshop:3000</td><td style="border:1px solid #e2e8f0;padding:4px 8px;text-align:center"><span style="background:#2f6f4f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px;font-size:11px">Tentative</td></tr>
+      </table></div>
+      <div style="font-size:14px;font-weight:700;color:#0b7285;border-bottom:2px solid #e2e8f0;padding-bottom:5px;margin:16px 0 4px">Findings &amp; Remediation</div>
       <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
         <div style="font-weight:700;color:#0b7285;font-size:12px">1. Application version disclosure (vulnerable/outdated components) &nbsp;<span style="color:#8a99a8;font-weight:400">Confidence: Certain</span></div>
         <div style="color:#5a6b7a;font-size:12px;margin:4px 0"><b>Affected asset:</b> <span style="font-family:monospace;color:#0b7285">juiceshop:3000/rest/admin/application-version</span></div>
