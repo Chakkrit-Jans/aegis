@@ -12,21 +12,25 @@
   <div class="brand">AEGIS<small>BOOK 01 · USER GUIDE</small></div>
   <a class="book active" href="index.html">← <span class="th">กลับหน้ารวมคู่มือ</span><span class="en">All books</span></a>
   <ol>
+    <li class="grp"><span class="th">ภาพรวม</span><span class="en">Overview</span></li>
     <li><a href="#intro">1. <span class="th">Aegis คืออะไร</span><span class="en">What is Aegis</span></a></li>
     <li><a href="#arch">2. <span class="th">สถาปัตยกรรม</span><span class="en">Architecture</span></a></li>
     <li><a href="#concepts">3. <span class="th">แนวคิดความปลอดภัย</span><span class="en">Safety concepts</span></a></li>
+    <li class="grp"><span class="th">เริ่มต้น &amp; ตั้งค่า</span><span class="en">Getting started &amp; setup</span></li>
     <li><a href="#login">4. <span class="th">เข้าสู่ระบบ</span><span class="en">Sign in</span></a></li>
-    <li><a href="#ai">5. <span class="th">ตั้งค่า AI Providers</span><span class="en">AI Providers</span></a></li>
-    <li><a href="#workers">6. <span class="th">ตั้งค่า Kali Workers</span><span class="en">Kali Workers</span></a></li>
-    <li><a href="#extras">7. <span class="th">Proxy &amp; Telegram</span><span class="en">Proxy &amp; Telegram</span></a></li>
-    <li><a href="#templates">8. <span class="th">Objective Templates</span><span class="en">Objective Templates</span></a></li>
-    <li><a href="#workflow">9. <span class="th">เดินงานเต็มรูปแบบ</span><span class="en">Full workflow</span></a></li>
-    <li><a href="#report">10. <span class="th">รายงาน (Report)</span><span class="en">The Report</span></a></li>
-    <li><a href="#screens">11. <span class="th">แท็บหน้าจอ</span><span class="en">The tabs</span></a></li>
-    <li><a href="#feeds">12. <span class="th">Vuln Feeds</span><span class="en">Vuln Feeds</span></a></li>
-    <li><a href="#admin">13. <span class="th">Operators &amp; Audit</span><span class="en">Operators &amp; Audit</span></a></li>
-    <li><a href="#tools">14. <span class="th">เครื่องมือของ AI</span><span class="en">Agent tools</span></a></li>
+    <li><a href="#screens">5. <span class="th">แท็บหน้าจอ</span><span class="en">The tabs</span></a></li>
+    <li><a href="#ai">6. <span class="th">ตั้งค่า AI Providers</span><span class="en">AI Providers</span></a></li>
+    <li><a href="#workers">7. <span class="th">ตั้งค่า Kali Workers</span><span class="en">Kali Workers</span></a></li>
+    <li><a href="#extras">8. <span class="th">Proxy &amp; Telegram</span><span class="en">Proxy &amp; Telegram</span></a></li>
+    <li><a href="#admin">9. <span class="th">Operators &amp; Audit</span><span class="en">Operators &amp; Audit</span></a></li>
+    <li><a href="#feeds">10. <span class="th">Vuln Feeds</span><span class="en">Vuln Feeds</span></a></li>
+    <li class="grp"><span class="th">เดินงาน (Engagement)</span><span class="en">Running an engagement</span></li>
+    <li><a href="#templates">11. <span class="th">Objective Templates</span><span class="en">Objective Templates</span></a></li>
+    <li><a href="#workflow">12. <span class="th">เดินงานเต็มรูปแบบ</span><span class="en">Full workflow</span></a></li>
+    <li><a href="#tools">13. <span class="th">เครื่องมือของ AI</span><span class="en">Agent tools</span></a></li>
+    <li><a href="#report">14. <span class="th">รายงาน (Report)</span><span class="en">The Report</span></a></li>
     <li><a href="#manage">15. <span class="th">ลบ / จัดการงาน</span><span class="en">Delete engagements</span></a></li>
+    <li class="grp"><span class="th">อ้างอิง &amp; ดูแลระบบ</span><span class="en">Reference &amp; operations</span></li>
     <li><a href="#docker">16. <span class="th">คำสั่ง Docker</span><span class="en">Docker commands</span></a></li>
     <li><a href="#trouble">17. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></a></li>
     <li><a href="#editions">18. <span class="th">รุ่น &amp; License</span><span class="en">Editions &amp; Licensing</span></a></li>
@@ -134,8 +138,47 @@
   </section>
 
   <!-- 5 -->
+  <section id="screens">
+  <h2>5. <span class="th">แท็บหน้าจอทั้ง 4</span><span class="en">The four tabs</span></h2>
+  <div class="cols">
+    <div class="card"><h4>Console</h4><p><span class="th">ศูนย์กลาง: engagement, objective, spawn/stop, อนุมัติ, findings, รายงาน, ประวัติ</span><span class="en">The hub: engagements, objective, spawn/stop, approvals, findings, report, history.</span></p></div>
+    <div class="card"><h4>Terminal</h4><p><span class="th">เชลล์ของ operator บน worker — ทุกคำสั่งถูก audit และยังอยู่ในขอบเขต</span><span class="en">An operator shell on the worker — every command is audited and stays in scope.</span></p></div>
+    <div class="card"><h4>Desktop</h4><p><span class="th">เดสก์ท็อป XFCE ของ Kali ผ่าน noVNC (Burp, Firefox, GUI)</span><span class="en">The Kali XFCE desktop over noVNC (Burp, Firefox, GUI tools).</span></p></div>
+    <div class="card"><h4>Settings</h4><p><span class="th">AI, worker, proxy, telegram, users, templates, audit</span><span class="en">AI, workers, proxy, telegram, users, templates, audit.</span></p></div>
+  </div>
+
+  <h3><span class="th">ปุ่ม ⓘ About — เวอร์ชัน, License &amp; บัญชี</span><span class="en">The ⓘ About button — versions, license &amp; account</span></h3>
+  <p><span class="th">กลุ่มปุ่มมุมขวาบนคือ <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span> · กด <span class="btn">ⓘ About</span> เปิดหน้าต่างสรุปทั้งระบบ ซึ่ง<b>รวมการจัดการ Edition &amp; License ไว้ที่นี่</b> (ย้ายมาจากหน้า Settings) และดึงเวอร์ชันสด ๆ ตอนเปิด</span>
+  <span class="en">The top-right group is <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span>. Click <span class="btn">ⓘ About</span> for a full system summary — it now <b>hosts Edition &amp; License management</b> (moved from Settings) and reads live versions when opened.</span></p>
+
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3000 · About</span></div>
+    <div class="body">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><span class="ui-brand" style="margin:0">AEGIS</span><span class="pill ok" style="font-size:11px">v0.1.0</span><span class="pill ok" style="font-size:11px">★ Enterprise</span></div>
+      <div class="muted" style="font-size:12px;margin-bottom:10px">Signed in as admin · admin &nbsp;·&nbsp; git f8f635e</div>
+      <div class="box" style="margin:0 0 10px"><b style="color:var(--cyan)">Edition &amp; License</b> <span class="pill ok" style="font-size:10px">Enterprise</span>
+        <div style="font-size:12px;margin-top:6px">✅ SSO · ✅ Report branding · ✅ Audit/SIEM · ✅ Scheduled feeds · ✅ Org templates</div>
+        <div style="margin-top:8px"><span class="btn r">Remove license</span></div>
+      </div>
+      <div class="muted" style="font-size:12px">Node v22 · MongoDB 7.0 · Redis 7.4 &nbsp;|&nbsp; nmap 7.99 · nuclei 3.11 · gobuster 3.8.2 · hydra 9.7</div>
+    </div>
+  </figure>
+  <figcaption><span class="th">หน้าต่าง About — จัดการ License + เวอร์ชันทั้งหมด</span><span class="en">The About dialog — license management + all versions</span></figcaption>
+
+  <table>
+    <tr><th><span class="th">ส่วน</span><span class="en">Section</span></th><th><span class="th">แสดง / ทำอะไร</span><span class="en">Shows / does</span></th></tr>
+    <tr><td><span class="th">Edition &amp; License</span><span class="en">Edition &amp; License</span></td><td><span class="th">รุ่นปัจจุบัน, ตารางฟีเจอร์ 7 ตัว, และ<b>ใส่/ลบ license key</b> — ปลดล็อก Enterprise ที่นี่ (ย้ายมาจาก Settings)</span><span class="en">Current edition, the 7-feature matrix, and <b>paste/remove the license key</b> — activate Enterprise here (moved from Settings).</span></td></tr>
+    <tr><td><span class="th">บัญชี &amp; แอป</span><span class="en">Account &amp; app</span></td><td><span class="th">เวอร์ชัน Aegis, <b>git commit</b>, และ “Signed in as” (อีเมล · บทบาท)</span><span class="en">Aegis version, <b>git commit</b>, and “Signed in as” (email · role).</span></td></tr>
+    <tr><td><span class="th">Runtime &amp; services</span><span class="en">Runtime &amp; services</span></td><td><span class="th">Node.js, แพลตฟอร์ม, uptime, และ <b>MongoDB</b> + <b>Redis</b> (query สด)</span><span class="en">Node.js, platform, uptime, and live-queried <b>MongoDB</b> + <b>Redis</b>.</span></td></tr>
+    <tr><td><span class="th">Frontend &amp; components</span><span class="en">Frontend &amp; components</span></td><td>Next.js, React, Express, Socket.IO, Mongoose, ioredis, jsonwebtoken, bcryptjs</td></tr>
+    <tr><td><span class="th">เครื่องมือ Kali worker</span><span class="en">Kali worker tools</span></td><td><span class="th">เวอร์ชัน<b>จริง</b> (query สด): nmap, nuclei, ffuf, gobuster, nikto, whatweb, hydra, dig</span><span class="en">The <b>live</b> versions: nmap, nuclei, ffuf, gobuster, nikto, whatweb, hydra, dig.</span></td></tr>
+  </table>
+  <div class="box tip"><span class="tag">💡 <span class="th">เกร็ด</span><span class="en">Note</span></span><span class="th">เวอร์ชันเครื่องมือ Kali ดึงจาก worker ที่เปิดใช้งานตัวแรกแบบเรียลไทม์ (รัน <code>nmap --version</code> ฯลฯ) จึงตรงกับที่ติดตั้งจริงเสมอ · git commit จะโชว์ค่าจริงเมื่อ build ด้วย <code>GIT_COMMIT=$(git rev-parse --short HEAD)</code> ไม่งั้นขึ้น "dev"</span><span class="en">The Kali tool versions are pulled in real time from the first enabled worker (running <code>nmap --version</code>, etc.), so they always match what's installed. The git commit shows a real value when built with <code>GIT_COMMIT=$(git rev-parse --short HEAD)</code>, otherwise "dev".</span></div>
+  </section>
+
+  <!-- 6 -->
   <section id="ai">
-  <h2>5. <span class="th">ตั้งค่า AI Providers</span><span class="en">AI Providers</span></h2>
+  <h2>6. <span class="th">ตั้งค่า AI Providers</span><span class="en">AI Providers</span></h2>
   <p><span class="th">คือ “สมอง” ที่วางแผนและขับเคลื่อนงาน เพิ่มได้หลายตัว (DeepSeek / Anthropic / OpenAI-compatible เช่น Ollama) แล้วเลือกหนึ่งเป็น <b>default</b> — agent จะใช้ตัวที่เป็น default</span>
   <span class="en">This is the reasoning engine that plans and drives engagements. Add several (DeepSeek / Anthropic / OpenAI-compatible such as Ollama) and mark one as <b>default</b> — the agent uses the default.</span></p>
   <ol class="steps">
@@ -147,9 +190,9 @@
   <div class="box"><span class="tag">🏢 Enterprise</span><span class="th">Community เพิ่ม AI provider ได้ <b>1 ตัว</b> · หลายตัว (routing/fallback) ต้องใช้ Enterprise — ดู <a href="#editions">§18</a></span><span class="en">Community allows <b>1</b> AI provider; multiple (routing/fallback) needs Enterprise — see <a href="#editions">§18</a>.</span></div>
   </section>
 
-  <!-- 6 -->
+  <!-- 7 -->
   <section id="workers">
-  <h2>6. <span class="th">ตั้งค่า Kali Workers</span><span class="en">Kali Workers</span></h2>
+  <h2>7. <span class="th">ตั้งค่า Kali Workers</span><span class="en">Kali Workers</span></h2>
   <p><span class="th">worker คือคอนเทนเนอร์ Kali ที่รันเครื่องมือจริง (nmap, nuclei, ffuf, hydra …) ผ่าน exec-agent ที่กั้นด้วย token — เป็นส่วน<b>เดียว</b>ที่แตะเป้าหมายจริง มีได้หลายตัวเพื่อแยกงานตามลูกค้า/เครือข่าย แต่ละ engagement เลือก worker ของตัวเองได้ หรือใช้ตัว <b>default</b></span>
   <span class="en">A worker is a Kali container that runs the real tools (nmap, nuclei, ffuf, hydra …) via a token-gated exec-agent — the <b>only</b> component that touches the target. Register several to isolate work per client / network; each engagement can pick its own worker or use the <b>default</b>.</span></p>
 
@@ -180,9 +223,9 @@
   <div class="box"><span class="tag">🏢 Enterprise</span><span class="th">Community รันได้ <b>1 worker</b> · การเพิ่มตัวที่ 2 จะถูกกั้นที่ backend จริง (ตอบ HTTP 402: “limited to 1 Kali worker”) — หลาย worker (แยกตามลูกค้า/เครือข่าย) ต้องใช้ Enterprise — ดู <a href="#editions">§18</a></span><span class="en">Community runs <b>1</b> worker; adding a 2nd is blocked at the backend (HTTP 402: “limited to 1 Kali worker”). Multiple workers (per-client/network isolation) needs Enterprise — see <a href="#editions">§18</a>.</span></div>
   </section>
 
-  <!-- 7 -->
+  <!-- 8 -->
   <section id="extras">
-  <h2>7. <span class="th">ตั้งค่าเสริม — Proxy &amp; Telegram</span><span class="en">Optional — Proxy &amp; Telegram</span></h2>
+  <h2>8. <span class="th">ตั้งค่าเสริม — Proxy &amp; Telegram</span><span class="en">Optional — Proxy &amp; Telegram</span></h2>
   <p class="muted"><span class="th">สองตัวนี้เป็นตัวเลือกเสริม (ไม่ตั้งก็เดินงานได้) อยู่ในหน้า <span class="btn">Settings</span> เช่นกัน</span><span class="en">Both are optional (engagements run fine without them) and live in <span class="btn">Settings</span> too.</span></p>
 
   <h3><span class="th">7.1 Proxy · Burp / Caido</span><span class="en">7.1 Proxy · Burp / Caido</span></h3>
@@ -237,9 +280,64 @@
   <div class="box tip"><span class="tag">💡 <span class="th">เกร็ด</span><span class="en">Note</span></span><span class="th">ทุกการกดปุ่มบน Telegram ถูกบันทึกใน Audit Log ด้วย (actor = <code>telegram:@username</code>) เหมือนกดในหน้าเว็บ — ยังอยู่ในกรอบ approval + scope เดิมทุกอย่าง</span><span class="en">Every Telegram button press is written to the Audit Log too (actor = <code>telegram:@username</code>), exactly like clicking in the web UI — the same approval + scope rules still apply.</span></div>
   </section>
 
-  <!-- 8 -->
+  <!-- 9 -->
+  <section id="admin">
+  <h2>9. <span class="th">Operators &amp; Audit (admin)</span><span class="en">Operators &amp; Audit (admin)</span></h2>
+  <p><span class="th">มี 2 บทบาท: <b>admin</b> และ <b>operator</b> — จัดการผู้ใช้และดู Audit Log ได้ที่หน้า <span class="btn">Settings</span> (เฉพาะ admin เข้าหน้านี้ได้)</span>
+  <span class="en">There are two roles: <b>admin</b> and <b>operator</b>. Manage users and read the Audit Log in <span class="btn">Settings</span> (only admins can open it).</span></p>
+
+  <h3><span class="th">บทบาท admin vs operator ต่างกันอย่างไร</span><span class="en">Admin vs operator</span></h3>
+  <table>
+    <tr><th><span class="th">ทำได้</span><span class="en">Can…</span></th><th>admin</th><th>operator</th></tr>
+    <tr><td><span class="th">รันงาน: engagement, session, อนุมัติ, terminal, อัปเดต feed, ดู Audit</span><span class="en">Run work: engagements, sessions, approvals, terminal, feed updates, read Audit</span></td><td>✅</td><td>✅</td></tr>
+    <tr><td><span class="th">เปิดหน้า <b>Settings</b> (AI, workers, proxy, telegram, templates)</span><span class="en">Open <b>Settings</b> (AI, workers, proxy, telegram, templates)</span></td><td>✅</td><td><span class="pill no">no</span></td></tr>
+    <tr><td><span class="th">จัดการ <b>ผู้ใช้</b> และ <b>License</b> (edition)</span><span class="en">Manage <b>users</b> and the <b>License</b> (edition)</span></td><td>✅</td><td><span class="pill no">no</span></td></tr>
+  </table>
+  <div class="box"><span class="tag">🔒 <span class="th">บังคับที่ backend</span><span class="en">Enforced server-side</span></span><span class="th">สิทธิ์ถูกกั้นที่ API จริง (ตอบ HTTP 403 “forbidden: requires role admin”) ไม่ใช่แค่ซ่อนปุ่ม — operator เรียก endpoint ของ admin ไม่ได้แม้จะรู้ URL</span><span class="en">Roles are enforced at the API (HTTP 403 “forbidden: requires role admin”), not just hidden UI — an operator can't call an admin endpoint even knowing its URL.</span></div>
+
+  <h3><span class="th">เพิ่ม / ลบผู้ใช้ (Operators)</span><span class="en">Add / remove users (Operators)</span></h3>
+  <ol class="steps">
+    <li><span class="th"><span class="btn">Settings</span> → <b>Operators</b> → ช่อง <b>Add user</b>: กรอก <code>email</code>, <code>password (min 8)</code>, เลือก role (<b>operator</b>/admin) → <span class="btn p">Add</span></span><span class="en"><span class="btn">Settings</span> → <b>Operators</b> → the <b>Add user</b> row: enter <code>email</code>, <code>password (min 8)</code>, pick a role (<b>operator</b>/admin) → <span class="btn p">Add</span>.</span></li>
+    <li><span class="th">แต่ละแถวมี email + ป้าย role และปุ่ม <span class="btn r">Delete</span> (ยืนยันก่อนลบ)</span><span class="en">Each row shows the email + a role pill and a <span class="btn r">Delete</span> button (asks to confirm).</span></li>
+  </ol>
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">Settings · Operators &amp; Audit Log</span></div>
+    <div class="body">
+      <div class="rowline" style="border:none"><span>admin@acme.test <span class="pill">admin</span></span><span class="btn r">Delete</span></div>
+      <div class="rowline"><span>pentester@acme.test <span class="pill">operator</span></span><span class="btn r">Delete</span></div>
+      <div class="box" style="margin:10px 0"><b style="color:var(--cyan);font-size:13px">Add user</b>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;align-items:center">
+          <span class="inp" style="flex:1;min-width:120px">email</span><span class="inp" style="flex:1;min-width:120px">password (min 8)</span><span class="inp" style="width:110px">operator ▾</span><span class="btn p">Add</span>
+        </div>
+      </div>
+      <b style="color:var(--cyan);font-size:13px">Audit Log</b>
+      <div class="box" style="margin:6px 0 0;font-size:12px">
+        <div style="color:var(--muted)">2026-08-09 20:14:33 · admin@acme.test</div>
+        <div><b>approval.approve</b> <span class="muted">→ nmap_scan</span></div>
+        <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;color:var(--muted)">2026-08-09 20:12:01 · telegram:@alice</div>
+        <div><b>approval.reject</b> <span class="muted">→ run_command</span></div>
+      </div>
+    </div>
+  </figure>
+  <figcaption><span class="th">แผง Operators + Audit Log — เพิ่มผู้ใช้ด้านบน, เหตุการณ์ล่าสุดด้านล่าง</span><span class="en">The Operators panel + Audit Log — add users on top, latest events below</span></figcaption>
+
+  <h3><span class="th">Audit Log</span><span class="en">Audit Log</span></h3>
+  <p><span class="th">บันทึก<b>ทุกเหตุการณ์สำคัญ</b>แบบแก้ไม่ได้ (immutable): ใครอนุมัติ/ปฏิเสธอะไร, รันคำสั่งเชลล์อะไร, เปลี่ยน config อะไร, ลบงานไหน — แต่ละแถวเก็บ <code>เวลา · actor · action · target · detail</code> (และ actorRole, ip) · operator ก็เปิดดูได้</span>
+  <span class="en">An <b>immutable</b> record of every significant event: who approved/rejected what, which shell command ran, which config changed, which engagement was deleted — each row keeps <code>time · actor · action · target · detail</code> (plus actorRole, ip) · operators can read it too.</span></p>
+  <div class="box"><span class="tag">🏢 Enterprise</span><span class="th">การ<b>ดาวน์โหลด</b> Audit (JSON/CSV/NDJSON) และ<b>สตรีมเข้า SIEM</b> เป็นฟีเจอร์ Enterprise — ดู <a href="#editions">§18.2</a></span><span class="en"><b>Downloading</b> the audit log (JSON/CSV/NDJSON) and <b>streaming to a SIEM</b> are Enterprise features — see <a href="#editions">§18.2</a>.</span></div>
+  </section>
+
+  <!-- 10 -->
+  <section id="feeds">
+  <h2>10. <span class="th">Vuln Feeds</span><span class="en">Vuln Feeds</span></h2>
+  <p><span class="th">อัปเดตฐานช่องโหว่บนทุก worker พร้อมกัน: nuclei templates, Exploit-DB, nmap NSE — สั่งเองด้วย <span class="btn">⟳ Update all</span> หรือเปิด Auto-update ตามชั่วโมงที่ตั้ง</span>
+  <span class="en">Update the vulnerability databases across all workers at once: nuclei templates, Exploit-DB, nmap NSE — run manually with <span class="btn">⟳ Update all</span> or enable Auto-update on a schedule.</span></p>
+  <div class="box"><span class="tag">🏢 Enterprise</span><span class="th"><b>Update all</b> แบบสั่งเองฟรีเสมอ · การ<b>ตั้งเวลาอัตโนมัติ</b> (Auto-update) ต้องใช้ Enterprise — ในรุ่น Community ช่องนี้จะมีป้าย 🔒 — ดู <a href="#editions">§18</a></span><span class="en">Manual <b>Update all</b> is always free; <b>scheduled auto-updates</b> need Enterprise — in Community the toggle is marked 🔒. See <a href="#editions">§18</a>.</span></div>
+  </section>
+
+  <!-- 11 -->
   <section id="templates">
-  <h2>8. <span class="th">Objective Templates</span><span class="en">Objective Templates</span></h2>
+  <h2>11. <span class="th">Objective Templates</span><span class="en">Objective Templates</span></h2>
   <p><span class="th">เทมเพลตช่วยให้ไม่ต้องพิมพ์เป้าหมายเอง มี built-in 7 หมวด × 3 ระดับ (Basic/Medium/Advanced) และสร้าง custom เองได้ที่หน้า Settings</span>
   <span class="en">Templates save you from writing the objective by hand. There are 7 built-in categories × 3 levels (Basic/Medium/Advanced), plus custom ones you build in Settings.</span></p>
   <table>
@@ -259,9 +357,9 @@
   <p><span class="th">ในหน้า Console เทมเพลต built-in และ custom จะรวมอยู่ใน dropdown เดียวกัน (มีเส้น <code>── Custom ──</code> คั่น) เลือกแล้วกด <span class="btn">⬇ Use</span></span><span class="en">On the Console, built-in and custom templates share one dropdown (a <code>── Custom ──</code> divider separates them); pick one and press <span class="btn">⬇ Use</span>.</span></p>
   </section>
 
-  <!-- 9 -->
+  <!-- 12 -->
   <section id="workflow">
-  <h2>9. <span class="th">เดินงานเต็มรูปแบบ (ตั้งแต่ต้นจนจบ)</span><span class="en">A full engagement, end to end</span></h2>
+  <h2>12. <span class="th">เดินงานเต็มรูปแบบ (ตั้งแต่ต้นจนจบ)</span><span class="en">A full engagement, end to end</span></h2>
   <svg viewBox="0 0 760 70" role="img">
     <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0e7f96"/></marker></defs>
     <g font-size="12" text-anchor="middle">
@@ -313,9 +411,21 @@
   <figcaption><span class="th">หน้า Console ระหว่างรองานอนุมัติ</span><span class="en">The Console while awaiting an approval</span></figcaption>
   </section>
 
-  <!-- 10 -->
+  <!-- 13 -->
+  <section id="tools">
+  <h2>13. <span class="th">เครื่องมือที่ AI เรียกใช้ได้</span><span class="en">Tools the agent can call</span></h2>
+  <table>
+    <tr><th>Tool</th><th><span class="th">ระดับ</span><span class="en">Risk</span></th><th><span class="th">ทำอะไร</span><span class="en">Purpose</span></th></tr>
+    <tr><td>dns_lookup · http_probe · whatweb</td><td><span class="pill pas">passive</span></td><td><span class="th">เก็บข้อมูลเบื้องต้น ไม่ยิงหนัก</span><span class="en">Light recon, no heavy traffic.</span></td></tr>
+    <tr><td>tcp_scan · nmap_scan · dir_enum · web_vuln_scan</td><td><span class="pill act">active</span></td><td><span class="th">สแกนพอร์ต/บริการ/ไดเรกทอรี/ช่องโหว่เว็บ</span><span class="en">Scan ports/services/dirs/web vulns.</span></td></tr>
+    <tr><td>cred_test · run_command</td><td><span class="pill intr">intrusive</span></td><td><span class="th">ทดสอบรหัสผ่าน / รันคำสั่งเชลล์เดี่ยวเพื่อยืนยันช่องโหว่</span><span class="en">Test credentials / run one shell command to validate a finding.</span></td></tr>
+    <tr><td>exploit_search · save_finding · generate_report</td><td><span class="pill pas">passive</span></td><td><span class="th">ค้นฐาน exploit / บันทึกผล / สร้างรายงาน</span><span class="en">Search exploit DB / record findings / build the report.</span></td></tr>
+  </table>
+  </section>
+
+  <!-- 14 -->
   <section id="report">
-  <h2>10. <span class="th">รายงาน (Report)</span><span class="en">The Report</span></h2>
+  <h2>14. <span class="th">รายงาน (Report)</span><span class="en">The Report</span></h2>
   <p><span class="th">เมื่อ AI บันทึก finding แล้ว Aegis จะรวมเป็น<b>รายงานพร้อมส่งลูกค้า</b> — เป็นหน้า HTML พิมพ์เป็น PDF ได้ในคลิกเดียว รายงานผสม 2 สไตล์เข้าด้วยกัน: ส่วน<b>สรุปแบบสแกนเนอร์</b> (เหมือน Burp Suite — สถิติ + ตารางรวมช่องโหว่) และส่วน<b>เล่าเรื่องเชิงที่ปรึกษา</b> (แต่ละ finding มีหลักฐาน ผลกระทบ และวิธีแก้)</span>
   <span class="en">Once the agent has saved findings, Aegis composes a <b>client-ready report</b> — an HTML page you print to PDF in one click. It blends two styles: a <b>scanner-style summary</b> (like Burp Suite — statistics + a rolled-up issues table) and a <b>consultant-style narrative</b> (each finding with evidence, impact and a fix).</span></p>
 
@@ -388,112 +498,6 @@
     <li><span class="th">พร้อมแล้วกดปุ่ม <span class="btn">🖨️ Print / Save as PDF</span> บนหน้ารายงาน แล้วเลือก “Save as PDF” ในกล่องพิมพ์ของเบราว์เซอร์</span><span class="en">When ready, click <span class="btn">🖨️ Print / Save as PDF</span> in the report page, then choose “Save as PDF” in the browser's print dialog.</span></li>
   </ol>
   <div class="box"><span class="tag">🎨 <span class="th">Enterprise · ติดแบรนด์</span><span class="en">Enterprise · branding</span></span><span class="th">รุ่น Enterprise ใส่ <b>โลโก้ · ชื่อบริษัท · สี accent · footer</b> ลงรายงานได้ (Settings → Report Branding) — หน้าปกจะขึ้น “Prepared by …” และใช้สีแบรนด์ทั้งฉบับ ดู <a href="#editions">§18</a></span><span class="en">Enterprise adds a <b>logo · company name · accent colour · footer</b> to the report (Settings → Report Branding) — the cover shows “Prepared by …” and the brand colour is applied throughout. See <a href="#editions">§18</a>.</span></div>
-  </section>
-
-  <!-- 11 -->
-  <section id="screens">
-  <h2>11. <span class="th">แท็บหน้าจอทั้ง 4</span><span class="en">The four tabs</span></h2>
-  <div class="cols">
-    <div class="card"><h4>Console</h4><p><span class="th">ศูนย์กลาง: engagement, objective, spawn/stop, อนุมัติ, findings, รายงาน, ประวัติ</span><span class="en">The hub: engagements, objective, spawn/stop, approvals, findings, report, history.</span></p></div>
-    <div class="card"><h4>Terminal</h4><p><span class="th">เชลล์ของ operator บน worker — ทุกคำสั่งถูก audit และยังอยู่ในขอบเขต</span><span class="en">An operator shell on the worker — every command is audited and stays in scope.</span></p></div>
-    <div class="card"><h4>Desktop</h4><p><span class="th">เดสก์ท็อป XFCE ของ Kali ผ่าน noVNC (Burp, Firefox, GUI)</span><span class="en">The Kali XFCE desktop over noVNC (Burp, Firefox, GUI tools).</span></p></div>
-    <div class="card"><h4>Settings</h4><p><span class="th">AI, worker, proxy, telegram, users, templates, audit</span><span class="en">AI, workers, proxy, telegram, users, templates, audit.</span></p></div>
-  </div>
-
-  <h3><span class="th">ปุ่ม ⓘ About — เวอร์ชัน, License &amp; บัญชี</span><span class="en">The ⓘ About button — versions, license &amp; account</span></h3>
-  <p><span class="th">กลุ่มปุ่มมุมขวาบนคือ <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span> · กด <span class="btn">ⓘ About</span> เปิดหน้าต่างสรุปทั้งระบบ ซึ่ง<b>รวมการจัดการ Edition &amp; License ไว้ที่นี่</b> (ย้ายมาจากหน้า Settings) และดึงเวอร์ชันสด ๆ ตอนเปิด</span>
-  <span class="en">The top-right group is <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span>. Click <span class="btn">ⓘ About</span> for a full system summary — it now <b>hosts Edition &amp; License management</b> (moved from Settings) and reads live versions when opened.</span></p>
-
-  <figure class="screen">
-    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3000 · About</span></div>
-    <div class="body">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><span class="ui-brand" style="margin:0">AEGIS</span><span class="pill ok" style="font-size:11px">v0.1.0</span><span class="pill ok" style="font-size:11px">★ Enterprise</span></div>
-      <div class="muted" style="font-size:12px;margin-bottom:10px">Signed in as admin · admin &nbsp;·&nbsp; git f8f635e</div>
-      <div class="box" style="margin:0 0 10px"><b style="color:var(--cyan)">Edition &amp; License</b> <span class="pill ok" style="font-size:10px">Enterprise</span>
-        <div style="font-size:12px;margin-top:6px">✅ SSO · ✅ Report branding · ✅ Audit/SIEM · ✅ Scheduled feeds · ✅ Org templates</div>
-        <div style="margin-top:8px"><span class="btn r">Remove license</span></div>
-      </div>
-      <div class="muted" style="font-size:12px">Node v22 · MongoDB 7.0 · Redis 7.4 &nbsp;|&nbsp; nmap 7.99 · nuclei 3.11 · gobuster 3.8.2 · hydra 9.7</div>
-    </div>
-  </figure>
-  <figcaption><span class="th">หน้าต่าง About — จัดการ License + เวอร์ชันทั้งหมด</span><span class="en">The About dialog — license management + all versions</span></figcaption>
-
-  <table>
-    <tr><th><span class="th">ส่วน</span><span class="en">Section</span></th><th><span class="th">แสดง / ทำอะไร</span><span class="en">Shows / does</span></th></tr>
-    <tr><td><span class="th">Edition &amp; License</span><span class="en">Edition &amp; License</span></td><td><span class="th">รุ่นปัจจุบัน, ตารางฟีเจอร์ 7 ตัว, และ<b>ใส่/ลบ license key</b> — ปลดล็อก Enterprise ที่นี่ (ย้ายมาจาก Settings)</span><span class="en">Current edition, the 7-feature matrix, and <b>paste/remove the license key</b> — activate Enterprise here (moved from Settings).</span></td></tr>
-    <tr><td><span class="th">บัญชี &amp; แอป</span><span class="en">Account &amp; app</span></td><td><span class="th">เวอร์ชัน Aegis, <b>git commit</b>, และ “Signed in as” (อีเมล · บทบาท)</span><span class="en">Aegis version, <b>git commit</b>, and “Signed in as” (email · role).</span></td></tr>
-    <tr><td><span class="th">Runtime &amp; services</span><span class="en">Runtime &amp; services</span></td><td><span class="th">Node.js, แพลตฟอร์ม, uptime, และ <b>MongoDB</b> + <b>Redis</b> (query สด)</span><span class="en">Node.js, platform, uptime, and live-queried <b>MongoDB</b> + <b>Redis</b>.</span></td></tr>
-    <tr><td><span class="th">Frontend &amp; components</span><span class="en">Frontend &amp; components</span></td><td>Next.js, React, Express, Socket.IO, Mongoose, ioredis, jsonwebtoken, bcryptjs</td></tr>
-    <tr><td><span class="th">เครื่องมือ Kali worker</span><span class="en">Kali worker tools</span></td><td><span class="th">เวอร์ชัน<b>จริง</b> (query สด): nmap, nuclei, ffuf, gobuster, nikto, whatweb, hydra, dig</span><span class="en">The <b>live</b> versions: nmap, nuclei, ffuf, gobuster, nikto, whatweb, hydra, dig.</span></td></tr>
-  </table>
-  <div class="box tip"><span class="tag">💡 <span class="th">เกร็ด</span><span class="en">Note</span></span><span class="th">เวอร์ชันเครื่องมือ Kali ดึงจาก worker ที่เปิดใช้งานตัวแรกแบบเรียลไทม์ (รัน <code>nmap --version</code> ฯลฯ) จึงตรงกับที่ติดตั้งจริงเสมอ · git commit จะโชว์ค่าจริงเมื่อ build ด้วย <code>GIT_COMMIT=$(git rev-parse --short HEAD)</code> ไม่งั้นขึ้น "dev"</span><span class="en">The Kali tool versions are pulled in real time from the first enabled worker (running <code>nmap --version</code>, etc.), so they always match what's installed. The git commit shows a real value when built with <code>GIT_COMMIT=$(git rev-parse --short HEAD)</code>, otherwise "dev".</span></div>
-  </section>
-
-  <!-- 12 -->
-  <section id="feeds">
-  <h2>12. <span class="th">Vuln Feeds</span><span class="en">Vuln Feeds</span></h2>
-  <p><span class="th">อัปเดตฐานช่องโหว่บนทุก worker พร้อมกัน: nuclei templates, Exploit-DB, nmap NSE — สั่งเองด้วย <span class="btn">⟳ Update all</span> หรือเปิด Auto-update ตามชั่วโมงที่ตั้ง</span>
-  <span class="en">Update the vulnerability databases across all workers at once: nuclei templates, Exploit-DB, nmap NSE — run manually with <span class="btn">⟳ Update all</span> or enable Auto-update on a schedule.</span></p>
-  <div class="box"><span class="tag">🏢 Enterprise</span><span class="th"><b>Update all</b> แบบสั่งเองฟรีเสมอ · การ<b>ตั้งเวลาอัตโนมัติ</b> (Auto-update) ต้องใช้ Enterprise — ในรุ่น Community ช่องนี้จะมีป้าย 🔒 — ดู <a href="#editions">§18</a></span><span class="en">Manual <b>Update all</b> is always free; <b>scheduled auto-updates</b> need Enterprise — in Community the toggle is marked 🔒. See <a href="#editions">§18</a>.</span></div>
-  </section>
-
-  <!-- 13 -->
-  <section id="admin">
-  <h2>13. <span class="th">Operators &amp; Audit (admin)</span><span class="en">Operators &amp; Audit (admin)</span></h2>
-  <p><span class="th">มี 2 บทบาท: <b>admin</b> และ <b>operator</b> — จัดการผู้ใช้และดู Audit Log ได้ที่หน้า <span class="btn">Settings</span> (เฉพาะ admin เข้าหน้านี้ได้)</span>
-  <span class="en">There are two roles: <b>admin</b> and <b>operator</b>. Manage users and read the Audit Log in <span class="btn">Settings</span> (only admins can open it).</span></p>
-
-  <h3><span class="th">บทบาท admin vs operator ต่างกันอย่างไร</span><span class="en">Admin vs operator</span></h3>
-  <table>
-    <tr><th><span class="th">ทำได้</span><span class="en">Can…</span></th><th>admin</th><th>operator</th></tr>
-    <tr><td><span class="th">รันงาน: engagement, session, อนุมัติ, terminal, อัปเดต feed, ดู Audit</span><span class="en">Run work: engagements, sessions, approvals, terminal, feed updates, read Audit</span></td><td>✅</td><td>✅</td></tr>
-    <tr><td><span class="th">เปิดหน้า <b>Settings</b> (AI, workers, proxy, telegram, templates)</span><span class="en">Open <b>Settings</b> (AI, workers, proxy, telegram, templates)</span></td><td>✅</td><td><span class="pill no">no</span></td></tr>
-    <tr><td><span class="th">จัดการ <b>ผู้ใช้</b> และ <b>License</b> (edition)</span><span class="en">Manage <b>users</b> and the <b>License</b> (edition)</span></td><td>✅</td><td><span class="pill no">no</span></td></tr>
-  </table>
-  <div class="box"><span class="tag">🔒 <span class="th">บังคับที่ backend</span><span class="en">Enforced server-side</span></span><span class="th">สิทธิ์ถูกกั้นที่ API จริง (ตอบ HTTP 403 “forbidden: requires role admin”) ไม่ใช่แค่ซ่อนปุ่ม — operator เรียก endpoint ของ admin ไม่ได้แม้จะรู้ URL</span><span class="en">Roles are enforced at the API (HTTP 403 “forbidden: requires role admin”), not just hidden UI — an operator can't call an admin endpoint even knowing its URL.</span></div>
-
-  <h3><span class="th">เพิ่ม / ลบผู้ใช้ (Operators)</span><span class="en">Add / remove users (Operators)</span></h3>
-  <ol class="steps">
-    <li><span class="th"><span class="btn">Settings</span> → <b>Operators</b> → ช่อง <b>Add user</b>: กรอก <code>email</code>, <code>password (min 8)</code>, เลือก role (<b>operator</b>/admin) → <span class="btn p">Add</span></span><span class="en"><span class="btn">Settings</span> → <b>Operators</b> → the <b>Add user</b> row: enter <code>email</code>, <code>password (min 8)</code>, pick a role (<b>operator</b>/admin) → <span class="btn p">Add</span>.</span></li>
-    <li><span class="th">แต่ละแถวมี email + ป้าย role และปุ่ม <span class="btn r">Delete</span> (ยืนยันก่อนลบ)</span><span class="en">Each row shows the email + a role pill and a <span class="btn r">Delete</span> button (asks to confirm).</span></li>
-  </ol>
-  <figure class="screen">
-    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">Settings · Operators &amp; Audit Log</span></div>
-    <div class="body">
-      <div class="rowline" style="border:none"><span>admin@acme.test <span class="pill">admin</span></span><span class="btn r">Delete</span></div>
-      <div class="rowline"><span>pentester@acme.test <span class="pill">operator</span></span><span class="btn r">Delete</span></div>
-      <div class="box" style="margin:10px 0"><b style="color:var(--cyan);font-size:13px">Add user</b>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;align-items:center">
-          <span class="inp" style="flex:1;min-width:120px">email</span><span class="inp" style="flex:1;min-width:120px">password (min 8)</span><span class="inp" style="width:110px">operator ▾</span><span class="btn p">Add</span>
-        </div>
-      </div>
-      <b style="color:var(--cyan);font-size:13px">Audit Log</b>
-      <div class="box" style="margin:6px 0 0;font-size:12px">
-        <div style="color:var(--muted)">2026-08-09 20:14:33 · admin@acme.test</div>
-        <div><b>approval.approve</b> <span class="muted">→ nmap_scan</span></div>
-        <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;color:var(--muted)">2026-08-09 20:12:01 · telegram:@alice</div>
-        <div><b>approval.reject</b> <span class="muted">→ run_command</span></div>
-      </div>
-    </div>
-  </figure>
-  <figcaption><span class="th">แผง Operators + Audit Log — เพิ่มผู้ใช้ด้านบน, เหตุการณ์ล่าสุดด้านล่าง</span><span class="en">The Operators panel + Audit Log — add users on top, latest events below</span></figcaption>
-
-  <h3><span class="th">Audit Log</span><span class="en">Audit Log</span></h3>
-  <p><span class="th">บันทึก<b>ทุกเหตุการณ์สำคัญ</b>แบบแก้ไม่ได้ (immutable): ใครอนุมัติ/ปฏิเสธอะไร, รันคำสั่งเชลล์อะไร, เปลี่ยน config อะไร, ลบงานไหน — แต่ละแถวเก็บ <code>เวลา · actor · action · target · detail</code> (และ actorRole, ip) · operator ก็เปิดดูได้</span>
-  <span class="en">An <b>immutable</b> record of every significant event: who approved/rejected what, which shell command ran, which config changed, which engagement was deleted — each row keeps <code>time · actor · action · target · detail</code> (plus actorRole, ip) · operators can read it too.</span></p>
-  <div class="box"><span class="tag">🏢 Enterprise</span><span class="th">การ<b>ดาวน์โหลด</b> Audit (JSON/CSV/NDJSON) และ<b>สตรีมเข้า SIEM</b> เป็นฟีเจอร์ Enterprise — ดู <a href="#editions">§18.2</a></span><span class="en"><b>Downloading</b> the audit log (JSON/CSV/NDJSON) and <b>streaming to a SIEM</b> are Enterprise features — see <a href="#editions">§18.2</a>.</span></div>
-  </section>
-
-  <!-- 14 -->
-  <section id="tools">
-  <h2>14. <span class="th">เครื่องมือที่ AI เรียกใช้ได้</span><span class="en">Tools the agent can call</span></h2>
-  <table>
-    <tr><th>Tool</th><th><span class="th">ระดับ</span><span class="en">Risk</span></th><th><span class="th">ทำอะไร</span><span class="en">Purpose</span></th></tr>
-    <tr><td>dns_lookup · http_probe · whatweb</td><td><span class="pill pas">passive</span></td><td><span class="th">เก็บข้อมูลเบื้องต้น ไม่ยิงหนัก</span><span class="en">Light recon, no heavy traffic.</span></td></tr>
-    <tr><td>tcp_scan · nmap_scan · dir_enum · web_vuln_scan</td><td><span class="pill act">active</span></td><td><span class="th">สแกนพอร์ต/บริการ/ไดเรกทอรี/ช่องโหว่เว็บ</span><span class="en">Scan ports/services/dirs/web vulns.</span></td></tr>
-    <tr><td>cred_test · run_command</td><td><span class="pill intr">intrusive</span></td><td><span class="th">ทดสอบรหัสผ่าน / รันคำสั่งเชลล์เดี่ยวเพื่อยืนยันช่องโหว่</span><span class="en">Test credentials / run one shell command to validate a finding.</span></td></tr>
-    <tr><td>exploit_search · save_finding · generate_report</td><td><span class="pill pas">passive</span></td><td><span class="th">ค้นฐาน exploit / บันทึกผล / สร้างรายงาน</span><span class="en">Search exploit DB / record findings / build the report.</span></td></tr>
-  </table>
   </section>
 
   <!-- 15 -->
@@ -627,8 +631,8 @@ docker compose logs -f backend</code></pre>
   <figcaption><span class="th">แผง Audit Export &amp; SIEM — ดาวน์โหลด 3 ฟอร์แมต + สตรีมเข้า SIEM webhook</span><span class="en">The Audit Export &amp; SIEM panel — three download formats + SIEM webhook streaming</span></figcaption>
 
   <h4 style="font-size:16px;margin-top:22px">18.4 · 📚 <span class="th">Org Template Library</span><span class="en">Org Template Library</span></h4>
-  <p><span class="th">คลังเทมเพลต<b>กลางขององค์กร</b>ที่ admin ดูแล และ operator <b>ทุกคนเห็น</b>ใน objective picker (ต่างจาก Custom Template ใน <a href="#templates">§8</a> ที่เป็นของส่วนตัวใครของมัน) · export/import <b>เซ็นดิจิทัลด้วย Ed25519</b> ป้องกันการแก้ไข · ตั้งที่ <span class="btn">Settings</span> → <b>Org Template Library</b></span>
-  <span class="en">A <b>team-shared, admin-curated</b> library every operator sees in the objective picker (unlike the personal Custom Templates in <a href="#templates">§8</a>) · export/import is <b>Ed25519-signed</b> against tampering · configure in <span class="btn">Settings</span> → <b>Org Template Library</b>.</span></p>
+  <p><span class="th">คลังเทมเพลต<b>กลางขององค์กร</b>ที่ admin ดูแล และ operator <b>ทุกคนเห็น</b>ใน objective picker (ต่างจาก Custom Template ใน <a href="#templates">§11</a> ที่เป็นของส่วนตัวใครของมัน) · export/import <b>เซ็นดิจิทัลด้วย Ed25519</b> ป้องกันการแก้ไข · ตั้งที่ <span class="btn">Settings</span> → <b>Org Template Library</b></span>
+  <span class="en">A <b>team-shared, admin-curated</b> library every operator sees in the objective picker (unlike the personal Custom Templates in <a href="#templates">§11</a>) · export/import is <b>Ed25519-signed</b> against tampering · configure in <span class="btn">Settings</span> → <b>Org Template Library</b>.</span></p>
   <ol class="steps">
     <li><span class="th"><b>เพิ่มเข้าคลัง</b> — ช่อง <b>Add a template</b>: ใส่ <b>Template name</b> + คำสั่งของแต่ละระดับ (<b>Basic/Medium/Advanced</b>, ใช้ <code>&lt;TARGET&gt;</code>) → <span class="btn p">Add to library</span> (ต้องมีอย่างน้อย 1 ระดับ)</span><span class="en"><b>Add to library</b> — the <b>Add a template</b> form: a <b>Template name</b> + a command per level (<b>Basic/Medium/Advanced</b>, use <code>&lt;TARGET&gt;</code>) → <span class="btn p">Add to library</span> (at least one level required).</span></li>
     <li><span class="th"><b>แชร์แบบเซ็น</b> — <span class="btn">⬇ Export signed bundle</span> ได้ไฟล์ <code>aegis-org-templates.signed.json</code> (มี public key + ลายเซ็น) · อีกเครื่องกด <span class="btn">⬆ Import signed bundle</span> เพื่อโหลด (import จะ<b>แทนที่</b>คลังทั้งหมด)</span><span class="en"><b>Signed sharing</b> — <span class="btn">⬇ Export signed bundle</span> gives <code>aegis-org-templates.signed.json</code> (with a public key + signature) · another instance uses <span class="btn">⬆ Import signed bundle</span> to load it (import <b>replaces</b> the whole library).</span></li>
@@ -650,7 +654,7 @@ docker compose logs -f backend</code></pre>
   <figcaption><span class="th">แผง Org Template Library — คลังกลาง + export/import ที่เซ็นดิจิทัล</span><span class="en">The Org Template Library — a shared library + signed export/import</span></figcaption>
   <div class="box tip"><span class="tag">🔏 <span class="th">ลายเซ็นทำงานอย่างไร</span><span class="en">How signing works</span></span><span class="th">แต่ละ instance มีคู่กุญแจ <b>Ed25519</b> ของตัวเอง (สร้างอัตโนมัติครั้งแรก, private key ไม่เคยออกจาก server) · bundle พก public key + fingerprint + ลายเซ็นที่ครอบเฉพาะ name+levels — แก้เนื้อในแม้นิดเดียว ลายเซ็นก็ไม่ผ่าน</span><span class="en">Each instance has its own <b>Ed25519</b> keypair (auto-generated on first use; the private key never leaves the server) · a bundle carries the public key + fingerprint + a signature over name+levels — change any content and verification fails.</span></div>
 
-  <div class="box"><span class="tag"><span class="th">ฟีเจอร์ Enterprise อื่น ๆ</span><span class="en">Other Enterprise features</span></span><span class="th"><b>🎨 Report Branding</b> (ดู <a href="#report">§10</a>) · <b>⏰ Scheduled Feeds</b> — ตั้งเวลาอัปเดต feed อัตโนมัติ (ดู <a href="#feeds">§12</a>) · <b>🧠 Multi AI / Worker</b> — เพิ่ม AI provider (<a href="#ai">§5</a>) และ Kali worker (<a href="#workers">§6</a>) ได้หลายตัว</span><span class="en"><b>🎨 Report Branding</b> (see <a href="#report">§10</a>) · <b>⏰ Scheduled Feeds</b> — auto-update feeds on a schedule (see <a href="#feeds">§12</a>) · <b>🧠 Multi AI / Worker</b> — register multiple AI providers (<a href="#ai">§5</a>) and Kali workers (<a href="#workers">§6</a>).</span></div>
+  <div class="box"><span class="tag"><span class="th">ฟีเจอร์ Enterprise อื่น ๆ</span><span class="en">Other Enterprise features</span></span><span class="th"><b>🎨 Report Branding</b> (ดู <a href="#report">§14</a>) · <b>⏰ Scheduled Feeds</b> — ตั้งเวลาอัปเดต feed อัตโนมัติ (ดู <a href="#feeds">§10</a>) · <b>🧠 Multi AI / Worker</b> — เพิ่ม AI provider (<a href="#ai">§6</a>) และ Kali worker (<a href="#workers">§7</a>) ได้หลายตัว</span><span class="en"><b>🎨 Report Branding</b> (see <a href="#report">§14</a>) · <b>⏰ Scheduled Feeds</b> — auto-update feeds on a schedule (see <a href="#feeds">§10</a>) · <b>🧠 Multi AI / Worker</b> — register multiple AI providers (<a href="#ai">§6</a>) and Kali workers (<a href="#workers">§7</a>).</span></div>
   </section>
 
   <hr />
