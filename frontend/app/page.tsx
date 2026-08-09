@@ -656,8 +656,19 @@ export default function Console() {
                 <button onClick={() => setReportText(null)}>{t("sess.back")}</button>
               </div>
               <pre
-                className="transcript"
-                style={{ flex: 1, minHeight: 320, height: "auto", whiteSpace: "pre-wrap" }}
+                style={{
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                  margin: 0,
+                  height: "auto",
+                  overflow: "visible",
+                  fontSize: 13,
+                  lineHeight: 1.6,
+                  border: "1px solid var(--border)",
+                  borderRadius: 6,
+                  padding: 14,
+                  background: "var(--panel2, #060a14)",
+                }}
               >
                 {reportText || "(empty report)"}
               </pre>
