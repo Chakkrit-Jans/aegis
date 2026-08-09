@@ -216,6 +216,104 @@ Save findings with remediation, then generate_report.</code></pre>
   </table>
   <div class="box tip"><span class="tag">💡 <span class="th">อ่านผลอย่างไร</span><span class="en">Reading the results</span></span><span class="th">หมวดที่มี <span class="pill no">critical/high</span> คือช่องโหว่จริงที่ระบบ<b>ยิงยืนยันเอง</b>ได้ (Injection, Broken Auth) · หมวด <span class="pill warn">medium</span> ส่วนใหญ่คือ endpoint/config ที่หลุดจริง (feedbacks, /ftp, CORS, version) · ส่วนที่เป็น “ทำมือ” ระบบจะ<b>ระบุพื้นผิว</b>ให้ แต่การพิสูจน์ต้อง login + หลายขั้นผ่านแท็บ Desktop — ตรงกับธรรมชาติของบทเรียน WebGoat</span><span class="en">Categories with <span class="pill no">critical/high</span> are real flaws the system <b>self-confirmed</b> (Injection, Broken Auth) · most <span class="pill warn">medium</span> ones are genuinely exposed endpoints/config (feedbacks, /ftp, CORS, version) · the “manual” parts are <b>surfaced</b> by the system but proving them needs an authenticated, multi-step session via the Desktop tab — matching the nature of WebGoat lessons.</span></div>
 
+  <h3 id="reports7"><span class="th">รายงานจริงทั้ง 7 engagement (เทียบกัน)</span><span class="en">All 7 engagement reports (side by side)</span></h3>
+  <p><span class="th">หน้าปก + Issues found ของรายงาน<b>จริงทั้ง 7 หมวด</b> (ดึงจากระบบ) เรียงให้เทียบกันได้ — เห็นชัดว่า <b>Injection / Broken Auth</b> ได้ <b>CRITICAL</b> (ระบบยิงยืนยันเอง) ส่วนหมวดอื่นเป็น <b>MEDIUM/LOW</b> (endpoint/config ที่หลุดจริง + พื้นผิวของส่วนที่ต้องทำมือ)</span>
+  <span class="en">Cover + Issues-found of all <b>7 real category reports</b> (pulled from the system), lined up for comparison — <b>Injection / Broken Auth</b> reach <b>CRITICAL</b> (self-confirmed) while the rest are <b>MEDIUM/LOW</b> (genuinely exposed endpoints/config + the surface of the manual parts).</span></p>
+  <div class="grid2">
+    <figure class="screen" style="margin:0">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Injection (A03)</span></div>
+      <div class="body" style="background:#fff;color:#1a2430;padding:12px">
+        <div style="border-left:4px solid #b30021;padding-left:10px;margin-bottom:8px">
+          <div style="font-weight:700;color:#0b7285;font-size:13px">Injection <span style="color:#8a99a8;font-weight:400">(A03)</span></div>
+          <div style="font-size:11px;color:#5a6b7a;margin-top:2px">Overall risk: <span style="background:#b30021;color:#fff;padding:1px 8px;border-radius:5px;font-weight:700;font-size:10px">CRITICAL</span> &middot; 4 findings</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+          <tr><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;text-align:left">Finding</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:60px">Sev</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:62px">Conf</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:3px 7px">SQL Injection Authentication Bypass in /rest/user/login</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b30021;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">CRITICAL</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Exposed Directory Listing: /ftp</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing HTTP Strict Transport Security (HSTS) and Content Secu</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#2f6f4f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Firm</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing Security Headers (CSP / HSTS)</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#2f6f4f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr>
+        </table>
+      </div>
+    </figure>
+    <figure class="screen" style="margin:0">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Broken Auth (A07)</span></div>
+      <div class="body" style="background:#fff;color:#1a2430;padding:12px">
+        <div style="border-left:4px solid #b30021;padding-left:10px;margin-bottom:8px">
+          <div style="font-weight:700;color:#0b7285;font-size:13px">Broken Auth <span style="color:#8a99a8;font-weight:400">(A07)</span></div>
+          <div style="font-size:11px;color:#5a6b7a;margin-top:2px">Overall risk: <span style="background:#b30021;color:#fff;padding:1px 8px;border-radius:5px;font-weight:700;font-size:10px">CRITICAL</span> &middot; 4 findings</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+          <tr><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;text-align:left">Finding</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:60px">Sev</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:62px">Conf</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:3px 7px">SQL Injection Authentication Bypass at /rest/user/login (Broke</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b30021;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">CRITICAL</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Authentication token JWT discloses full account profile includ</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#d9480f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Open management/listening port 3000 exposed</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#5a6b7a;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">INFO</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">DNS resolution of target hostname discloses internal IP addres</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#5a6b7a;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">INFO</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr>
+        </table>
+      </div>
+    </figure>
+    <figure class="screen" style="margin:0">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Access Control (A01)</span></div>
+      <div class="body" style="background:#fff;color:#1a2430;padding:12px">
+        <div style="border-left:4px solid #b8860b;padding-left:10px;margin-bottom:8px">
+          <div style="font-weight:700;color:#0b7285;font-size:13px">Access Control <span style="color:#8a99a8;font-weight:400">(A01)</span></div>
+          <div style="font-size:11px;color:#5a6b7a;margin-top:2px">Overall risk: <span style="background:#b8860b;color:#fff;padding:1px 8px;border-radius:5px;font-weight:700;font-size:10px">MEDIUM</span> &middot; 3 findings</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+          <tr><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;text-align:left">Finding</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:60px">Sev</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:62px">Conf</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing function-level access control / data exposure on /api/</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing HTTP Strict-Transport-Security (HSTS) header</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#2f6f4f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Tentative</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing Content-Security-Policy (CSP) header</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#2f6f4f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Tentative</td></tr>
+        </table>
+      </div>
+    </figure>
+    <figure class="screen" style="margin:0">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · XSS (A03)</span></div>
+      <div class="body" style="background:#fff;color:#1a2430;padding:12px">
+        <div style="border-left:4px solid #b8860b;padding-left:10px;margin-bottom:8px">
+          <div style="font-weight:700;color:#0b7285;font-size:13px">XSS <span style="color:#8a99a8;font-weight:400">(A03)</span></div>
+          <div style="font-size:11px;color:#5a6b7a;margin-top:2px">Overall risk: <span style="background:#b8860b;color:#fff;padding:1px 8px;border-radius:5px;font-weight:700;font-size:10px">MEDIUM</span> &middot; 2 findings</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+          <tr><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;text-align:left">Finding</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:60px">Sev</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:62px">Conf</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing Content-Security-Policy (CSP) header — increases XSS i</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing HTTP Strict-Transport-Security (HSTS) header</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#2f6f4f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr>
+        </table>
+      </div>
+    </figure>
+    <figure class="screen" style="margin:0">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Sensitive Data / XXE (A02/A05)</span></div>
+      <div class="body" style="background:#fff;color:#1a2430;padding:12px">
+        <div style="border-left:4px solid #b8860b;padding-left:10px;margin-bottom:8px">
+          <div style="font-weight:700;color:#0b7285;font-size:13px">Sensitive Data / XXE <span style="color:#8a99a8;font-weight:400">(A02/A05)</span></div>
+          <div style="font-size:11px;color:#5a6b7a;margin-top:2px">Overall risk: <span style="background:#b8860b;color:#fff;padding:1px 8px;border-radius:5px;font-weight:700;font-size:10px">MEDIUM</span> &middot; 4 findings</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+          <tr><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;text-align:left">Finding</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:60px">Sev</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:62px">Conf</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing HTTP Content-Security-Policy (CSP) header</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Browsable /ftp/ directory (information disclosure)</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Sensitive file exposure in /ftp/ directory</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Tentative</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing HTTP Strict-Transport-Security (HSTS) header</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#2f6f4f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr>
+        </table>
+      </div>
+    </figure>
+    <figure class="screen" style="margin:0">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Request Forgery (A01/A10)</span></div>
+      <div class="body" style="background:#fff;color:#1a2430;padding:12px">
+        <div style="border-left:4px solid #b8860b;padding-left:10px;margin-bottom:8px">
+          <div style="font-weight:700;color:#0b7285;font-size:13px">Request Forgery <span style="color:#8a99a8;font-weight:400">(A01/A10)</span></div>
+          <div style="font-size:11px;color:#5a6b7a;margin-top:2px">Overall risk: <span style="background:#b8860b;color:#fff;padding:1px 8px;border-radius:5px;font-weight:700;font-size:10px">MEDIUM</span> &middot; 4 findings</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+          <tr><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;text-align:left">Finding</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:60px">Sev</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:62px">Conf</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Permissive CORS Access-Control-Allow-Origin: *</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Missing security headers (HSTS / Content-Security-Policy)</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Profile image-URL SSRF surface (needs authenticated session + </td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">CSRF surface on authenticated state-changing endpoints (needs </td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#b8860b;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Tentative</td></tr>
+        </table>
+      </div>
+    </figure>
+    <figure class="screen" style="margin:0">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Vulnerable Components (A06)</span></div>
+      <div class="body" style="background:#fff;color:#1a2430;padding:12px">
+        <div style="border-left:4px solid #2f6f4f;padding-left:10px;margin-bottom:8px">
+          <div style="font-weight:700;color:#0b7285;font-size:13px">Vulnerable Components <span style="color:#8a99a8;font-weight:400">(A06)</span></div>
+          <div style="font-size:11px;color:#5a6b7a;margin-top:2px">Overall risk: <span style="background:#2f6f4f;color:#fff;padding:1px 8px;border-radius:5px;font-weight:700;font-size:10px">LOW</span> &middot; 2 findings</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+          <tr><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;text-align:left">Finding</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:60px">Sev</th><th style="border:1px solid #e2e8f0;padding:3px 7px;background:#f1f5f9;width:62px">Conf</th></tr>
+          <tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Application version disclosure (vulnerable/outdated components</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#2f6f4f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Certain</td></tr><tr><td style="border:1px solid #e2e8f0;padding:3px 7px">Server-side missing HTTP security headers (HSTS / CSP / X-Cont</td><td style="border:1px solid #e2e8f0;padding:3px 7px;white-space:nowrap"><span style="background:#2f6f4f;color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:9px">LOW</span></td><td style="border:1px solid #e2e8f0;padding:3px 7px;font-size:11px">Tentative</td></tr>
+        </table>
+      </div>
+    </figure>
+  </div>
+  <figcaption><span class="th">รายงานจริงทั้ง 7 engagement — เปิด <b>Console → เลือก engagement <code>Case ·</code> → 📄 View report</b> เพื่อดูฉบับเต็มของแต่ละอัน</span><span class="en">All 7 real engagement reports — open <b>Console → a <code>Case ·</code> engagement → 📄 View report</b> for each full report.</span></figcaption>
+
   <h3><span class="th">ตัวอย่างจริง: Injection (A03) — จากโจทย์ถึงรายงาน</span><span class="en">Worked example: Injection (A03) — objective to report</span></h3>
   <p><span class="th">โจทย์นี้สั่งให้ <b>ยืนยัน</b> ช่องโหว่ (ไม่ใช่แค่สแกนผ่าน ๆ) — เคล็ดลับคือระบุให้ใช้ <code>run_command</code> ยิงจริงและบอกว่า “อะไรคือหลักฐานที่พิสูจน์ได้”:</span><span class="en">This objective tells the agent to <b>confirm</b> the flaw (not just scan) — the trick is to name <code>run_command</code> and state “what proves it”:</span></p>
   <pre><code>Validate two issues on juiceshop:3000 using run_command, then report.
