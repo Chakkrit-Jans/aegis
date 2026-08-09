@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="th" class="lang-th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aegis — Documentation / คู่มือการใช้งาน</title>
+<link rel="stylesheet" href="assets/manual.css" />
+<style>
+  .hub{max-width:1000px;margin:0 auto;padding:40px 24px}
+  .hub .langbar{position:static;margin:0 0 20px;padding:0;background:none;backdrop-filter:none;justify-content:flex-end}
+  .hero{text-align:center;padding:24px 0 10px}
+  .hero .logo{font-size:44px;letter-spacing:10px;color:var(--cyan);font-weight:700;text-shadow:0 0 24px rgba(34,224,255,.45)}
+  .hero .sub{color:var(--muted);letter-spacing:2px;font-size:13px;margin-top:6px}
+  .books{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:30px}
+  a.bookcard{display:block;border:1px solid var(--border);border-radius:14px;padding:22px;background:var(--panel);transition:.15s;color:var(--text)}
+  a.bookcard:hover{border-color:var(--cyan);transform:translateY(-3px);text-decoration:none;box-shadow:0 12px 34px rgba(0,0,0,.4)}
+  a.bookcard .num{font-family:monospace;color:var(--cyan);font-size:13px;letter-spacing:2px}
+  a.bookcard h3{margin:8px 0 8px;color:#fff;font-size:18px}
+  a.bookcard p{margin:0;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="hub">
+  <div class="langbar">
+    <button data-lang="th">ไทย</button>
+    <button data-lang="en">English</button>
+  </div>
+
+  <div class="hero">
+    <div class="logo">AEGIS</div>
+    <div class="sub">DOCUMENTATION SET · ชุดคู่มือการใช้งาน</div>
+  </div>
+
+  <p class="lead" style="text-align:center;max-width:720px;margin:18px auto 0">
+    <span class="th">ชุดคู่มือ 3 เล่มสำหรับแพลตฟอร์มทดสอบเจาะระบบอัตโนมัติแบบมีคนกำกับ (human-in-the-loop) — ใช้กับเป้าหมายที่ได้รับอนุญาตเท่านั้น</span>
+    <span class="en">A three-book set for the human-in-the-loop autonomous penetration-testing platform — for authorized targets only.</span>
+  </p>
+
+  <div class="books">
+    <a class="bookcard" href="01-aegis.html">
+      <div class="num">BOOK 01</div>
+      <h3><span class="th">คู่มือการใช้งาน Aegis</span><span class="en">Aegis User Guide</span></h3>
+      <p><span class="th">ตั้งค่า เข้าใช้งาน และเดินงานทดสอบครบวงจร ตั้งแต่สร้าง engagement จนออกรายงาน PDF พร้อมภาพประกอบ</span><span class="en">Set up, sign in, and run a full engagement end-to-end — from scope to the PDF report. Illustrated.</span></p>
+    </a>
+    <a class="bookcard" href="02-targets.html">
+      <div class="num">BOOK 02</div>
+      <h3><span class="th">คู่มือ WebGoat &amp; Juice Shop</span><span class="en">WebGoat &amp; Juice Shop Guide</span></h3>
+      <p><span class="th">รู้จักและติดตั้งแอปฝึกเจาะระบบสองตัวยอดนิยม พร้อมแผนผังช่องโหว่ในแต่ละหมวด</span><span class="en">Install and understand the two classic deliberately-vulnerable training apps, with a map of every vulnerability category.</span></p>
+    </a>
+    <a class="bookcard" href="03-testing.html">
+      <div class="num">BOOK 03</div>
+      <h3><span class="th">ทดสอบ Aegis กับเป้าหมายจริง</span><span class="en">Testing Aegis on the Targets</span></h3>
+      <p><span class="th">ขั้นตอนใช้ Aegis ทดสอบ WebGoat และ Juice Shop จริง ทีละสถานการณ์ พร้อมผลลัพธ์ที่ควรได้</span><span class="en">Step-by-step scenarios running Aegis against WebGoat and Juice Shop, with the results you should expect.</span></p>
+    </a>
+  </div>
+
+  <div style="text-align:center;margin-top:26px">
+    <a class="bookcard" href="../pricing.html" style="display:inline-block;text-align:center;min-width:280px">
+      <div class="num">PRICING</div>
+      <h3 style="margin-bottom:4px"><span class="th">ราคา &amp; รุ่น (Community / Enterprise)</span><span class="en">Pricing &amp; Editions (Community / Enterprise)</span></h3>
+      <p><span class="th">เทียบรุ่นฟรีกับ Enterprise และวิธีเปิดใช้ license</span><span class="en">Compare the free and Enterprise tiers and how to activate a license.</span></p>
+    </a>
+  </div>
+
+  <div class="box warn" style="margin-top:30px">
+    <span class="tag">⚠ <span class="th">ข้อกำหนดการใช้งาน</span><span class="en">Rules of use</span></span>
+    <span class="th">ใช้ Aegis กับระบบที่คุณได้รับอนุญาตเป็นลายลักษณ์อักษรเท่านั้น · WebGoat และ Juice Shop เป็นแล็บสำหรับฝึกโดยเฉพาะ ห้ามนำเทคนิคไปใช้กับระบบผู้อื่นโดยไม่ได้รับอนุญาต</span>
+    <span class="en">Only use Aegis against systems you have written authorization to test. WebGoat and Juice Shop are purpose-built practice labs — never apply these techniques to systems you do not own or lack permission to test.</span>
+  </div>
+</div>
+<script src="assets/manual.js"></script>
+</body>
+</html>

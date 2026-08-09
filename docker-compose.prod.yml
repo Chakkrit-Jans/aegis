@@ -1,0 +1,49 @@
+# Production overlay. Use together with the base file:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# What it changes vs. the base compose:
+#   - data-plane ports (mongo/redis/backend) are bound to 127.0.0.1 only, so
+#     they are NOT reachable from the network — only via the Caddy proxy.
+#   - the frontend is built for same-origin API calls (NEXT_PUBLIC_API_URL="").
+#   - a Caddy reverse proxy terminates HTTPS and routes /api + /socket.io to the
+#     backend and everything else to the frontend.
+services:
+  mongo:
+    ports: !override
+      - "127.0.0.1:27017:27017"
+
+  redis:
+    ports: !override
+      - "127.0.0.1:6379:6379"
+
+  backend:
+    environment:
+      # Only the public site origin may call the API / open a socket.
+      CORS_ORIGIN: ${PUBLIC_URL}
+    ports: !override
+      - "127.0.0.1:8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Empty = same-origin: the browser calls /api on the site it loaded from,
+        # which Caddy proxies to the backend. No CORS, no exposed backend port.
+        NEXT_PUBLIC_API_URL: ""
+    ports: !override []
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - backend
+    environment:
+      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data/caddy:/data
+      - ./data/caddy-config:/config
+    ports:
+      - "80:80"
+      - "443:443"

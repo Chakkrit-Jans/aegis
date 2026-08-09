@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="th" class="lang-th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Book 01 — Aegis User Guide / คู่มือการใช้งาน Aegis</title>
+<link rel="stylesheet" href="assets/manual.css" />
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+  <div class="brand">AEGIS<small>BOOK 01 · USER GUIDE</small></div>
+  <a class="book active" href="index.html">← <span class="th">กลับหน้ารวมคู่มือ</span><span class="en">All books</span></a>
+  <ol>
+    <li><a href="#intro">1. <span class="th">Aegis คืออะไร</span><span class="en">What is Aegis</span></a></li>
+    <li><a href="#arch">2. <span class="th">สถาปัตยกรรม</span><span class="en">Architecture</span></a></li>
+    <li><a href="#concepts">3. <span class="th">แนวคิดความปลอดภัย</span><span class="en">Safety concepts</span></a></li>
+    <li><a href="#login">4. <span class="th">เข้าสู่ระบบ</span><span class="en">Sign in</span></a></li>
+    <li><a href="#ai">5. <span class="th">ตั้งค่า AI Providers</span><span class="en">AI Providers</span></a></li>
+    <li><a href="#workers">6. <span class="th">ตั้งค่า Kali Workers</span><span class="en">Kali Workers</span></a></li>
+    <li><a href="#extras">7. <span class="th">Proxy / Telegram</span><span class="en">Proxy / Telegram</span></a></li>
+    <li><a href="#templates">8. <span class="th">Objective Templates</span><span class="en">Objective Templates</span></a></li>
+    <li><a href="#workflow">9. <span class="th">เดินงานเต็มรูปแบบ</span><span class="en">Full workflow</span></a></li>
+    <li><a href="#screens">10. <span class="th">แท็บหน้าจอ</span><span class="en">The tabs</span></a></li>
+    <li><a href="#feeds">11. <span class="th">Vuln Feeds</span><span class="en">Vuln Feeds</span></a></li>
+    <li><a href="#admin">12. <span class="th">Users &amp; Audit</span><span class="en">Users &amp; Audit</span></a></li>
+    <li><a href="#tools">13. <span class="th">เครื่องมือของ AI</span><span class="en">Agent tools</span></a></li>
+    <li><a href="#manage">14. <span class="th">ลบ / จัดการงาน</span><span class="en">Delete engagements</span></a></li>
+    <li><a href="#docker">15. <span class="th">คำสั่ง Docker</span><span class="en">Docker commands</span></a></li>
+    <li><a href="#trouble">16. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></a></li>
+    <li><a href="#editions">17. <span class="th">รุ่น &amp; License</span><span class="en">Editions &amp; Licensing</span></a></li>
+  </ol>
+</nav>
+
+<main>
+  <div class="langbar">
+    <button data-lang="th">ไทย</button>
+    <button data-lang="en">English</button>
+  </div>
+
+  <h1><span class="th">คู่มือการใช้งาน Aegis</span><span class="en">Aegis User Guide</span></h1>
+  <p class="lead"><span class="th">แพลตฟอร์มสั่งการทดสอบเจาะระบบด้วย AI ที่มี “คนอนุมัติทุกขั้นตอน” — ตั้งค่าครั้งเดียว แล้วเดินงานได้ตั้งแต่ต้นจนออกรายงานให้ลูกค้า</span><span class="en">An AI-driven penetration-testing console with a human in the loop on every intrusive action — configure once, then run an engagement from scope to a client-ready report.</span></p>
+
+  <!-- 1 -->
+  <section id="intro">
+  <h2>1. <span class="th">Aegis คืออะไร</span><span class="en">What is Aegis</span></h2>
+  <p><span class="th">Aegis เป็นระบบที่ให้ AI ทำหน้าที่ “ผู้ทดสอบเจาะระบบ” — มันวางแผน เลือกเครื่องมือ และวิเคราะห์ผลเอง แต่<b>ทุกคำสั่งที่เป็น active/intrusive จะต้องหยุดรอให้คุณกดอนุมัติก่อน</b> และถูกจำกัดด้วยขอบเขต (scope) ที่คุณกำหนด งานจบลงด้วยรายงานพร้อมหลักฐาน ผลกระทบ และวิธีแก้</span>
+  <span class="en">Aegis lets an AI act as the penetration tester — it plans, picks tools, and analyzes results on its own, but <b>every active / intrusive command pauses for your approval</b> and is confined to the scope you set. An engagement ends with a report containing evidence, impact, and remediation.</span></p>
+  <div class="cols">
+    <div class="card"><h4>🧠 <span class="th">AI ขับเคลื่อน</span><span class="en">AI-driven</span></h4><p><span class="th">วางแผนเป็นเฟส: recon → สแกน → ทดสอบ credential → ยืนยันช่องโหว่ → รายงาน</span><span class="en">Plans in phases: recon → scan → credential testing → validation → reporting.</span></p></div>
+    <div class="card"><h4>🚦 <span class="th">มีประตูกั้น</span><span class="en">Gated</span></h4><p><span class="th">Scope Gate + Approval Gate กันการยิงนอกขอบเขตและกันการทำงานโดยไม่ได้รับอนุญาต</span><span class="en">A Scope Gate and Approval Gate stop out-of-scope or unapproved actions.</span></p></div>
+    <div class="card"><h4>🧾 <span class="th">ตรวจสอบย้อนหลังได้</span><span class="en">Auditable</span></h4><p><span class="th">ทุกการอนุมัติ/คำสั่ง/การลบ ถูกบันทึกใน Audit Log</span><span class="en">Every approval, command, and deletion is written to the Audit Log.</span></p></div>
+    <div class="card"><h4>🛠️ <span class="th">เครื่องมือจริง</span><span class="en">Real tools</span></h4><p><span class="th">รันบนเครื่อง Kali จริง: nmap, nuclei, ffuf, hydra, ฯลฯ</span><span class="en">Runs real Kali tooling: nmap, nuclei, ffuf, hydra, and more.</span></p></div>
+  </div>
+  </section>
+
+  <!-- 2 -->
+  <section id="arch">
+  <h2>2. <span class="th">สถาปัตยกรรม</span><span class="en">Architecture</span></h2>
+  <p><span class="th">ระบบแยกเป็นส่วน ๆ ผ่าน Docker: หน้าเว็บ (Next.js) → หลังบ้าน (Node/Express + Socket.IO) → เครื่อง Kali worker ที่รันเครื่องมือจริง โดยมี MongoDB/Redis เก็บสถานะ</span>
+  <span class="en">The system is split into Docker services: a Next.js web console → a Node/Express + Socket.IO backend → one or more Kali workers that run the real tools, with MongoDB/Redis holding state.</span></p>
+  <svg viewBox="0 0 760 250" role="img">
+    <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#0e7f96"/></marker></defs>
+    <rect x="16" y="96" width="150" height="58" rx="10" fill="#0b1120" stroke="#22e0ff"/>
+    <text x="91" y="120" fill="#cfe8f5" font-size="13" text-anchor="middle">Web Console</text>
+    <text x="91" y="138" fill="#6b8299" font-size="10" text-anchor="middle">Next.js · :3001</text>
+    <rect x="230" y="96" width="160" height="58" rx="10" fill="#0b1120" stroke="#22e0ff"/>
+    <text x="310" y="120" fill="#cfe8f5" font-size="13" text-anchor="middle">Backend / Agent</text>
+    <text x="310" y="138" fill="#6b8299" font-size="10" text-anchor="middle">Express · Socket.IO · :8081</text>
+    <rect x="454" y="30" width="150" height="52" rx="10" fill="#0b1120" stroke="#39ff88"/>
+    <text x="529" y="52" fill="#cfe8f5" font-size="13" text-anchor="middle">Kali worker 1</text>
+    <text x="529" y="69" fill="#6b8299" font-size="10" text-anchor="middle">exec :7000 · VNC :6080</text>
+    <rect x="454" y="98" width="150" height="52" rx="10" fill="#0b1120" stroke="#39ff88"/>
+    <text x="529" y="120" fill="#cfe8f5" font-size="13" text-anchor="middle">Kali worker 2</text>
+    <text x="529" y="137" fill="#6b8299" font-size="10" text-anchor="middle">nmap · nuclei · ffuf …</text>
+    <rect x="454" y="166" width="150" height="52" rx="10" fill="#0b1120" stroke="#a78bfa"/>
+    <text x="529" y="188" fill="#cfe8f5" font-size="13" text-anchor="middle">Mongo · Redis</text>
+    <text x="529" y="205" fill="#6b8299" font-size="10" text-anchor="middle">state / audit / sessions</text>
+    <rect x="648" y="96" width="96" height="58" rx="10" fill="#0b1120" stroke="#ffb547"/>
+    <text x="696" y="122" fill="#ffb547" font-size="12" text-anchor="middle">Target</text>
+    <text x="696" y="139" fill="#6b8299" font-size="10" text-anchor="middle">in-scope</text>
+    <line x1="166" y1="125" x2="228" y2="125" stroke="#0e7f96" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="390" y1="112" x2="452" y2="60"  stroke="#0e7f96" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="390" y1="125" x2="452" y2="124" stroke="#0e7f96" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="390" y1="138" x2="452" y2="190" stroke="#0e7f96" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="604" y1="124" x2="646" y2="124" stroke="#ffb547" stroke-width="2" marker-end="url(#ar)"/>
+  </svg>
+  <figcaption><span class="th">ผังภาพรวม — worker คือส่วนเดียวที่แตะเป้าหมายจริง</span><span class="en">Overview — the worker is the only part that touches the real target.</span></figcaption>
+  </section>
+
+  <!-- 3 -->
+  <section id="concepts">
+  <h2>3. <span class="th">แนวคิดความปลอดภัย 4 อย่าง</span><span class="en">Four safety concepts</span></h2>
+
+  <h3>① Scope Gate</h3>
+  <p><span class="th">ก่อนยิงเครื่องมือที่ระบุเป้าหมาย ระบบเช็คว่าเป้าอยู่ใน include และไม่อยู่ใน exclude — <b>ถ้านอกขอบเขตจะถูกบล็อกทันที</b> แม้ AI อยากทำก็ตาม</span>
+  <span class="en">Before any tool that names a target runs, Aegis checks the target is in <code>include</code> and not in <code>exclude</code> — <b>out-of-scope targets are blocked immediately</b>, even if the AI wants to proceed.</span></p>
+
+  <h3>② Approval Gate</h3>
+  <p><span class="th">เครื่องมือทุกตัวที่เป็น <span class="pill act">active</span> หรือ <span class="pill intr">intrusive</span> จะหยุดรอการ์ดอนุมัติ — คุณเห็นเหตุผลของ AI + คำสั่งจริง แล้วกด APPROVE / REJECT</span>
+  <span class="en">Every <span class="pill act">active</span> or <span class="pill intr">intrusive</span> tool pauses on an approval card — you see the AI's rationale and the exact command, then APPROVE / REJECT.</span></p>
+
+  <h3>③ Auto-approve</h3>
+  <p><span class="th">โหมดเสริม (checkbox ตอน spawn) ที่ปิดเฉพาะ “การอนุมัติของคน” เพื่อให้เดินเร็วในแล็บ — <b>Scope Gate ยังทำงานอยู่เสมอ</b></span>
+  <span class="en">An opt-in mode (a checkbox when you spawn) that skips only the human approval so lab runs go faster — <b>the Scope Gate still applies at all times</b>.</span></p>
+  <div class="box danger"><span class="tag">⚠ <span class="th">ระวัง</span><span class="en">Caution</span></span><span class="th">ใช้ Auto-approve เฉพาะเป้าหมายที่คุณเป็นเจ้าของ/แล็บของตัวเองเท่านั้น</span><span class="en">Only enable Auto-approve on lab targets you own or are explicitly authorized to hammer.</span></div>
+
+  <h3>④ Audit + RBAC</h3>
+  <p><span class="th">ผู้ใช้มีบทบาท admin/operator; ทุกเหตุการณ์สำคัญถูกบันทึกถาวรและดูได้ที่ Settings → Audit Log</span>
+  <span class="en">Users are admin or operator; every significant event is recorded permanently and viewable in Settings → Audit Log.</span></p>
+  </section>
+
+  <!-- 4 -->
+  <section id="login">
+  <h2>4. <span class="th">เข้าสู่ระบบ</span><span class="en">Sign in</span></h2>
+  <ol class="steps">
+    <li><span class="th"><b>เปิดเบราว์เซอร์</b>ไปที่ <code>http://localhost:3001</code></span><span class="en"><b>Open</b> <code>http://localhost:3001</code> in your browser.</span></li>
+    <li><span class="th"><b>ล็อกอิน</b> — Email <code>admin</code> · Password <code>admin1234</code></span><span class="en"><b>Log in</b> — Email <code>admin</code> · Password <code>admin1234</code>.</span></li>
+    <li><span class="th"><b>เปลี่ยนรหัสผ่าน</b>ทันทีถ้าใช้จริง จากปุ่ม <span class="btn">🔑 Pass</span> มุมขวาบน</span><span class="en"><b>Change the password</b> right away for real use — the <span class="btn">🔑 Pass</span> button, top-right.</span></li>
+  </ol>
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3001</span></div>
+    <div class="body" style="text-align:center;padding:34px">
+      <div class="ui-brand" style="margin:0 0 18px;font-size:22px">AEGIS</div>
+      <div style="max-width:300px;margin:0 auto;text-align:left">
+        <div class="fld"><label>Email</label><div class="inp">admin</div></div>
+        <div class="fld"><label>Password</label><div class="inp">••••••••</div></div>
+        <div class="btn p" style="width:100%;text-align:center;margin-top:12px">Sign in</div>
+      </div>
+    </div>
+  </figure>
+  <figcaption><span class="th">หน้า Sign in</span><span class="en">The sign-in screen</span></figcaption>
+  </section>
+
+  <!-- 5 -->
+  <section id="ai">
+  <h2>5. <span class="th">ตั้งค่า AI Providers</span><span class="en">AI Providers</span></h2>
+  <p><span class="th">คือ “สมอง” ที่วางแผนและขับเคลื่อนงาน เพิ่มได้หลายตัว (DeepSeek / Anthropic / OpenAI-compatible เช่น Ollama) แล้วเลือกหนึ่งเป็น <b>default</b> — agent จะใช้ตัวที่เป็น default</span>
+  <span class="en">This is the reasoning engine that plans and drives engagements. Add several (DeepSeek / Anthropic / OpenAI-compatible such as Ollama) and mark one as <b>default</b> — the agent uses the default.</span></p>
+  <ol class="steps">
+    <li><span class="th">ไปที่ <span class="btn">Settings</span> → <b>AI Providers</b> → <span class="btn p">+ Add provider</span></span><span class="en">Go to <span class="btn">Settings</span> → <b>AI Providers</b> → <span class="btn p">+ Add provider</span>.</span></li>
+    <li><span class="th">เลือก provider, ใส่ <b>API key</b> (คีย์เก็บฝั่ง server ไม่โชว์กลับ), เลือก/พิมพ์ model แล้ว Save</span><span class="en">Pick the provider, paste the <b>API key</b> (stored server-side, never echoed), choose or type a model, then Save.</span></li>
+    <li><span class="th">กด <span class="btn">Set default</span> ที่ provider ที่ต้องการใช้ และ <span class="btn">Test</span> เพื่อยืนยันว่าต่อได้</span><span class="en">Click <span class="btn">Set default</span> on the one to use, and <span class="btn">Test</span> to confirm connectivity.</span></li>
+  </ol>
+  <div class="box tip"><span class="tag">🔑 <span class="th">เรื่องคีย์</span><span class="en">About keys</span></span><span class="th">ห้ามวาง API key ในแชท — ใส่ผ่าน UI นี้เท่านั้น</span><span class="en">Never paste API keys into a chat — enter them only through this UI.</span></div>
+  <div class="box"><span class="tag">🏢 Enterprise</span><span class="th">Community เพิ่ม AI provider ได้ <b>1 ตัว</b> · หลายตัว (routing/fallback) ต้องใช้ Enterprise — ดู <a href="#editions">§17</a></span><span class="en">Community allows <b>1</b> AI provider; multiple (routing/fallback) needs Enterprise — see <a href="#editions">§17</a>.</span></div>
+  </section>
+
+  <!-- 6 -->
+  <section id="workers">
+  <h2>6. <span class="th">ตั้งค่า Kali Workers</span><span class="en">Kali Workers</span></h2>
+  <p><span class="th">worker คือคอนเทนเนอร์ Kali ที่รันเครื่องมือจริง มีได้หลายตัวเพื่อแยกงานตามลูกค้า/เครือข่าย แต่ละ engagement เลือก worker ของตัวเองได้ หรือใช้ตัว default</span>
+  <span class="en">A worker is a Kali container that runs the real tools. You can register several to isolate work per client / network; each engagement can pick its own worker or use the default.</span></p>
+  <ol class="steps">
+    <li><span class="th"><span class="btn">Settings</span> → <b>Kali Workers</b> → <span class="btn p">+ Add worker</span> ใส่ชื่อ, URL (เช่น <code>http://worker2:7000</code>) และ token</span><span class="en"><span class="btn">Settings</span> → <b>Kali Workers</b> → <span class="btn p">+ Add worker</span>, enter a name, URL (e.g. <code>http://worker2:7000</code>) and token.</span></li>
+    <li><span class="th">กด <span class="btn">Health</span> เพื่อเช็คว่าเครื่องมือครบ (เห็นจำนวน tools)</span><span class="en">Click <span class="btn">Health</span> to confirm the toolset is present (it shows a tool count).</span></li>
+  </ol>
+  <div class="box"><span class="tag">🏢 Enterprise</span><span class="th">Community รันได้ <b>1 worker</b> · หลาย worker (แยกตามลูกค้า/เครือข่าย) ต้องใช้ Enterprise — ดู <a href="#editions">§17</a></span><span class="en">Community runs <b>1</b> worker; multiple workers (per-client/network isolation) needs Enterprise — see <a href="#editions">§17</a>.</span></div>
+  </section>
+
+  <!-- 7 -->
+  <section id="extras">
+  <h2>7. <span class="th">ตั้งค่าเสริม — Proxy &amp; Telegram</span><span class="en">Optional — Proxy &amp; Telegram</span></h2>
+  <div class="grid2">
+    <div class="box"><span class="tag" style="color:var(--cyan)">Proxy · Burp / Caido</span><span class="th">ส่ง web tool (nuclei, ffuf) ผ่าน proxy ดักจับ เพื่อเห็นทุก request — จาก worker เข้าถึง host ด้วย <code>http://host.docker.internal:8080</code></span><span class="en">Route web tools (nuclei, ffuf) through an intercepting proxy so you see every request — from the worker reach the host via <code>http://host.docker.internal:8080</code>.</span></div>
+    <div class="box"><span class="tag" style="color:var(--cyan)">Telegram Gateway</span><span class="th">รับการ์ดอนุมัติบนมือถือพร้อมปุ่ม Approve/Reject — สร้าง bot ด้วย @BotFather แล้ววาง token + chat id</span><span class="en">Get approval cards on your phone with Approve/Reject buttons — create a bot with @BotFather, then paste its token and your chat id.</span></div>
+  </div>
+  </section>
+
+  <!-- 8 -->
+  <section id="templates">
+  <h2>8. <span class="th">Objective Templates</span><span class="en">Objective Templates</span></h2>
+  <p><span class="th">เทมเพลตช่วยให้ไม่ต้องพิมพ์เป้าหมายเอง มี built-in 7 หมวด × 3 ระดับ (Basic/Medium/Advanced) และสร้าง custom เองได้ที่หน้า Settings</span>
+  <span class="en">Templates save you from writing the objective by hand. There are 7 built-in categories × 3 levels (Basic/Medium/Advanced), plus custom ones you build in Settings.</span></p>
+  <table>
+    <tr><th><span class="th">หมวด</span><span class="en">Category</span></th><th>Basic</th><th>Advanced</th></tr>
+    <tr><td>Web / Network / OS / Database / Firewall / Full</td><td><span class="th">recon + สแกนพื้นฐาน</span><span class="en">recon + baseline scan</span></td><td><span class="th">ยืนยัน + ประเมินผลกระทบ</span><span class="en">validate + assess impact</span></td></tr>
+    <tr><td><b>Exploitation &amp; Post-Ex</b> (Red Team)</td><td><span class="th">ยืนยัน exploit ได้จริง + PoC</span><span class="en">confirm exploitability + PoC</span></td><td><span class="th">privesc / persistence exposure / lateral (แบบไม่ทำลาย)</span><span class="en">privesc / persistence exposure / lateral (non-destructive)</span></td></tr>
+  </table>
+  <div class="box warn"><span class="tag"><span class="th">ความปลอดภัย</span><span class="en">Safety</span></span><span class="th">ทุก template ผ่าน approval + scope · เป็น objective (ภาษาคน) ไม่ใช่โค้ด exploit สำเร็จรูป · หมวด Exploitation เฟรมเป็น non-destructive (“assess persistence exposure only, do NOT install”)</span><span class="en">Every template still passes approval + scope · it is a natural-language objective, not ready-made exploit code · the Exploitation category is framed non-destructive (“assess persistence exposure only, do NOT install”).</span></div>
+
+  <h3><span class="th">สร้าง Custom Template (หน้า Settings)</span><span class="en">Custom templates (in Settings)</span></h3>
+  <ol class="steps">
+    <li><span class="th"><span class="btn">Settings</span> → <b>Objective Templates (Custom)</b></span><span class="en"><span class="btn">Settings</span> → <b>Objective Templates (Custom)</b>.</span></li>
+    <li><span class="th">ใน “Copy from a source” เลือก template ต้นแบบ → <span class="btn">Copy →</span> ระบบคัดลอกมาให้ครบ <b>ทั้ง 3 ระดับ</b></span><span class="en">Under “Copy from a source”, pick a template → <span class="btn">Copy →</span> and it copies <b>all 3 levels</b> at once.</span></li>
+    <li><span class="th">ตั้งชื่อ + แก้ command แต่ละระดับ (ใช้ <code>&lt;TARGET&gt;</code> เป็นตัวแทน) → <span class="btn p">Create</span></span><span class="en">Name it and edit each level's command (use <code>&lt;TARGET&gt;</code> as the placeholder) → <span class="btn p">Create</span>.</span></li>
+    <li><span class="th"><b>แชร์กัน</b> — <span class="btn">⬇ Export all</span> ได้ไฟล์ JSON · เพื่อนกด <span class="btn">⬆ Import (.json)</span> เพื่อโหลด</span><span class="en"><b>Share</b> — <span class="btn">⬇ Export all</span> gives a JSON file; a teammate uses <span class="btn">⬆ Import (.json)</span> to load it.</span></li>
+  </ol>
+  <p><span class="th">ในหน้า Console เทมเพลต built-in และ custom จะรวมอยู่ใน dropdown เดียวกัน (มีเส้น <code>── Custom ──</code> คั่น) เลือกแล้วกด <span class="btn">⬇ Use</span></span><span class="en">On the Console, built-in and custom templates share one dropdown (a <code>── Custom ──</code> divider separates them); pick one and press <span class="btn">⬇ Use</span>.</span></p>
+  </section>
+
+  <!-- 9 -->
+  <section id="workflow">
+  <h2>9. <span class="th">เดินงานเต็มรูปแบบ (ตั้งแต่ต้นจนจบ)</span><span class="en">A full engagement, end to end</span></h2>
+  <svg viewBox="0 0 760 70" role="img">
+    <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0e7f96"/></marker></defs>
+    <g font-size="12" text-anchor="middle">
+    <rect x="6"   y="20" width="86" height="30" rx="15" fill="#0b1120" stroke="#16324a"/><text x="49"  y="39" fill="#cfe8f5">① New</text>
+    <rect x="104" y="20" width="96" height="30" rx="15" fill="#0b1120" stroke="#16324a"/><text x="152" y="39" fill="#cfe8f5">② Authorize</text>
+    <rect x="212" y="20" width="80" height="30" rx="15" fill="#0b1120" stroke="#16324a"/><text x="252" y="39" fill="#cfe8f5">③ Scope</text>
+    <rect x="304" y="20" width="86" height="30" rx="15" fill="#0b1120" stroke="#16324a"/><text x="347" y="39" fill="#cfe8f5">④ Objective</text>
+    <rect x="402" y="20" width="80" height="30" rx="15" fill="#0b1120" stroke="#16324a"/><text x="442" y="39" fill="#cfe8f5">⑤ Spawn</text>
+    <rect x="494" y="20" width="128" height="30" rx="15" fill="#0b1120" stroke="#ffb547"/><text x="558" y="39" fill="#ffb547">⑥ Approve/Stop</text>
+    <rect x="634" y="20" width="86" height="30" rx="15" fill="#0b1120" stroke="#39ff88"/><text x="677" y="39" fill="#39ff88">⑦ Report</text>
+    </g>
+    <line x1="92"  y1="35" x2="102" y2="35" stroke="#0e7f96" stroke-width="2" marker-end="url(#a3)"/>
+    <line x1="200" y1="35" x2="210" y2="35" stroke="#0e7f96" stroke-width="2" marker-end="url(#a3)"/>
+    <line x1="292" y1="35" x2="302" y2="35" stroke="#0e7f96" stroke-width="2" marker-end="url(#a3)"/>
+    <line x1="390" y1="35" x2="400" y2="35" stroke="#0e7f96" stroke-width="2" marker-end="url(#a3)"/>
+    <line x1="482" y1="35" x2="492" y2="35" stroke="#0e7f96" stroke-width="2" marker-end="url(#a3)"/>
+    <line x1="622" y1="35" x2="632" y2="35" stroke="#0e7f96" stroke-width="2" marker-end="url(#a3)"/>
+  </svg>
+  <ol class="steps">
+    <li><span class="th"><b>สร้าง Engagement</b> — แผงซ้าย <span class="btn p">+ New</span> ใส่ชื่องาน + ลูกค้า</span><span class="en"><b>Create an engagement</b> — left panel <span class="btn p">+ New</span>, enter a name and client.</span></li>
+    <li><span class="th"><b>บันทึก Authorization</b> — <span class="btn">Record authorization</span> ใส่ผู้อนุญาต + เลขอ้างอิง <span class="muted">(ไม่ทำ = ยิงอะไรไม่ได้)</span></span><span class="en"><b>Record authorization</b> — <span class="btn">Record authorization</span>, enter who authorized it and a reference <span class="muted">(without this, nothing active can run)</span>.</span></li>
+    <li><span class="th"><b>ตั้ง Scope</b> — <span class="btn">+ in-scope</span> ใส่เป้าที่อนุญาต, <span class="btn">+ exclude</span> ที่ห้ามแตะ</span><span class="en"><b>Set scope</b> — <span class="btn">+ in-scope</span> for allowed targets, <span class="btn">+ exclude</span> for off-limits ones.</span></li>
+    <li><span class="th"><b>เลือก Objective</b> — เลือกจาก dropdown (built-in + custom) กด <span class="btn">⬇ Use</span> หรือพิมพ์เอง · (ไม่บังคับ) ติ๊ก <b>Auto-approve</b></span><span class="en"><b>Choose an objective</b> — pick from the dropdown (built-in + custom), press <span class="btn">⬇ Use</span>, or type your own · optionally tick <b>Auto-approve</b>.</span></li>
+    <li><span class="th"><b>Spawn</b> — <span class="btn p">▶ Spawn session</span>; ระหว่างทำงานปุ่มเปลี่ยนเป็น <span class="btn r">⏹ Stop session</span> กดยกเลิกได้ทันที (แม้ตอนค้างรออนุมัติ)</span><span class="en"><b>Spawn</b> — <span class="btn p">▶ Spawn session</span>; while running it becomes <span class="btn r">⏹ Stop session</span> which cancels immediately (even mid-approval).</span></li>
+    <li><span class="th"><b>อนุมัติ</b> — แผงขวาสตรีมความคิด AI; เมื่อขอ active tool มีการ์ดเหลือง กด <span class="btn g">APPROVE</span>/<span class="btn r">REJECT</span></span><span class="en"><b>Approve</b> — the right panel streams the AI's reasoning; on an active tool a yellow card appears — <span class="btn g">APPROVE</span>/<span class="btn r">REJECT</span>.</span></li>
+    <li><span class="th"><b>รายงาน + PDF + ย้อนหลัง</b> — AI บันทึก finding + สร้างรายงาน · <span class="btn">📄 View report</span> / <span class="btn">⬇ Export PDF</span> (เปิด<b>หน้า preview รายงาน</b>ก่อน ไม่เด้ง printer — กดปุ่ม <span class="btn">🖨️ Print / Save as PDF</span> ในหน้ารายงานเองเมื่อพร้อม) และ <b>Session history</b> เปิด session เก่าดูได้</span><span class="en"><b>Report + PDF + history</b> — the AI saves findings and builds the report · <span class="btn">📄 View report</span> / <span class="btn">⬇ Export PDF</span> (opens a <b>report preview</b> first — no auto-print; click <span class="btn">🖨️ Print / Save as PDF</span> in that page when ready), and <b>Session history</b> re-opens past sessions.</span></li>
+  </ol>
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3001 · Console</span></div>
+    <div class="body">
+      <div class="ui-nav"><span class="ui-brand">AEGIS</span><span class="btn p">Console</span><span class="btn">Terminal</span><span class="btn">Desktop</span><span class="btn">Settings</span></div>
+      <div class="grid2">
+        <div>
+          <div class="rowline" style="border:none"><b>acme-staging</b><span class="btn r" style="font-size:11px">🗑 Delete engagement</span></div>
+          <div class="muted" style="font-size:12px">client: ACME</div>
+          <div style="margin:8px 0">Authorization: <span class="pill ok">GRANTED</span></div>
+          <div class="fld"><label>Objective template</label><div class="inp">Web · Advanced ▾</div></div>
+          <div class="fld"><label>Objective for the agent</label><div class="inp" style="height:54px">Assess http://host.docker.internal:3000 … save findings + report</div></div>
+          <div class="btn p" style="width:100%;text-align:center;margin-top:8px">▶ Spawn session</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px">Session · <span style="color:var(--amber)">waiting_approval</span></div>
+          <div class="box warn" style="margin:8px 0"><span class="tag">⚠ Approval required — nmap_scan</span><span style="font-size:12px">Rationale: baseline port/service map of the in-scope host.</span>
+            <div style="margin-top:8px"><span class="btn g">APPROVE</span> <span class="btn r">REJECT</span></div></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <figcaption><span class="th">หน้า Console ระหว่างรองานอนุมัติ</span><span class="en">The Console while awaiting an approval</span></figcaption>
+  </section>
+
+  <!-- 10 -->
+  <section id="screens">
+  <h2>10. <span class="th">แท็บหน้าจอทั้ง 4</span><span class="en">The four tabs</span></h2>
+  <div class="cols">
+    <div class="card"><h4>Console</h4><p><span class="th">ศูนย์กลาง: engagement, objective, spawn/stop, อนุมัติ, findings, รายงาน, ประวัติ</span><span class="en">The hub: engagements, objective, spawn/stop, approvals, findings, report, history.</span></p></div>
+    <div class="card"><h4>Terminal</h4><p><span class="th">เชลล์ของ operator บน worker — ทุกคำสั่งถูก audit และยังอยู่ในขอบเขต</span><span class="en">An operator shell on the worker — every command is audited and stays in scope.</span></p></div>
+    <div class="card"><h4>Desktop</h4><p><span class="th">เดสก์ท็อป XFCE ของ Kali ผ่าน noVNC (Burp, Firefox, GUI)</span><span class="en">The Kali XFCE desktop over noVNC (Burp, Firefox, GUI tools).</span></p></div>
+    <div class="card"><h4>Settings</h4><p><span class="th">AI, worker, proxy, telegram, users, templates, audit</span><span class="en">AI, workers, proxy, telegram, users, templates, audit.</span></p></div>
+  </div>
+
+  <h3><span class="th">ปุ่ม ⓘ About — เวอร์ชัน, License &amp; บัญชี</span><span class="en">The ⓘ About button — versions, license &amp; account</span></h3>
+  <p><span class="th">กลุ่มปุ่มมุมขวาบนคือ <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span> · กด <span class="btn">ⓘ About</span> เปิดหน้าต่างสรุปทั้งระบบ ซึ่ง<b>รวมการจัดการ Edition &amp; License ไว้ที่นี่</b> (ย้ายมาจากหน้า Settings) และดึงเวอร์ชันสด ๆ ตอนเปิด</span>
+  <span class="en">The top-right group is <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span>. Click <span class="btn">ⓘ About</span> for a full system summary — it now <b>hosts Edition &amp; License management</b> (moved from Settings) and reads live versions when opened.</span></p>
+
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3001 · About</span></div>
+    <div class="body">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><span class="ui-brand" style="margin:0">AEGIS</span><span class="pill ok" style="font-size:11px">v0.1.0</span><span class="pill ok" style="font-size:11px">★ Enterprise</span></div>
+      <div class="muted" style="font-size:12px;margin-bottom:10px">Signed in as admin · admin &nbsp;·&nbsp; git f8f635e</div>
+      <div class="box" style="margin:0 0 10px"><b style="color:var(--cyan)">Edition &amp; License</b> <span class="pill ok" style="font-size:10px">Enterprise</span>
+        <div style="font-size:12px;margin-top:6px">✅ SSO · ✅ Report branding · ✅ Audit/SIEM · ✅ Scheduled feeds · ✅ Org templates</div>
+        <div style="margin-top:8px"><span class="btn r">Remove license</span></div>
+      </div>
+      <div class="muted" style="font-size:12px">Node v22 · MongoDB 7.0 · Redis 7.4 &nbsp;|&nbsp; nmap 7.99 · nuclei 3.11 · gobuster 3.8.2 · hydra 9.7</div>
+    </div>
+  </figure>
+  <figcaption><span class="th">หน้าต่าง About — จัดการ License + เวอร์ชันทั้งหมด</span><span class="en">The About dialog — license management + all versions</span></figcaption>
+
+  <table>
+    <tr><th><span class="th">ส่วน</span><span class="en">Section</span></th><th><span class="th">แสดง / ทำอะไร</span><span class="en">Shows / does</span></th></tr>
+    <tr><td><span class="th">Edition &amp; License</span><span class="en">Edition &amp; License</span></td><td><span class="th">รุ่นปัจจุบัน, ตารางฟีเจอร์ 7 ตัว, และ<b>ใส่/ลบ license key</b> — ปลดล็อก Enterprise ที่นี่ (ย้ายมาจาก Settings)</span><span class="en">Current edition, the 7-feature matrix, and <b>paste/remove the license key</b> — activate Enterprise here (moved from Settings).</span></td></tr>
+    <tr><td><span class="th">บัญชี &amp; แอป</span><span class="en">Account &amp; app</span></td><td><span class="th">เวอร์ชัน Aegis, <b>git commit</b>, และ “Signed in as” (อีเมล · บทบาท)</span><span class="en">Aegis version, <b>git commit</b>, and “Signed in as” (email · role).</span></td></tr>
+    <tr><td><span class="th">Runtime &amp; services</span><span class="en">Runtime &amp; services</span></td><td><span class="th">Node.js, แพลตฟอร์ม, uptime, และ <b>MongoDB</b> + <b>Redis</b> (query สด)</span><span class="en">Node.js, platform, uptime, and live-queried <b>MongoDB</b> + <b>Redis</b>.</span></td></tr>
+    <tr><td><span class="th">Frontend &amp; components</span><span class="en">Frontend &amp; components</span></td><td>Next.js, React, Express, Socket.IO, Mongoose, ioredis, jsonwebtoken, bcryptjs</td></tr>
+    <tr><td><span class="th">เครื่องมือ Kali worker</span><span class="en">Kali worker tools</span></td><td><span class="th">เวอร์ชัน<b>จริง</b> (query สด): nmap, nuclei, ffuf, gobuster, nikto, whatweb, hydra, dig</span><span class="en">The <b>live</b> versions: nmap, nuclei, ffuf, gobuster, nikto, whatweb, hydra, dig.</span></td></tr>
+  </table>
+  <div class="box tip"><span class="tag">💡 <span class="th">เกร็ด</span><span class="en">Note</span></span><span class="th">เวอร์ชันเครื่องมือ Kali ดึงจาก worker ที่เปิดใช้งานตัวแรกแบบเรียลไทม์ (รัน <code>nmap --version</code> ฯลฯ) จึงตรงกับที่ติดตั้งจริงเสมอ · git commit จะโชว์ค่าจริงเมื่อ build ด้วย <code>GIT_COMMIT=$(git rev-parse --short HEAD)</code> ไม่งั้นขึ้น "dev"</span><span class="en">The Kali tool versions are pulled in real time from the first enabled worker (running <code>nmap --version</code>, etc.), so they always match what's installed. The git commit shows a real value when built with <code>GIT_COMMIT=$(git rev-parse --short HEAD)</code>, otherwise "dev".</span></div>
+  </section>
+
+  <!-- 11 -->
+  <section id="feeds">
+  <h2>11. <span class="th">Vuln Feeds</span><span class="en">Vuln Feeds</span></h2>
+  <p><span class="th">อัปเดตฐานช่องโหว่บนทุก worker พร้อมกัน: nuclei templates, Exploit-DB, nmap NSE — สั่งเองด้วย <span class="btn">⟳ Update all</span> หรือเปิด Auto-update ตามชั่วโมงที่ตั้ง</span>
+  <span class="en">Update the vulnerability databases across all workers at once: nuclei templates, Exploit-DB, nmap NSE — run manually with <span class="btn">⟳ Update all</span> or enable Auto-update on a schedule.</span></p>
+  <div class="box"><span class="tag">🏢 Enterprise</span><span class="th"><b>Update all</b> แบบสั่งเองฟรีเสมอ · การ<b>ตั้งเวลาอัตโนมัติ</b> (Auto-update) ต้องใช้ Enterprise — ในรุ่น Community ช่องนี้จะมีป้าย 🔒 — ดู <a href="#editions">§17</a></span><span class="en">Manual <b>Update all</b> is always free; <b>scheduled auto-updates</b> need Enterprise — in Community the toggle is marked 🔒. See <a href="#editions">§17</a>.</span></div>
+  </section>
+
+  <!-- 12 -->
+  <section id="admin">
+  <h2>12. <span class="th">Users &amp; Audit (admin)</span><span class="en">Users &amp; Audit (admin)</span></h2>
+  <p><span class="th"><b>Operators</b>: เพิ่ม/ลบผู้ใช้และกำหนดบทบาท (admin/operator) · <b>Audit Log</b>: ดูทุกเหตุการณ์ — ใครอนุมัติอะไร รันคำสั่งอะไร ลบงานไหน เมื่อไร</span>
+  <span class="en"><b>Operators</b>: add/remove users and set roles (admin/operator) · <b>Audit Log</b>: every event — who approved what, ran which command, deleted which engagement, and when.</span></p>
+  </section>
+
+  <!-- 13 -->
+  <section id="tools">
+  <h2>13. <span class="th">เครื่องมือที่ AI เรียกใช้ได้</span><span class="en">Tools the agent can call</span></h2>
+  <table>
+    <tr><th>Tool</th><th><span class="th">ระดับ</span><span class="en">Risk</span></th><th><span class="th">ทำอะไร</span><span class="en">Purpose</span></th></tr>
+    <tr><td>dns_lookup · http_probe · whatweb</td><td><span class="pill pas">passive</span></td><td><span class="th">เก็บข้อมูลเบื้องต้น ไม่ยิงหนัก</span><span class="en">Light recon, no heavy traffic.</span></td></tr>
+    <tr><td>tcp_scan · nmap_scan · dir_enum · web_vuln_scan</td><td><span class="pill act">active</span></td><td><span class="th">สแกนพอร์ต/บริการ/ไดเรกทอรี/ช่องโหว่เว็บ</span><span class="en">Scan ports/services/dirs/web vulns.</span></td></tr>
+    <tr><td>cred_test · run_command</td><td><span class="pill intr">intrusive</span></td><td><span class="th">ทดสอบรหัสผ่าน / รันคำสั่งเชลล์เดี่ยวเพื่อยืนยันช่องโหว่</span><span class="en">Test credentials / run one shell command to validate a finding.</span></td></tr>
+    <tr><td>exploit_search · save_finding · generate_report</td><td><span class="pill pas">passive</span></td><td><span class="th">ค้นฐาน exploit / บันทึกผล / สร้างรายงาน</span><span class="en">Search exploit DB / record findings / build the report.</span></td></tr>
+  </table>
+  </section>
+
+  <!-- 14 -->
+  <section id="manage">
+  <h2>14. <span class="th">ลบและจัดการงาน (Engagements)</span><span class="en">Delete &amp; manage engagements</span></h2>
+  <p><span class="th">งานที่ไม่ใช้แล้วลบได้: เลือก engagement → ปุ่มแดง <span class="btn r">🗑 Delete engagement</span> มุมขวาบนของแผงรายละเอียด → ยืนยัน</span>
+  <span class="en">Delete unused engagements: select it → the red <span class="btn r">🗑 Delete engagement</span> at the top-right of the detail panel → confirm.</span></p>
+  <ul>
+    <li><span class="th">ลบ engagement พร้อม <b>session, approval, finding และรายงานทั้งหมด</b> — กู้คืนไม่ได้</span><span class="en">Deletes the engagement plus <b>all its sessions, approvals, findings and report</b> — not recoverable.</span></li>
+    <li><span class="th"><b>ลบไม่ได้ถ้ายังมี session ทำงานอยู่</b> (running / waiting_approval) — กด ⏹ Stop ก่อน</span><span class="en"><b>Blocked while a session is running</b> (running / waiting_approval) — press ⏹ Stop first.</span></li>
+    <li><span class="th">การลบถูกบันทึกใน Audit Log (ชื่องาน + จำนวน session/finding)</span><span class="en">The deletion is recorded in the Audit Log (name + session/finding counts).</span></li>
+  </ul>
+  </section>
+
+  <!-- 15 -->
+  <section id="docker">
+  <h2>15. <span class="th">คำสั่ง Docker ที่ใช้บ่อย</span><span class="en">Handy Docker commands</span></h2>
+  <p class="muted"><span class="th">รันในโฟลเดอร์ <code>E:\DEV\Aegis</code> (ใช้ override สำหรับพอร์ตทางเลือก 3001/8081)</span><span class="en">Run these in <code>E:\DEV\Aegis</code> (the override maps the alternate ports 3001/8081).</span></p>
+  <pre><code># <span class="th">ดูสถานะ</span><span class="en">status</span>
+docker compose -f docker-compose.yml -f docker-compose.local.yml ps
+
+# <span class="th">รีบิลด์ + รีสตาร์ท frontend</span><span class="en">rebuild + restart the frontend</span>
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build frontend
+
+# <span class="th">ดู log หลังบ้าน</span><span class="en">tail backend logs</span>
+docker compose -f docker-compose.yml -f docker-compose.local.yml logs -f backend</code></pre>
+  </section>
+
+  <!-- 16 -->
+  <section id="trouble">
+  <h2>16. <span class="th">แก้ปัญหาที่พบบ่อย</span><span class="en">Troubleshooting</span></h2>
+  <table>
+    <tr><th><span class="th">อาการ</span><span class="en">Symptom</span></th><th><span class="th">วิธีแก้</span><span class="en">Fix</span></th></tr>
+    <tr><td><span class="th">session ค้างหลัง restart</span><span class="en">Session stuck after a restart</span></td><td><span class="th">ปกติ session อยู่รอด restart แล้ว (บทสนทนาเก็บใน DB + approval ใช้ Redis; boot ขึ้นมาจะ resume ต่อเอง) — ถ้ายังค้าง ตรวจว่า Redis รันอยู่ (<code>docker ps</code>) แล้ว restart backend</span><span class="en">Sessions now survive a restart (the conversation is persisted in the DB and approvals go through Redis; on boot they resume). If one still hangs, check Redis is up (<code>docker ps</code>) and restart the backend.</span></td></tr>
+    <tr><td><span class="th">รายงานว่าง</span><span class="en">Empty report</span></td><td><span class="th">พอ AI หยุดหรือชนลิมิต ระบบบังคับเข้า “reporting phase” ให้ save findings จากหลักฐานที่มีก่อนจบ — ถ้ายังว่างแปลว่าไม่พบช่องโหว่จริง; ลองระดับ Advanced หรือขยาย scope</span><span class="en">When the agent stops or hits the step limit, Aegis forces a “reporting phase” that saves findings from the gathered evidence before finishing — a still-empty report means nothing was found; try an Advanced level or widen scope.</span></td></tr>
+    <tr><td><span class="th">worker ยิงเป้าไม่โดน</span><span class="en">Worker can't reach the target</span></td><td><span class="th">ดู Book 03 หัวข้อการเชื่อมเครือข่าย (host.docker.internal / docker network)</span><span class="en">See Book 03's connectivity section (host.docker.internal / docker network).</span></td></tr>
+    <tr><td><span class="th">build ล้ม “no such host … registry”</span><span class="en">Build fails “no such host … registry”</span></td><td><span class="th">DNS ของ Docker หลุดชั่วคราว — <code>docker pull node:22-slim</code> แล้ว build ใหม่</span><span class="en">Docker registry DNS blipped — <code>docker pull node:22-slim</code> then rebuild.</span></td></tr>
+  </table>
+  </section>
+
+  <!-- 17 -->
+  <section id="editions">
+  <h2>17. <span class="th">รุ่น &amp; License (Community / Enterprise)</span><span class="en">Editions &amp; Licensing (Community / Enterprise)</span></h2>
+  <p><span class="th">Aegis เป็น <b>open-core</b>: ตัวโปรแกรมหลักใช้ได้ฟรีในรุ่น <b>Community</b> และมี license ปลดล็อกความสามารถระดับองค์กรในรุ่น <b>Enterprise</b> — สถานะรุ่นแสดงเป็นป้ายข้างโลโก้ AEGIS มุมซ้ายบน</span>
+  <span class="en">Aegis is <b>open-core</b>: the core product is free as <b>Community</b>, and a license unlocks organization-grade capabilities as <b>Enterprise</b>. The current edition shows as a badge beside the AEGIS logo, top-left.</span></p>
+
+  <div class="box tip"><span class="tag">🛡️ <span class="th">หลักการสำคัญ</span><span class="en">Guiding rule</span></span><span class="th">ฟีเจอร์ด้าน<b>ความปลอดภัยทุกตัว</b> (Scope Gate, Approval Gate, Audit Log) <b>ฟรีตลอด</b> ไม่มีวันอยู่หลัง paywall — เพราะเป็นเรื่องจริยธรรม ไม่ใช่ของขาย</span><span class="en">Every <b>safety feature</b> (Scope Gate, Approval Gate, Audit Log) is <b>free forever</b> and never behind the paywall — that is an ethics matter, not a product tier.</span></div>
+
+  <h3><span class="th">ตารางเปรียบเทียบรุ่น</span><span class="en">Edition comparison</span></h3>
+  <table>
+    <tr><th><span class="th">ความสามารถ</span><span class="en">Capability</span></th><th>🆓 Community</th><th>🏢 Enterprise</th></tr>
+    <tr><td><span class="th">Scope / Approval / Audit (ความปลอดภัย)</span><span class="en">Scope / Approval / Audit (safety)</span></td><td>✅</td><td>✅</td></tr>
+    <tr><td><span class="th">งาน / session / รายงาน / เทมเพลตส่วนตัว</span><span class="en">Engagements / sessions / reports / personal templates</span></td><td>✅</td><td>✅</td></tr>
+    <tr><td><span class="th">อัปเดต Vuln Feed แบบสั่งเอง</span><span class="en">Manual vuln-feed updates</span></td><td>✅</td><td>✅</td></tr>
+    <tr><td>AI Providers</td><td><span class="th">1 ตัว</span><span class="en">1</span></td><td><span class="th">หลายตัว</span><span class="en">multiple</span></td></tr>
+    <tr><td>Kali Workers</td><td><span class="th">1 ตัว</span><span class="en">1</span></td><td><span class="th">หลายตัว</span><span class="en">multiple</span></td></tr>
+    <tr><td><span class="th">ตั้งเวลาอัปเดต Feed อัตโนมัติ</span><span class="en">Scheduled auto-updates</span></td><td>🔒</td><td>✅</td></tr>
+    <tr><td><span class="th">รายงานติดแบรนด์ (โลโก้/สี/footer)</span><span class="en">White-label reports (logo/colour/footer)</span></td><td>🔒</td><td>✅</td></tr>
+    <tr><td><span class="th">ส่งออก Audit &amp; สตรีมเข้า SIEM</span><span class="en">Audit export &amp; SIEM streaming</span></td><td>🔒</td><td>✅</td></tr>
+    <tr><td>SSO / OIDC</td><td>🔒</td><td>✅</td></tr>
+    <tr><td><span class="th">คลังเทมเพลตองค์กร (เซ็นดิจิทัล)</span><span class="en">Org template library (signed)</span></td><td>🔒</td><td>✅</td></tr>
+  </table>
+
+  <h3><span class="th">การเปิดใช้ Enterprise</span><span class="en">Activating Enterprise</span></h3>
+  <ol class="steps">
+    <li><span class="th">กดปุ่ม <span class="btn">ⓘ About</span> (มุมขวาบน) → ส่วน <b>Edition &amp; License</b></span><span class="en">Click the <span class="btn">ⓘ About</span> button (top-right) → the <b>Edition &amp; License</b> section.</span></li>
+    <li><span class="th">วาง <b>license key</b> แล้วกด <span class="btn p">Activate Enterprise</span> — ป้ายจะเปลี่ยนเป็น <span class="pill ok">★ Enterprise</span> ทันที ฟีเจอร์ที่ล็อก 🔒 จะปลดล็อก</span><span class="en">Paste the <b>license key</b> and click <span class="btn p">Activate Enterprise</span> — the badge flips to <span class="pill ok">★ Enterprise</span> and 🔒 features unlock.</span></li>
+    <li><span class="th">กด <span class="btn">Remove license</span> เพื่อกลับเป็น Community เมื่อไรก็ได้</span><span class="en">Click <span class="btn">Remove license</span> to return to Community anytime.</span></li>
+  </ol>
+  <div class="box"><span class="tag">🔑 <span class="th">License ทำงานอย่างไร</span><span class="en">How licensing works</span></span><span class="th">License เซ็นด้วยกุญแจ <b>Ed25519</b> ของผู้ให้บริการ ตรวจสอบแบบ offline ในเครื่อง — <b>ปลอมไม่ได้</b> (ไม่มีกุญแจส่วนตัวก็สร้าง license ไม่ได้) และ license ที่หมดอายุจะถือเป็น Community อัตโนมัติ · ผู้ให้บริการออก license ด้วย <code>node licensing/sign-license.mjs "&lt;องค์กร&gt;" [วัน]</code></span><span class="en">Licenses are signed with the vendor's <b>Ed25519</b> key and verified offline on the instance — they <b>cannot be forged</b> (no private key = no license), and an expired license reverts to Community automatically. The vendor mints one with <code>node licensing/sign-license.mjs "&lt;org&gt;" [days]</code>.</span></div>
+
+  <h3><span class="th">ฟีเจอร์ Enterprise แต่ละตัว (ตั้งค่าที่หน้า Settings)</span><span class="en">The Enterprise features (configured in Settings)</span></h3>
+  <div class="cols">
+    <div class="card"><h4>🎨 <span class="th">Report Branding</span><span class="en">Report Branding</span></h4><p><span class="th">ใส่โลโก้ ชื่อบริษัท สี accent และ footer ลงในรายงาน — มี preview สด</span><span class="en">Put a logo, company name, accent colour and footer on the report — with a live preview.</span></p></div>
+    <div class="card"><h4>📤 <span class="th">Audit Export &amp; SIEM</span><span class="en">Audit Export &amp; SIEM</span></h4><p><span class="th">ดาวน์โหลด audit (JSON/CSV/NDJSON) หรือสตรีมทุกเหตุการณ์เข้า SIEM แบบเรียลไทม์</span><span class="en">Download the audit log (JSON/CSV/NDJSON) or stream every event to a SIEM in real time.</span></p></div>
+    <div class="card"><h4>🔑 SSO / OIDC</h4><p><span class="th">ล็อกอินด้วย IdP ขององค์กร (Google/Azure AD/Okta/Keycloak) + auto-provision ผู้ใช้</span><span class="en">Sign in with your IdP (Google/Azure AD/Okta/Keycloak) + auto-provision users.</span></p></div>
+    <div class="card"><h4>⏰ <span class="th">Scheduled Feeds</span><span class="en">Scheduled Feeds</span></h4><p><span class="th">อัปเดต Vuln Feed อัตโนมัติตามรอบเวลา (สั่งเองยังฟรีใน Community)</span><span class="en">Auto-update vuln feeds on a schedule (manual runs stay free in Community).</span></p></div>
+    <div class="card"><h4>📚 <span class="th">Org Template Library</span><span class="en">Org Template Library</span></h4><p><span class="th">คลังเทมเพลตกลางที่ทุกคนเห็น + export/import ที่<b>เซ็นดิจิทัล</b> (แก้ไขแล้ว import ไม่ผ่าน)</span><span class="en">A shared library everyone sees + <b>signed</b> export/import (tampered bundles are rejected).</span></p></div>
+    <div class="card"><h4>🧠 <span class="th">Multi AI / Worker</span><span class="en">Multi AI / Worker</span></h4><p><span class="th">เพิ่ม AI provider และ Kali worker ได้หลายตัว (Community จำกัดอย่างละ 1)</span><span class="en">Register multiple AI providers and Kali workers (Community caps each at 1).</span></p></div>
+  </div>
+  <div class="box warn"><span class="tag"><span class="th">พฤติกรรมของ gate</span><span class="en">How the gate behaves</span></span><span class="th">การกั้นบังคับที่ backend จริง (ตอบ HTTP 402) ไม่ใช่แค่ซ่อนปุ่ม — ใน Community ปุ่ม/ช่องของฟีเจอร์ Enterprise จะเป็นสีเทาและมีป้าย 🔒 Enterprise</span><span class="en">Gating is enforced at the backend (HTTP 402), not just hidden UI — in Community the Enterprise controls are greyed out and marked 🔒 Enterprise.</span></div>
+  </section>
+
+  <hr />
+  <p class="muted" style="text-align:center"><span class="th">Book 01 · ต่อไป → </span><span class="en">Book 01 · Next → </span><a href="02-targets.html">Book 02 — WebGoat &amp; Juice Shop</a></p>
+</main>
+</div>
+<script src="assets/manual.js"></script>
+</body>
+</html>

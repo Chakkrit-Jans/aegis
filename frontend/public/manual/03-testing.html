@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="th" class="lang-th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Book 03 — Testing Aegis on WebGoat &amp; Juice Shop</title>
+<link rel="stylesheet" href="assets/manual.css" />
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+  <div class="brand">AEGIS<small>BOOK 03 · TESTING</small></div>
+  <a class="book active" href="index.html">← <span class="th">กลับหน้ารวมคู่มือ</span><span class="en">All books</span></a>
+  <ol>
+    <li><a href="#prereq">1. <span class="th">สิ่งที่ต้องมีก่อน</span><span class="en">Prerequisites</span></a></li>
+    <li><a href="#setup">2. <span class="th">ตั้งค่า Engagement</span><span class="en">Set up the engagement</span></a></li>
+    <li><a href="#sA">3. <span class="th">สถานการณ์ A — Recon + Scan</span><span class="en">Scenario A — Recon + Scan</span></a></li>
+    <li><a href="#sB">4. <span class="th">สถานการณ์ B — Dir Enum</span><span class="en">Scenario B — Dir Enum</span></a></li>
+    <li><a href="#sC">5. <span class="th">สถานการณ์ C — SQLi Login</span><span class="en">Scenario C — SQLi Login</span></a></li>
+    <li><a href="#sD">6. <span class="th">สถานการณ์ D — WebGoat</span><span class="en">Scenario D — WebGoat</span></a></li>
+    <li><a href="#auto">7. <span class="th">Auto-approve ในแล็บ</span><span class="en">Auto-approve in the lab</span></a></li>
+    <li><a href="#report">8. <span class="th">รายงาน + PDF</span><span class="en">Report + PDF</span></a></li>
+    <li><a href="#validate">9. <span class="th">ผลลัพธ์ที่ควรได้</span><span class="en">Expected results</span></a></li>
+    <li><a href="#tshoot">10. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></a></li>
+  </ol>
+</nav>
+
+<main>
+  <div class="langbar">
+    <button data-lang="th">ไทย</button>
+    <button data-lang="en">English</button>
+  </div>
+
+  <h1><span class="th">ทดสอบ Aegis กับ WebGoat &amp; Juice Shop</span><span class="en">Testing Aegis on WebGoat &amp; Juice Shop</span></h1>
+  <p class="lead"><span class="th">คู่มือเชิงปฏิบัติ: ใช้ Aegis เดินงานจริงกับเป้าหมายฝึกทั้งสอง ทีละสถานการณ์ พร้อมข้อความ objective ที่ก็อปไปใช้ได้เลย และผลลัพธ์ที่ควรเห็น</span><span class="en">A hands-on playbook: drive Aegis against both practice targets, scenario by scenario, with copy-paste objectives and the results you should expect.</span></p>
+
+  <div class="box danger"><span class="tag">⚠ <span class="th">ขอบเขต</span><span class="en">Scope</span></span><span class="th">ทำเฉพาะกับ WebGoat/Juice Shop ที่คุณรันเองเท่านั้น ทุกขั้นตอนในคู่มือนี้ถือว่าเป็นแล็บที่ได้รับอนุญาต</span><span class="en">Do this only against WebGoat/Juice Shop you run yourself. Every step here assumes an authorized lab.</span></div>
+
+  <!-- 1 -->
+  <section id="prereq">
+  <h2>1. <span class="th">สิ่งที่ต้องมีก่อน</span><span class="en">Prerequisites</span></h2>
+  <ol class="steps">
+    <li><span class="th"><b>เป้าหมายรันอยู่</b>และ worker ยิงถึง — ทำตาม Book 02 หัวข้อ 7–8 (curl เห็น 200)</span><span class="en"><b>Targets are running</b> and reachable from the worker — follow Book 02 §7–8 (curl returns 200).</span></li>
+    <li><span class="th"><b>AI Provider</b> มีตัว default และกด Test ผ่านแล้ว (Book 01 §5)</span><span class="en"><b>AI Provider</b> has a default set and passes Test (Book 01 §5).</span></li>
+    <li><span class="th"><b>Worker</b> กด Health แล้วเห็นเครื่องมือครบ (Book 01 §6)</span><span class="en"><b>Worker</b> Health check shows the full toolset (Book 01 §6).</span></li>
+  </ol>
+  </section>
+
+  <!-- 2 -->
+  <section id="setup">
+  <h2>2. <span class="th">ตั้งค่า Engagement</span><span class="en">Set up the engagement</span></h2>
+  <ol class="steps">
+    <li><span class="th"><span class="btn p">+ New</span> — ชื่อ <code>juice-lab</code>, client <code>internal lab</code></span><span class="en"><span class="btn p">+ New</span> — name <code>juice-lab</code>, client <code>internal lab</code>.</span></li>
+    <li><span class="th"><span class="btn">Record authorization</span> — Authorized by <code>me</code>, ref <code>self-hosted lab</code></span><span class="en"><span class="btn">Record authorization</span> — Authorized by <code>me</code>, ref <code>self-hosted lab</code>.</span></li>
+    <li><span class="th"><span class="btn">+ in-scope</span> — ใส่ <code>host.docker.internal</code> (หรือชื่อคอนเทนเนอร์ถ้าใช้วิธี B)</span><span class="en"><span class="btn">+ in-scope</span> — add <code>host.docker.internal</code> (or the container name if you used Option B).</span></li>
+  </ol>
+  <div class="box tip"><span class="tag">🔒 <span class="th">พิสูจน์ scope gate</span><span class="en">Prove the scope gate</span></span><span class="th">ลองตั้ง objective ให้ยิง <code>example.com</code> (นอก scope) — Aegis จะบล็อกด้วยข้อความ “BLOCKED by scope gate” ใช้ยืนยันว่าประตูกั้นทำงาน</span><span class="en">Try an objective aimed at <code>example.com</code> (out of scope) — Aegis blocks it with “BLOCKED by scope gate”, confirming the gate works.</span></div>
+  </section>
+
+  <!-- 3 -->
+  <section id="sA">
+  <h2>3. <span class="th">สถานการณ์ A — Recon + Web Vuln Scan (Juice Shop)</span><span class="en">Scenario A — Recon + Web Vuln Scan (Juice Shop)</span></h2>
+  <p><span class="th">ให้ AI ทำ recon แล้วสแกนช่องโหว่เว็บ — ครอบคลุมเฟส RECON และ VULN SCAN</span><span class="en">Have the AI recon then scan the web app — this covers the RECON and VULN SCAN phases.</span></p>
+  <p><b><span class="th">วาง objective นี้:</span><span class="en">Paste this objective:</span></b></p>
+  <pre><code>Assess the web application at host.docker.internal:3000 (OWASP Juice Shop,
+authorized lab). Do passive recon (dns, http probe, whatweb), map open ports
+and services, then run a web vulnerability scan. For every issue call
+save_finding with evidence, business impact, a risk rating and a concrete
+remediation, then call generate_report.</code></pre>
+  <ol class="steps">
+    <li><span class="th">กด <span class="btn p">▶ Spawn session</span> — แผงขวาเริ่มสตรีมว่า AI อยู่เฟสไหน</span><span class="en">Press <span class="btn p">▶ Spawn session</span> — the right panel streams which phase the AI is in.</span></li>
+    <li><span class="th">เมื่อถึง <code>nmap_scan</code> / <code>web_vuln_scan</code> จะมี<b>การ์ดอนุมัติเหลือง</b> — อ่านเหตุผล + คำสั่ง แล้วกด <span class="btn g">APPROVE</span></span><span class="en">On <code>nmap_scan</code> / <code>web_vuln_scan</code> a <b>yellow approval card</b> appears — read the rationale and command, then <span class="btn g">APPROVE</span>.</span></li>
+    <li><span class="th">passive tool (http_probe, whatweb) จะรันเองโดยไม่ขออนุมัติ</span><span class="en">Passive tools (http_probe, whatweb) run without asking.</span></li>
+  </ol>
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3001 · Session</span></div>
+    <div class="body">
+      <div class="box warn" style="margin:0"><span class="tag">⚠ Approval required — active tool · web_vuln_scan</span>
+        <div style="font-size:12px;margin:6px 0"><span class="muted">Rationale:</span> Juice Shop responded on :3000; running nuclei to surface known web CVEs and misconfigurations.</div>
+        <div style="font-size:12px"><code>{ "target": "host.docker.internal:3000" }</code></div>
+        <div style="margin-top:8px"><span class="btn g">APPROVE</span> <span class="btn r">REJECT</span></div></div>
+    </div>
+  </figure>
+  <figcaption><span class="th">การ์ดอนุมัติของ web_vuln_scan</span><span class="en">The approval card for web_vuln_scan</span></figcaption>
+  </section>
+
+  <!-- 4 -->
+  <section id="sB">
+  <h2>4. <span class="th">สถานการณ์ B — Directory Enumeration</span><span class="en">Scenario B — Directory Enumeration</span></h2>
+  <p><span class="th">หาเส้นทางที่ซ่อนอยู่ เช่น <code>/ftp/</code> (เอกสารลับ) และ <code>/#/administration</code> (หน้า admin) ของ Juice Shop</span><span class="en">Discover hidden paths such as <code>/ftp/</code> (confidential docs) and <code>/#/administration</code> (admin page) on Juice Shop.</span></p>
+  <pre><code>On host.docker.internal:3000 enumerate directories and hidden endpoints
+with a common wordlist. Flag anything sensitive (backups, /ftp, admin,
+config, api). Save findings with the exact URLs and remediation, then report.</code></pre>
+  <p><span class="th">tool <code>dir_enum</code> (ffuf/gobuster) เป็น <span class="pill act">active</span> → ต้องอนุมัติ · ผลลัพธ์ที่ควรเห็นคือ <code>/ftp/</code> ตอบ 200</span><span class="en">The <code>dir_enum</code> tool (ffuf/gobuster) is <span class="pill act">active</span> → needs approval · you should see <code>/ftp/</code> returning 200.</span></p>
+  </section>
+
+  <!-- 5 -->
+  <section id="sC">
+  <h2>5. <span class="th">สถานการณ์ C — SQL Injection ที่หน้า Login</span><span class="en">Scenario C — SQL Injection at Login</span></h2>
+  <p><span class="th">challenge คลาสสิกของ Juice Shop: ล็อกอินเป็น admin ด้วย SQLi ที่ช่อง email (<code>' OR true--</code>) ที่นี่ให้ Aegis <b>ยืนยัน</b>ว่าช่องโหว่มีจริงด้วย <code>run_command</code> (intrusive)</span>
+  <span class="en">Juice Shop's classic challenge: log in as admin via SQLi in the email field (<code>' OR true--</code>). Here Aegis <b>validates</b> the flaw with <code>run_command</code> (intrusive).</span></p>
+  <pre><code>Check the login endpoint of host.docker.internal:3000 for SQL injection.
+Craft a single safe proof-of-concept request that demonstrates auth bypass
+(do NOT alter data). If confirmed, save_finding with the request/response
+evidence, impact (admin auth bypass), risk = High, and remediation
+(parameterized queries), then generate_report.</code></pre>
+  <ol class="steps">
+    <li><span class="th">tool <code>run_command</code> เป็น <span class="pill intr">intrusive</span> — Aegis จะโชว์คำสั่ง <code>curl</code> จริงในการ์ด ก่อนกด APPROVE <b>อ่านให้แน่ใจว่าอยู่ในขอบเขตและไม่ทำลายข้อมูล</b></span><span class="en">The <code>run_command</code> tool is <span class="pill intr">intrusive</span> — Aegis shows the exact <code>curl</code> in the card. Before APPROVE, <b>confirm it stays in scope and is non-destructive</b>.</span></li>
+    <li><span class="th">ตัวอย่างคำสั่งที่ AI อาจเสนอ:</span><span class="en">Example command the AI may propose:</span>
+      <pre><code>curl -s -X POST http://host.docker.internal:3000/rest/user/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"'"'"' OR true--","password":"x"}'</code></pre></li>
+    <li><span class="th">ถ้าตอบกลับมี <code>authentication</code> token = ยืนยัน auth bypass → AI บันทึกเป็น finding ระดับ High</span><span class="en">If the response returns an <code>authentication</code> token = auth bypass confirmed → the AI records a High-severity finding.</span></li>
+  </ol>
+  <div class="box warn"><span class="tag"><span class="th">นี่คือจุดสำคัญของ Aegis</span><span class="en">This is the point of Aegis</span></span><span class="th">คุณเห็นคำสั่งที่จะยิง<b>ก่อน</b>มันรันจริง และตัดสินใจเอง — นี่คือ human-in-the-loop</span><span class="en">You see the exact command <b>before</b> it runs and decide yourself — that is the human-in-the-loop.</span></div>
+  </section>
+
+  <!-- 6 -->
+  <section id="sD">
+  <h2>6. <span class="th">สถานการณ์ D — WebGoat (บทเรียนเจาะจง)</span><span class="en">Scenario D — WebGoat (targeted lessons)</span></h2>
+  <p><span class="th">WebGoat ต้องล็อกอิน/มี session ก่อนถึงบทเรียน ดังนั้นการสแกนอัตโนมัติจะเห็นแค่หน้า login เป็นหลัก ใช้ Aegis สำหรับ recon + ตรวจ header/CVE ของตัวแอป และใช้แท็บ Terminal/Desktop ทำบทเรียนที่ต้องมี session เอง</span>
+  <span class="en">WebGoat requires a login/session before its lessons, so automated scanning mostly sees the login page. Use Aegis for recon + checking the app's headers/CVEs, and use the Terminal/Desktop tabs for session-based lessons.</span></p>
+  <pre><code>Recon host.docker.internal:8080 (OWASP WebGoat, authorized lab): identify
+the server/framework and version, check security headers (HSTS, CSP,
+X-Frame-Options), and search for known CVEs of the detected components.
+Save findings with remediation, then generate_report.</code></pre>
+  <div class="box tip"><span class="tag">💡 <span class="th">เคล็ดลับ</span><span class="en">Tip</span></span><span class="th">บทเรียน WebGoat แบบ SQLi/JWT/Access-Control เหมาะทำมือผ่านแท็บ <b>Desktop</b> (Firefox + Burp บน Kali) มากกว่าให้ AI ยิงอัตโนมัติ</span><span class="en">WebGoat's SQLi/JWT/Access-Control lessons are better done by hand via the <b>Desktop</b> tab (Firefox + Burp on Kali) than by fully automated scanning.</span></div>
+  </section>
+
+  <!-- 7 -->
+  <section id="auto">
+  <h2>7. <span class="th">Auto-approve ในแล็บ</span><span class="en">Auto-approve in the lab</span></h2>
+  <p><span class="th">เมื่อมั่นใจว่าเป้าหมายคือแล็บของตัวเอง ติ๊ก <b>Auto-approve</b> ตอน spawn เพื่อให้ AI เดินครบทุกเฟสโดยไม่ต้องกดอนุมัติทีละครั้ง — <b>Scope gate ยังกันเป้านอกขอบเขตอยู่</b></span>
+  <span class="en">Once you're sure the target is your own lab, tick <b>Auto-approve</b> when spawning so the AI runs every phase without per-step approval — <b>the scope gate still blocks anything out of scope</b>.</span></p>
+  <p><span class="th">พิสูจน์: เปิด Auto-approve แล้วตั้ง objective ที่มีเป้าใน scope + นอก scope ปนกัน — ตัวในจะรัน ตัวนอกจะถูกบล็อกอัตโนมัติ</span>
+  <span class="en">Prove it: enable Auto-approve with an objective mixing in-scope and out-of-scope targets — in-scope runs, out-of-scope is auto-blocked.</span></p>
+  </section>
+
+  <!-- 8 -->
+  <section id="report">
+  <h2>8. <span class="th">รายงาน + Export PDF</span><span class="en">Report + Export PDF</span></h2>
+  <ol class="steps">
+    <li><span class="th">เมื่อ session จบ แผงซ้ายโชว์ <b>Findings</b> — กด <span class="btn">📄 View report</span> เพื่อดูรายงานเต็ม</span><span class="en">When the session ends, the left panel lists <b>Findings</b> — click <span class="btn">📄 View report</span> for the full report.</span></li>
+    <li><span class="th">กด <span class="btn">⬇ Export PDF</span> — เปิดรายงานพร้อมพิมพ์ (ปก, ระดับความเสี่ยงรวม, สรุป, รายละเอียด finding) แล้ว Save as PDF</span><span class="en">Click <span class="btn">⬇ Export PDF</span> — a print-ready report opens (cover, overall risk, summary, per-finding detail) → Save as PDF.</span></li>
+    <li><span class="th">เปิด session เก่าได้จาก <b>Session history</b></span><span class="en">Re-open past runs from <b>Session history</b>.</span></li>
+  </ol>
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Juice Shop</span></div>
+    <div class="body">
+      <div style="display:flex;justify-content:space-between;align-items:center"><b>Assessment Report — juice-lab</b><span class="pill warn">Overall risk: MEDIUM</span></div>
+      <table style="margin-top:10px"><tr><th>Finding</th><th>Severity</th></tr>
+        <tr><td>SQL injection → admin auth bypass (/rest/user/login)</td><td><span class="pill no">High</span></td></tr>
+        <tr><td>Confidential document exposed at /ftp/</td><td><span class="pill warn">Medium</span></td></tr>
+        <tr><td>Missing security headers (CSP, HSTS)</td><td><span class="pill">Low</span></td></tr>
+      </table>
+    </div>
+  </figure>
+  <figcaption><span class="th">ตัวอย่างรายงานที่ export ได้</span><span class="en">An example of the exported report</span></figcaption>
+  </section>
+
+  <!-- 9 -->
+  <section id="validate">
+  <h2>9. <span class="th">ผลลัพธ์ที่ควรได้ (ไว้เทียบ)</span><span class="en">Expected results (a checklist)</span></h2>
+  <table>
+    <tr><th><span class="th">สถานการณ์</span><span class="en">Scenario</span></th><th><span class="th">ควรเห็น</span><span class="en">You should see</span></th></tr>
+    <tr><td>A · Recon + Scan</td><td><span class="th">ระบุ service บน :3000, header ที่ขาด (CSP/HSTS), CVE/misconfig จาก nuclei</span><span class="en">Service on :3000 identified, missing headers (CSP/HSTS), nuclei CVEs/misconfig.</span></td></tr>
+    <tr><td>B · Dir Enum</td><td><span class="th"><code>/ftp/</code> ตอบ 200 ถูก flag เป็น sensitive</span><span class="en"><code>/ftp/</code> returns 200 and is flagged sensitive.</span></td></tr>
+    <tr><td>C · SQLi Login</td><td><span class="th">finding ระดับ High “auth bypass” พร้อมหลักฐาน request/response</span><span class="en">A High “auth bypass” finding with request/response evidence.</span></td></tr>
+    <tr><td>D · WebGoat</td><td><span class="th">เวอร์ชัน/เฟรมเวิร์ก + header ที่ขาด (บทเรียนลึกทำมือ)</span><span class="en">Version/framework + missing headers (deeper lessons done by hand).</span></td></tr>
+    <tr><td><span class="th">ทุกงาน</span><span class="en">Every run</span></td><td><span class="th">รายงานไม่ว่าง + Audit Log บันทึกการอนุมัติทุกครั้ง</span><span class="en">A non-empty report + Audit Log entries for every approval.</span></td></tr>
+  </table>
+  </section>
+
+  <!-- 10 -->
+  <section id="tshoot">
+  <h2>10. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></h2>
+  <table>
+    <tr><th><span class="th">อาการ</span><span class="en">Symptom</span></th><th><span class="th">วิธีแก้</span><span class="en">Fix</span></th></tr>
+    <tr><td><span class="th">tool ล้มด้วย connection refused/timeout</span><span class="en">Tools fail with connection refused/timeout</span></td><td><span class="th">worker ยิงเป้าไม่ถึง — curl ทดสอบจากแท็บ Terminal (Book 02 §8); ใช้ <code>host.docker.internal</code> ไม่ใช่ <code>localhost</code></span><span class="en">The worker can't reach the target — curl-test from the Terminal tab (Book 02 §8); use <code>host.docker.internal</code>, not <code>localhost</code>.</span></td></tr>
+    <tr><td><span class="th">“BLOCKED by scope gate”</span><span class="en">“BLOCKED by scope gate”</span></td><td><span class="th">เป้าที่ AI ยิงไม่ตรงกับ scope include — เพิ่ม <code>host.docker.internal</code> ใน scope ให้ตรงกับ objective</span><span class="en">The AI's target doesn't match the scope include — add <code>host.docker.internal</code> so it matches the objective.</span></td></tr>
+    <tr><td><span class="th">รายงานว่าง</span><span class="en">Empty report</span></td><td><span class="th">ลองระดับ Advanced หรือระบุใน objective ให้ save_finding + generate_report ชัด ๆ (คู่มือด้านบนใส่ไว้แล้ว)</span><span class="en">Try an Advanced level or spell out save_finding + generate_report in the objective (the ones above already do).</span></td></tr>
+    <tr><td><span class="th">WebGoat เห็นแค่หน้า login</span><span class="en">WebGoat only shows the login page</span></td><td><span class="th">ปกติ — บทเรียนต้องมี session; ทำมือผ่านแท็บ Desktop</span><span class="en">Expected — lessons need a session; do them by hand via the Desktop tab.</span></td></tr>
+  </table>
+  </section>
+
+  <hr />
+  <p class="muted" style="text-align:center"><span class="th">จบชุดคู่มือ · </span><span class="en">End of the set · </span><a href="index.html"><span class="th">กลับหน้ารวม</span><span class="en">Back to all books</span></a></p>
+</main>
+</div>
+<script src="assets/manual.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.next/
+out/
+build/
+*.log
+.env
+.env.local
+.env.*.local
+coverage/
+.DS_Store
+data/
+engagements/
+
+# Vendor license signing key — keep offline, never commit
+licensing/vendor-private.pem
+
+# Build artifacts
+frontend/tsconfig.tsbuildinfo

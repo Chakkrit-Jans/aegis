@@ -1,0 +1,46 @@
+# Local side-by-side overlay: run Aegis on alternate host ports so it can coexist
+# with another stack (e.g. VektorSec) already holding the standard ports.
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+services:
+  mongo:
+    ports: !override
+      - "127.0.0.1:27018:27017"
+
+  redis:
+    ports: !override
+      - "127.0.0.1:6380:6379"
+
+  backend:
+    environment:
+      CORS_ORIGIN: http://localhost:3001
+    ports: !override
+      - "8081:8080"
+
+  worker:
+    ports: !override
+      - "127.0.0.1:6081:6080"
+
+  # A second Kali worker to demonstrate multi-worker. Register it in the UI as
+  # http://worker2:7000 (same WORKER_TOKEN). noVNC on 6082.
+  worker2:
+    build: ./worker
+    restart: unless-stopped
+    environment:
+      WORKER_TOKEN: ${WORKER_TOKEN:-change-me-worker-token}
+      PORT: "7000"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    ports:
+      - "127.0.0.1:6082:6080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8081
+        NEXT_PUBLIC_VNC_URL: "http://localhost:6081/vnc.html?autoconnect=1&resize=scale"
+    ports: !override
+      - "3001:3000"

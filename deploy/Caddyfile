@@ -1,0 +1,18 @@
+# Caddy automatically provisions and renews a Let's Encrypt certificate for
+# {$PUBLIC_DOMAIN}. Point the domain's DNS A record at this server first.
+{$PUBLIC_DOMAIN} {
+	encode gzip
+
+	# API + websocket go to the backend...
+	handle /api/* {
+		reverse_proxy backend:8080
+	}
+	handle /socket.io/* {
+		reverse_proxy backend:8080
+	}
+
+	# ...everything else to the Next.js console.
+	handle {
+		reverse_proxy frontend:3000
+	}
+}

@@ -1,0 +1,70 @@
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - ./data/mongo:/data/db
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  # Kali worker: runs the actual security tools. NOT exposed to the host —
+  # only the backend reaches it over the internal compose network, and every
+  # call is bearer-token gated + binary allow-listed by its exec agent.
+  worker:
+    build: ./worker
+    restart: unless-stopped
+    environment:
+      WORKER_TOKEN: ${WORKER_TOKEN:-change-me-worker-token}
+      PORT: "7000"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    # noVNC desktop, bound to localhost only (reach it via the console's Desktop
+    # tab, or an SSH tunnel on a remote server). The exec-agent (7000) stays
+    # internal-only.
+    ports:
+      - "127.0.0.1:6080:6080"
+    # Lets the worker reach a Burp/Caido proxy running on the host via
+    # http://host.docker.internal:8080 (Linux needs this explicit mapping).
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        GIT_COMMIT: ${GIT_COMMIT:-dev}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MONGO_URL: mongodb://mongo:27017/aegis
+      REDIS_URL: redis://redis:6379
+      WORKER_URL: http://worker:7000
+      WORKER_TOKEN: ${WORKER_TOKEN:-change-me-worker-token}
+      PORT: "8080"
+    depends_on:
+      - mongo
+      - redis
+      - worker
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Baked into the client bundle at build time. For plain local docker the
+        # browser reaches the backend on localhost:8080.
+        NEXT_PUBLIC_API_URL: http://localhost:8080
+        NEXT_PUBLIC_VNC_URL: "http://localhost:6080/vnc.html?autoconnect=1&resize=scale"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
