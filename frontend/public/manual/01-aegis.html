@@ -148,6 +148,39 @@
     <div class="card"><h4>Settings</h4><p><span class="th">AI, worker, proxy, telegram, users, templates, audit</span><span class="en">AI, workers, proxy, telegram, users, templates, audit.</span></p></div>
   </div>
 
+  <h3><span class="th">Dashboard — ภาพรวมทั้งระบบ (หน้าแรกหลัง login)</span><span class="en">Dashboard — the cross-engagement overview (landing tab)</span></h3>
+  <p><span class="th">เปิดแอปมาจะเจอ <b>Dashboard</b> ก่อน — สรุปทุกอย่าง<b>ข้าม engagement</b>ในหน้าเดียว (auto-refresh ทุก 20 วินาที) ไม่ต้องคลิกเข้าไปดูทีละงาน</span>
+  <span class="en">The app opens on the <b>Dashboard</b> — everything summarised <b>across all engagements</b> on one page (auto-refreshes every 20s), so you don't click into each engagement one by one.</span></p>
+  <ul>
+    <li><span class="th"><b>KPI 4 การ์ด</b> — จำนวน Engagements · Running sessions · Pending approvals · Total findings</span><span class="en"><b>Four KPI cards</b> — Engagements · Running sessions · Pending approvals · Total findings.</span></li>
+    <li><span class="th"><b>โดนัท 3 วง</b> — <b>Findings by severity</b>, <b>Findings by confidence</b> (Certain/Firm/Tentative), และ <b>Sessions by status</b> — แต่ละวงมี legend บอกจำนวน + เปอร์เซ็นต์</span><span class="en"><b>Three donuts</b> — <b>Findings by severity</b>, <b>Findings by confidence</b> (Certain/Firm/Tentative), and <b>Sessions by status</b> — each with a legend showing count + percentage.</span></li>
+    <li><span class="th"><b>⚠ Pending approvals</b> และ <b>Recent sessions</b> — คลิกเพื่อ<b>กระโดดไปงานนั้นใน Console</b>ทันที · <b>Worker health</b> (สถานะทุก worker) · <b>Recent activity</b> (audit ล่าสุด)</span><span class="en"><b>⚠ Pending approvals</b> and <b>Recent sessions</b> — click to <b>jump straight to that engagement in the Console</b> · <b>Worker health</b> (every worker's status) · <b>Recent activity</b> (latest audit).</span></li>
+  </ul>
+  <figure class="screen">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">localhost:3000 · Dashboard</span></div>
+    <div class="body">
+      <div class="cols" style="margin:0 0 12px">
+        <div class="card" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--cyan)">2</div><div class="muted" style="font-size:11px">Engagements</div></div>
+        <div class="card" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--cyan)">0</div><div class="muted" style="font-size:11px">Running sessions</div></div>
+        <div class="card" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--amber)">1</div><div class="muted" style="font-size:11px">Pending approvals</div></div>
+        <div class="card" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--green)">15</div><div class="muted" style="font-size:11px">Total findings</div></div>
+      </div>
+      <div class="grid2">
+        <div class="box" style="margin:0"><b style="color:var(--cyan);font-size:12px">Findings by confidence</b>
+          <div style="display:flex;gap:14px;align-items:center;margin-top:8px">
+            <svg width="90" height="90" viewBox="0 0 150 150" style="flex:none"><circle cx="75" cy="75" r="63" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="24"/><path d="M 75 12 A 63 63 0 1 1 49.4 17.4" fill="none" stroke="#39ff88" stroke-width="24"/><path d="M 49.4 17.4 A 63 63 0 0 1 75 12" fill="none" stroke="#ffb547" stroke-width="24"/><text x="75" y="72" text-anchor="middle" font-size="28" font-weight="700" fill="#e6f6ff">15</text><text x="75" y="90" text-anchor="middle" font-size="10" fill="#6b8299">FINDINGS</text></svg>
+            <div style="font-size:12px"><div>🟢 Certain <b>14</b> <span class="muted">93%</span></div><div>🟡 Firm <b>1</b> <span class="muted">7%</span></div><div style="opacity:.4">⚪ Tentative <b>0</b></div></div>
+          </div>
+        </div>
+        <div class="box" style="margin:0"><b style="color:var(--cyan);font-size:12px">⚠ Pending approvals</b>
+          <div class="callout" style="margin-top:8px"><b>tcp_scan</b> · Post-AMS<br/><span style="font-size:11px">baseline port/service map…</span></div>
+          <div class="muted" style="font-size:11px;margin-top:6px">คลิกเพื่อเปิดใน Console · click to open in Console</div>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <figcaption><span class="th">Dashboard — KPI + โดนัท (ตัวอย่าง Findings by confidence) + งานรออนุมัติ</span><span class="en">The Dashboard — KPIs + donuts (Findings by confidence shown) + pending approvals</span></figcaption>
+
   <h3><span class="th">ปุ่ม ⓘ About — เวอร์ชัน, License &amp; บัญชี</span><span class="en">The ⓘ About button — versions, license &amp; account</span></h3>
   <p><span class="th">กลุ่มปุ่มมุมขวาบนคือ <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span> · กด <span class="btn">ⓘ About</span> เปิดหน้าต่างสรุปทั้งระบบ ซึ่ง<b>รวมการจัดการ Edition &amp; License ไว้ที่นี่</b> (ย้ายมาจากหน้า Settings) และดึงเวอร์ชันสด ๆ ตอนเปิด</span>
   <span class="en">The top-right group is <span class="btn">ⓘ About</span> <span class="btn">📖 Docs</span> <span class="btn">🔑 Pass</span> <span class="btn">⏻ Logout</span>. Click <span class="btn">ⓘ About</span> for a full system summary — it now <b>hosts Edition &amp; License management</b> (moved from Settings) and reads live versions when opened.</span></p>

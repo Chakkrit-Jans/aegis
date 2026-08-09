@@ -141,21 +141,29 @@ Save findings with remediation, then generate_report.</code></pre>
   <h2>8. <span class="th">รายงาน + Export PDF</span><span class="en">Report + Export PDF</span></h2>
   <ol class="steps">
     <li><span class="th">เมื่อ session จบ แผงซ้ายโชว์ <b>Findings</b> — กด <span class="btn">📄 View report</span> เพื่อดูรายงานเต็ม</span><span class="en">When the session ends, the left panel lists <b>Findings</b> — click <span class="btn">📄 View report</span> for the full report.</span></li>
-    <li><span class="th">กด <span class="btn">⬇ Export PDF</span> — เปิดรายงานพร้อมพิมพ์ (ปก, ระดับความเสี่ยงรวม, สรุป, รายละเอียด finding) แล้ว Save as PDF</span><span class="en">Click <span class="btn">⬇ Export PDF</span> — a print-ready report opens (cover, overall risk, summary, per-finding detail) → Save as PDF.</span></li>
-    <li><span class="th">เปิด session เก่าได้จาก <b>Session history</b></span><span class="en">Re-open past runs from <b>Session history</b>.</span></li>
+    <li><span class="th">รายงานมี <b>Scan statistics</b> + ตาราง <b>Issues found</b> (จัดกลุ่มตามชนิด พร้อมคอลัมน์ Severity/<b>Confidence</b>) แล้วตามด้วย <b>Findings &amp; Remediation</b> ที่แต่ละใบแยกหัวข้อ <b>Description · Impact/Risk · Remediation</b> ชัดเจน</span><span class="en">The report has <b>Scan statistics</b> + an <b>Issues found</b> table (grouped by type, with Severity/<b>Confidence</b> columns), then <b>Findings &amp; Remediation</b> cards split into clear <b>Description · Impact/Risk · Remediation</b> sections.</span></li>
+    <li><span class="th">กด <span class="btn">⬇ Export PDF</span> — เปิดหน้า preview แล้วกด <span class="btn">🖨️ Print / Save as PDF</span></span><span class="en">Click <span class="btn">⬇ Export PDF</span> — a preview opens; click <span class="btn">🖨️ Print / Save as PDF</span>.</span></li>
+    <li><span class="th">เปิดแท็บ <b>Dashboard</b> เพื่อดู finding/session ที่รันไป <b>รวมทุกงาน</b> — โดนัท severity/confidence และ session status จะขยับตามผลที่เพิ่ง save · เปิด session เก่าได้จาก <b>Session history</b></span><span class="en">Open the <b>Dashboard</b> tab to see findings/sessions roll up <b>across all runs</b> — the severity/confidence and session-status donuts move as new results are saved · re-open past runs from <b>Session history</b>.</span></li>
   </ol>
   <figure class="screen">
     <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="url">report.html · Juice Shop</span></div>
-    <div class="body">
-      <div style="display:flex;justify-content:space-between;align-items:center"><b>Assessment Report — juice-lab</b><span class="pill warn">Overall risk: MEDIUM</span></div>
-      <table style="margin-top:10px"><tr><th>Finding</th><th>Severity</th></tr>
-        <tr><td>SQL injection → admin auth bypass (/rest/user/login)</td><td><span class="pill no">High</span></td></tr>
-        <tr><td>Confidential document exposed at /ftp/</td><td><span class="pill warn">Medium</span></td></tr>
-        <tr><td>Missing security headers (CSP, HSTS)</td><td><span class="pill">Low</span></td></tr>
+    <div class="body" style="background:#fff;color:#1a2430">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #e2e8f0;padding-bottom:6px"><b style="color:#0b7285">Penetration Test Report — juice-lab</b><span style="background:#d9480f;color:#fff;padding:2px 10px;border-radius:5px;font-weight:700;font-size:11px">HIGH</span></div>
+      <div style="font-size:11px;color:#5a6b7a;text-transform:uppercase;letter-spacing:.5px;margin:10px 0 3px">Issues found</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:#1a2430;margin:0">
+        <tr><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;text-align:left">Affected asset</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:80px">Severity</th><th style="border:1px solid #e2e8f0;padding:4px 8px;background:#f1f5f9;width:90px">Confidence</th></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">/rest/user/login (SQLi auth bypass)</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#d9480f;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">HIGH</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Certain</td></tr>
+        <tr><td style="border:1px solid #e2e8f0;padding:4px 8px">Missing CSP header</td><td style="border:1px solid #e2e8f0;padding:4px 8px"><span style="background:#b8860b;color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px">MEDIUM</span></td><td style="border:1px solid #e2e8f0;padding:4px 8px">Firm</td></tr>
       </table>
+      <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-top:10px">
+        <div style="font-weight:700;color:#0b7285;font-size:12px">1. SQL injection → admin auth bypass</div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#5a6b7a">Description</span><span style="font-size:12px">' OR 1=1-- in the login field returns an admin session token.</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#d9480f">Impact / Risk</span><span style="font-size:12px">Full authentication bypass → admin account takeover.</span></div>
+        <div style="margin-top:6px"><span style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#2f6f4f">Remediation</span><span style="font-size:12px">Use parameterized queries; never build SQL from input.</span></div>
+      </div>
     </div>
   </figure>
-  <figcaption><span class="th">ตัวอย่างรายงานที่ export ได้</span><span class="en">An example of the exported report</span></figcaption>
+  <figcaption><span class="th">ตัวอย่างรายงาน — Issues found (มี Confidence) + การ์ด finding ที่แยก Description/Impact/Remediation</span><span class="en">Example report — Issues found (with Confidence) + a finding card split into Description/Impact/Remediation</span></figcaption>
   </section>
 
   <!-- 9 -->
@@ -167,7 +175,7 @@ Save findings with remediation, then generate_report.</code></pre>
     <tr><td>B · Dir Enum</td><td><span class="th"><code>/ftp/</code> ตอบ 200 ถูก flag เป็น sensitive</span><span class="en"><code>/ftp/</code> returns 200 and is flagged sensitive.</span></td></tr>
     <tr><td>C · SQLi Login</td><td><span class="th">finding ระดับ High “auth bypass” พร้อมหลักฐาน request/response</span><span class="en">A High “auth bypass” finding with request/response evidence.</span></td></tr>
     <tr><td>D · WebGoat</td><td><span class="th">เวอร์ชัน/เฟรมเวิร์ก + header ที่ขาด (บทเรียนลึกทำมือ)</span><span class="en">Version/framework + missing headers (deeper lessons done by hand).</span></td></tr>
-    <tr><td><span class="th">ทุกงาน</span><span class="en">Every run</span></td><td><span class="th">รายงานไม่ว่าง + Audit Log บันทึกการอนุมัติทุกครั้ง</span><span class="en">A non-empty report + Audit Log entries for every approval.</span></td></tr>
+    <tr><td><span class="th">ทุกงาน</span><span class="en">Every run</span></td><td><span class="th">รายงานไม่ว่าง (finding มี Description/Impact/Remediation + Confidence) + Audit Log บันทึกการอนุมัติทุกครั้ง + โดนัทบน <b>Dashboard</b> ขยับตามผล</span><span class="en">A non-empty report (findings carry Description/Impact/Remediation + Confidence) + Audit Log entries for every approval + the <b>Dashboard</b> donuts move to match.</span></td></tr>
   </table>
   </section>
 
