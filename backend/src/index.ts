@@ -18,6 +18,7 @@ import { integrationsRouter } from "./routes/integrations.js";
 import { workersRouter } from "./routes/workers.js";
 import { templatesRouter } from "./routes/templates.js";
 import { editionRouter } from "./routes/edition.js";
+import { startLicenseRefresh } from "./edition/refresh.js";
 import { aboutRouter } from "./routes/about.js";
 import { initUpdates } from "./updates/service.js";
 import { startTelegramPolling } from "./telegram/gateway.js";
@@ -55,6 +56,9 @@ async function main() {
   const inflight = await Session.find({ status: { $in: ["running", "waiting_approval"] } }).select("_id").lean();
   for (const s of inflight) resumeSession(String(s._id), io).catch((e) => log.error("resume failed", e));
   if (inflight.length) log.info(`resuming ${inflight.length} in-flight session(s)`);
+
+  // Optional online license refresh (auto-renew pickup + instant revocation). No-op if unset.
+  startLicenseRefresh();
 
   app.get("/health", async (_req, res) => {
     const ai = await getActiveAiConfig();
