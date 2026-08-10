@@ -20,6 +20,10 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 # remote server reach it through an SSH tunnel to the same port).
 ARG NEXT_PUBLIC_VNC_URL="http://localhost:6080/vnc.html?autoconnect=1&resize=scale"
 ENV NEXT_PUBLIC_VNC_URL=$NEXT_PUBLIC_VNC_URL
+# Optional: vendor checkout URL for the "Upgrade to Enterprise" button in About.
+# Empty = button hidden (open-core / self-hosted). Set to your checkout page in the commercial build.
+ARG NEXT_PUBLIC_CHECKOUT_URL=""
+ENV NEXT_PUBLIC_CHECKOUT_URL=$NEXT_PUBLIC_CHECKOUT_URL
 RUN npm run build
 
 FROM node:22-slim AS runner

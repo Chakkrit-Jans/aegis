@@ -52,6 +52,9 @@ export function EditionPanel({ onChanged }: { onChanged?: (edition: string) => v
   }
 
   const enterprise = ent?.edition === "enterprise";
+  // Optional vendor checkout link. Set NEXT_PUBLIC_CHECKOUT_URL in the commercial
+  // build to drive subscriptions; unset (public/self-hosted) hides the button.
+  const checkoutUrl = process.env.NEXT_PUBLIC_CHECKOUT_URL || "";
 
   return (
     <div className="panel">
@@ -115,6 +118,16 @@ export function EditionPanel({ onChanged }: { onChanged?: (edition: string) => v
           <button className="reject" disabled={busy} onClick={remove}>Remove license</button>
         ) : (
           <>
+            {checkoutUrl && (
+              <div style={{ marginBottom: 10 }}>
+                <button className="primary" onClick={() => window.open(checkoutUrl, "_blank", "noopener")}>
+                  ★ Upgrade to Enterprise — subscribe
+                </button>
+                <div className="muted" style={{ fontSize: 11, marginTop: 4 }}>
+                  Subscribe (฿500/mo), then paste the license key you receive by email below.
+                </div>
+              </div>
+            )}
             <label>Enterprise license key</label>
             <textarea
               rows={3}
