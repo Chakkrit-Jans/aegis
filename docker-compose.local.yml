@@ -42,5 +42,7 @@ services:
       args:
         NEXT_PUBLIC_API_URL: http://localhost:8081
         NEXT_PUBLIC_VNC_URL: "http://localhost:6081/vnc.html?autoconnect=1&resize=scale"
+        # dev: point the About "Upgrade" button at the local License Server checkout
+        NEXT_PUBLIC_CHECKOUT_URL: http://localhost:8090/checkout.html
     ports: !override
       - "3001:3000"

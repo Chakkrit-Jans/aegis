@@ -63,6 +63,9 @@ services:
         # browser reaches the backend on localhost:8080.
         NEXT_PUBLIC_API_URL: http://localhost:8080
         NEXT_PUBLIC_VNC_URL: "http://localhost:6080/vnc.html?autoconnect=1&resize=scale"
+        # Vendor checkout URL for the "Upgrade to Enterprise" button in About.
+        # Empty (default) hides it; set NEXT_PUBLIC_CHECKOUT_URL in your env to enable.
+        NEXT_PUBLIC_CHECKOUT_URL: ${NEXT_PUBLIC_CHECKOUT_URL:-}
     restart: unless-stopped
     depends_on:
       - backend
