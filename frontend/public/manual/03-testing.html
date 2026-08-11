@@ -22,7 +22,8 @@
     <li><a href="#report">8. <span class="th">รายงาน + PDF</span><span class="en">Report + PDF</span></a></li>
     <li><a href="#validate">9. <span class="th">ผลลัพธ์ที่ควรได้</span><span class="en">Expected results</span></a></li>
     <li><a href="#cases">10. <span class="th">Case Studies (OWASP)</span><span class="en">Case Studies (OWASP)</span></a></li>
-    <li><a href="#tshoot">11. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></a></li>
+    <li><a href="#sE">11. <span class="th">สถานการณ์ E — เครื่องมือโจมตี (Chat) 🔒</span><span class="en">Scenario E — Exploitation tools (Chat) 🔒</span></a></li>
+    <li><a href="#tshoot">12. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></a></li>
   </ol>
 </nav>
 
@@ -702,8 +703,25 @@ Save findings with remediation, then generate_report.</code></pre>
   </section>
 
   <!-- 11 -->
+  <section id="sE">
+  <h2>11. <span class="th">สถานการณ์ E — เครื่องมือโจมตีผ่าน AI Chat</span><span class="en">Scenario E — Exploitation tools via AI Chat</span> <span class="pill no" style="font-size:11px">🔒 Enterprise</span></h2>
+  <p><span class="th">รุ่น Enterprise ปลดล็อกเครื่องมือ<b>พิสูจน์ช่องโหว่</b> (sqlmap/commix/dalfox/Metasploit-check) และโหมด <b>💬 Chat session</b> ที่ให้คุณสั่งทีละขั้น AI จะบอก<b>คำสั่ง + เป้าหมาย</b>แล้ว<b>รอ Confirm</b> — เหมาะกับการยืนยัน SQLi ของ Juice Shop แบบเป็นทางการ (ดู <a href="01-aegis.html#workflow">Book 1 §12.1</a>)</span>
+  <span class="en">Enterprise unlocks the <b>exploitation-validation</b> tools (sqlmap/commix/dalfox/Metasploit-check) and the <b>💬 Chat session</b> mode where you instruct step by step — the AI states the <b>command + target</b> and <b>waits for Confirm</b>. Ideal for formally proving Juice Shop's SQLi (see <a href="01-aegis.html#workflow">Book 1 §12.1</a>).</span></p>
+  <ol class="steps">
+    <li><span class="th">ในหน้า Console กด <span class="btn">💬 Chat session</span> (แทน <span class="btn p">▶ Auto session</span>)</span><span class="en">In the Console click <span class="btn">💬 Chat session</span> (instead of <span class="btn p">▶ Auto session</span>).</span></li>
+    <li><span class="th">พิมพ์: <i>“Use sqlmap to test the product search for SQL injection.”</i></span><span class="en">Type: <i>“Use sqlmap to test the product search for SQL injection.”</i></span></li>
+    <li><span class="th">AI ตอบแผน + ขึ้นกล่อง <span class="pill" style="border-color:#ffb547;color:#ffb547">PROPOSED ACTION</span> ว่าจะรัน <code>sql_injection_test</code> บน <code>http://juiceshop:3000/rest/products/search?q=…</code> → กด <span class="btn g">✓ Confirm &amp; run</span></span><span class="en">The AI replies with a plan + a <span class="pill" style="border-color:#ffb547;color:#ffb547">PROPOSED ACTION</span> bubble to run <code>sql_injection_test</code> on <code>http://juiceshop:3000/rest/products/search?q=…</code> → click <span class="btn g">✓ Confirm &amp; run</span>.</span></li>
+    <li><span class="th">ผลของ sqlmap (parameter ที่ inject ได้ + DBMS + ข้อมูลตัวอย่าง) ถูกบันทึกเป็น log ในแชท แล้วสั่งต่อได้ เช่น <i>“dump the users table”</i> (จำกัด 20 แถว)</span><span class="en">sqlmap's output (injectable parameter + DBMS + sample data) is logged in the chat; continue with e.g. <i>“dump the users table”</i> (capped at 20 rows).</span></li>
+  </ol>
+  <pre><code># Under the hood the tool runs (capped, read-only — no os-shell):
+sqlmap -u "http://juiceshop:3000/rest/products/search?q=test" \
+  --batch --level 1 --risk 1 --threads 4 --dbs</code></pre>
+  <div class="box warn"><span class="tag">🎯 <span class="th">พิสูจน์ ไม่ใช่ยึดเครื่อง</span><span class="en">Prove, don't own</span></span><span class="th">ทุกตัวจำกัดแรงในโค้ด: sqlmap = อ่าน/ดึงพิสูจน์ (ไม่มี <code>--os-shell</code>), commix = รันแค่คำสั่งพิสูจน์ (<code>id</code>/<code>whoami</code>), Metasploit = <code>check</code> อย่างเดียว · และยังผ่าน Scope + Confirm ทุกครั้ง</span><span class="en">Each is hard-capped: sqlmap = read/proof only (no <code>--os-shell</code>), commix = proof command only (<code>id</code>/<code>whoami</code>), Metasploit = <code>check</code> only · all still pass Scope + Confirm every time.</span></div>
+  </section>
+
+  <!-- 12 -->
   <section id="tshoot">
-  <h2>11. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></h2>
+  <h2>12. <span class="th">แก้ปัญหา</span><span class="en">Troubleshooting</span></h2>
   <table>
     <tr><th><span class="th">อาการ</span><span class="en">Symptom</span></th><th><span class="th">วิธีแก้</span><span class="en">Fix</span></th></tr>
     <tr><td><span class="th">tool ล้มด้วย connection refused/timeout</span><span class="en">Tools fail with connection refused/timeout</span></td><td><span class="th">worker ยิงเป้าไม่ถึง — curl ทดสอบจากแท็บ Terminal (Book 02 §8); ใช้ <code>host.docker.internal</code> ไม่ใช่ <code>localhost</code></span><span class="en">The worker can't reach the target — curl-test from the Terminal tab (Book 02 §8); use <code>host.docker.internal</code>, not <code>localhost</code>.</span></td></tr>
