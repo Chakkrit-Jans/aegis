@@ -19,10 +19,6 @@ export const ALLOWED_BINS = new Set([
   "hydra",
   "searchsploit",
   "dig",
-  "sqlmap",
-  "commix",
-  "dalfox",
-  "msfconsole",
 ]);
 
 export interface ExecStatus {
