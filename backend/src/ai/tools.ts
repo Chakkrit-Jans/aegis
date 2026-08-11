@@ -495,10 +495,9 @@ function probePort(host: string, port: number, timeout = 2000): Promise<boolean>
   });
 }
 
-// Core tools shipped in every edition. The Enterprise exploitation tools
-// (sqlmap/commix/dalfox/msf) live in the private `ee/` overlay and are merged in
-// at runtime via eeHooks.extraTools — so they are physically ABSENT from the
-// Community build, not merely license-gated.
+// Core tools shipped in every edition. Any Enterprise-only tools live in the
+// private `ee/` overlay and are merged in at runtime via eeHooks.extraTools — so
+// they are physically ABSENT from the Community build, not merely license-gated.
 const CORE_TOOLS: Record<string, ToolDef> = {
   dns_lookup: dnsLookup,
   http_probe: httpProbe,
