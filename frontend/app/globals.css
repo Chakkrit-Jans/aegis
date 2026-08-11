@@ -88,6 +88,19 @@ button:disabled { opacity: .4; cursor: not-allowed; }
 .msg.tool { border-color: var(--green); background: rgba(57,255,136,.03); }
 .msg.event { border-color: var(--amber); color: var(--amber); }
 .msg.user { border-color: var(--border); color: var(--muted); }
+.msg.steer { border-color: var(--cyan); color: var(--text); background: rgba(43,208,229,.05); }
+.msg.steer .who { color: var(--cyan); }
+/* proposed-action (confirm) bubble shown inline in the chat */
+.msg.plan { border-color: var(--amber); background: rgba(255,181,71,.06); border-left-width: 3px; }
+.msg.plan .who { color: var(--amber); }
+.msg.plan code { color: var(--amber); }
+.msg.plan .approve { background: var(--green); border-color: var(--green); color: #041018; font-weight: 700; }
+.msg.plan .reject { color: var(--amber); }
+
+/* live operator chat input under the transcript */
+.chatbar { display: flex; gap: 8px; align-items: stretch; margin-top: 10px; }
+.chatbar textarea { flex: 1; resize: vertical; min-height: 40px; }
+.chatbar button { flex: none; align-self: stretch; padding: 0 18px; }
 
 .approval {
   border: 1px solid var(--amber); border-radius: 8px; padding: 12px; margin: 8px 0;

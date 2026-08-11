@@ -19,7 +19,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       exploitdb \
       dnsutils \
       dirb \
+      sqlmap \
+      commix \
     && (apt-get install -y --no-install-recommends nuclei || true) \
+    && (apt-get install -y --no-install-recommends dalfox || true) \
+    && (apt-get install -y --no-install-recommends metasploit-framework || true) \
     && rm -rf /var/lib/apt/lists/*
 
 # Graphical desktop reachable over VNC + noVNC (Burp, Firefox, GUI tooling).

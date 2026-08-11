@@ -46,6 +46,10 @@ ALLOWED = {
     "hydra",
     "searchsploit",
     "dig",
+    "sqlmap",
+    "commix",
+    "dalfox",
+    "msfconsole",
 }
 
 

@@ -2,7 +2,9 @@ import { Router } from "express";
 import type { Server } from "socket.io";
 import { Engagement, Session, Approval } from "../db/mongo.js";
 import { runSession, decideApproval } from "../ai/orchestrator.js";
-import { requestStop } from "../sessions/control.js";
+import { runChatTurn } from "../ai/chat.js";
+import { requestStop, pushSteer } from "../sessions/control.js";
+import { isEnterprise } from "../edition/service.js";
 import { audit } from "../audit/service.js";
 import type { AuthedRequest } from "../auth/middleware.js";
 import { log } from "../lib/log.js";
@@ -69,6 +71,52 @@ export function sessionsRouter(io: Server): Router {
     if (!session) return res.status(404).json({ error: "not found" });
     runSession(String(session._id), io).catch((e) => log.error("runSession failed", e));
     res.json({ ok: true });
+  });
+
+  // Conversational chat to a session. The operator message is appended to the
+  // transcript immediately, then:
+  //   - autonomous run in progress (running) → queued as live guidance (steer);
+  //   - a proposed action is awaiting confirmation (waiting_approval) → rejected,
+  //     the operator must confirm/cancel that first;
+  //   - otherwise (idle/done/stopped) → a chat turn: the agent replies with the
+  //     command + target it proposes, waits for confirmation, runs it, and logs
+  //     the result. Active/intrusive tools always pass the confirmation gate.
+  router.post("/:id/chat", async (req: AuthedRequest, res) => {
+    // Edition gate: the AI Chat control is an Enterprise feature.
+    if (!(await isEnterprise()))
+      return res.status(402).json({
+        error: "AI Chat control requires an Enterprise license.",
+        feature: "ai.chat",
+        upgrade: true,
+      });
+    const text = String(req.body?.text ?? "").trim();
+    if (!text) return res.status(400).json({ error: "text required" });
+    if (text.length > 2000) return res.status(400).json({ error: "text too long (max 2000 chars)" });
+    const session = await Session.findById(req.params.id).select("status").lean();
+    if (!session) return res.status(404).json({ error: "not found" });
+    if (session.status === "waiting_approval")
+      return res.status(409).json({ error: "confirm or cancel the pending action first" });
+
+    const entry = { role: "user", content: text, tool: "", meta: { steer: true }, at: new Date() };
+    await Session.findByIdAndUpdate(req.params.id, { $push: { transcript: entry } });
+    io.to(`session:${req.params.id}`).emit("transcript", entry);
+    await audit({
+      actor: req.user?.email ?? "operator",
+      actorRole: req.user?.role,
+      action: "session.chat",
+      target: req.params.id,
+      detail: text.slice(0, 200),
+      ip: req.ip,
+    });
+
+    if (session.status === "running") {
+      // An autonomous loop owns the session — feed the message as live guidance.
+      pushSteer(req.params.id, text);
+      return res.json({ ok: true, mode: "steered" });
+    }
+    // Operator-driven chat turn (propose → confirm → execute → log).
+    runChatTurn(req.params.id, io, text).catch((e) => log.error("chat turn failed", e));
+    res.json({ ok: true, mode: "chat" });
   });
 
   // Operator decision on a pending active-tool approval.

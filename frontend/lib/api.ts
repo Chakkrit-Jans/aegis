@@ -332,12 +332,14 @@ export const api = {
   workerHealth: (id: string) => get<{ ok: boolean; tools?: string[]; error?: string }>(`/api/workers/${id}/health`),
 
   // sessions
-  createSession: (engagementSlug: string, objective: string, autoApprove: boolean) =>
-    post<Session>("/api/sessions", { engagementSlug, objective, autoApprove }),
+  createSession: (engagementSlug: string, objective: string, autoApprove: boolean, autostart = true) =>
+    post<Session>("/api/sessions", { engagementSlug, objective, autoApprove, autostart }),
   listSessions: (engagementSlug: string) =>
     get<SessionSummary[]>(`/api/sessions?engagement=${encodeURIComponent(engagementSlug)}`),
   getSession: (id: string) => get<Session>(`/api/sessions/${id}`),
   stopSession: (id: string) => post<{ ok: boolean }>(`/api/sessions/${id}/stop`),
+  chatSession: (id: string, text: string) =>
+    post<{ ok: boolean; mode?: string }>(`/api/sessions/${id}/chat`, { text }),
   getReport: (slug: string) => getText(`/api/engagements/${slug}/report`),
   getReportHtml: (slug: string) => getText(`/api/engagements/${slug}/report.html`),
   decide: (sessionId: string, approvalId: string, decision: "approve" | "reject") =>

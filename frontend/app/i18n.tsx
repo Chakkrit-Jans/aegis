@@ -67,7 +67,10 @@ const S: Record<string, [string, string]> = {
   "auto.label": ["Auto-approve", "อนุมัติอัตโนมัติ"],
   "auto.hint": ["(run every tool without approval)", "(รันทุก tool โดยไม่ต้องกดอนุมัติ)"],
   "auto.warn": ["⚠ Approval gate off — the AI runs on its own (still limited by scope). Use only on lab / authorized targets.", "⚠ ปิด approval gate — AI ยิงเองอัตโนมัติ (ยังจำกัดด้วย scope) ใช้เฉพาะ lab / เป้าที่อนุญาต"],
-  "spawn.run": ["▶ Spawn session", "▶ เริ่ม session"],
+  "spawn.run": ["▶ Auto session", "▶ รันอัตโนมัติ"],
+  "spawn.chat": ["💬 Chat session", "💬 เริ่มแบบแชท"],
+  "spawn.chatHint": ["Drive the assessment yourself from the chat box — the agent proposes each command + target and waits for your confirmation.", "ขับเคลื่อนการทดสอบเองผ่านช่องแชท — agent เสนอคำสั่ง+เป้าหมายทีละขั้น แล้วรอให้คุณยืนยัน"],
+  "spawn.chatEE": ["AI Chat control requires an Enterprise license.", "AI Chat control ต้องใช้ Enterprise license"],
   "spawn.stop": ["⏹ Stop session", "⏹ หยุด session"],
   "spawn.needAuth": ["Record authorization before running the agent.", "ต้องบันทึกการอนุญาตก่อนรัน AI"],
 
@@ -90,6 +93,19 @@ const S: Record<string, [string, string]> = {
   "sess.approvalReq": ["⚠ Approval required — active tool", "⚠ ต้องอนุมัติ — active tool"],
   "sess.approve": ["APPROVE", "อนุมัติ"],
   "sess.reject": ["REJECT", "ปฏิเสธ"],
+
+  // conversational chat
+  "chat.you": ["you · chat", "คุณ · แชท"],
+  "chat.ready": ["💬 Chat mode ready — type what you want to check or attack in the box below. The agent will reply with the exact command + target and wait for your confirmation before running it.", "💬 พร้อมแชทแล้ว — พิมพ์สิ่งที่จะให้ตรวจ/โจมตีในช่องด้านล่าง แล้ว agent จะตอบว่าจะใช้คำสั่งอะไรกับเป้าหมายไหน และรอให้คุณกดยืนยันก่อนลงมือ"],
+  "chat.placeholder": ["Chat: tell the agent what to check or attack (e.g. test SQLi on the login page, scan ports on webgoat)…", "แชท: บอก agent ว่าจะให้ตรวจ/โจมตีอะไร (เช่น ทดสอบ SQLi หน้า login, สแกนพอร์ต webgoat)…"],
+  "chat.send": ["Send", "ส่ง"],
+  "chat.hint": ["The agent replies with the command + target it proposes, then waits for your confirmation before running it. Enter to send · Shift+Enter for a new line.", "agent จะตอบว่าจะใช้คำสั่งอะไรกับเป้าหมายไหน แล้วรอให้คุณกดยืนยันก่อนลงมือ · Enter เพื่อส่ง · Shift+Enter ขึ้นบรรทัดใหม่"],
+  "chat.awaitConfirm": ["Confirm or cancel the proposed action below before sending the next message.", "กดยืนยันหรือยกเลิกคำสั่งที่เสนอด้านล่างก่อน แล้วจึงพิมพ์คำสั่งถัดไป"],
+  "chat.plan": ["aegis · proposed action", "aegis · คำสั่งที่เสนอ"],
+  "chat.planRun": ["Will run", "จะใช้คำสั่ง"],
+  "chat.planOn": ["on", "กับเป้าหมาย"],
+  "chat.confirm": ["✓ Confirm & run", "✓ ยืนยันและลงมือ"],
+  "chat.cancel": ["✗ Cancel", "✗ ยกเลิก"],
 
   // vuln feeds
   "feeds.title": ["Vuln Feeds", "ฐานช่องโหว่ (Vuln Feeds)"],

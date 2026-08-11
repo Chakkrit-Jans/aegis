@@ -3,9 +3,10 @@ import { Engagement, Session, Approval } from "../db/mongo.js";
 import { checkScope } from "../engagement/scope.js";
 import { makeProvider, type ChatMessage } from "./providers.js";
 import { getActiveAiConfig } from "./settings.js";
-import { TOOLS, toolSchemas } from "./tools.js";
+import { getTool, toolSchemas } from "./tools.js";
+import { isEnterprise } from "../edition/service.js";
 import { awaitApproval } from "../approvals/registry.js";
-import { isStopRequested, clearStop } from "../sessions/control.js";
+import { isStopRequested, clearStop, drainSteer } from "../sessions/control.js";
 import { notifyApproval } from "../telegram/gateway.js";
 import { getWorkerRef } from "../workers/registry.js";
 import { log } from "../lib/log.js";
@@ -49,19 +50,19 @@ Think step by step. Call one tool at a time.`;
 
 const MAX_STEPS = 20;
 
-async function record(sessionId: string, entry: Record<string, unknown>, io: Server) {
+export async function record(sessionId: string, entry: Record<string, unknown>, io: Server) {
   const at = new Date();
   await Session.updateOne({ _id: sessionId }, { $push: { transcript: { ...entry, at } } });
   io.to(`session:${sessionId}`).emit("transcript", { ...entry, at });
 }
 
-async function setStatus(sessionId: string, status: string, io: Server) {
+export async function setStatus(sessionId: string, status: string, io: Server) {
   await Session.updateOne({ _id: sessionId }, { $set: { status } });
   io.to(`session:${sessionId}`).emit("status", { status });
 }
 
 /** Persist the provider-facing conversation so a restart can resume the loop. */
-async function saveMessages(sessionId: string, messages: ChatMessage[]) {
+export async function saveMessages(sessionId: string, messages: ChatMessage[]) {
   await Session.updateOne({ _id: sessionId }, { $set: { messages } });
 }
 
@@ -101,6 +102,8 @@ export async function runSession(
     return;
   }
   const provider = makeProvider(aiConfig);
+  // Enterprise entitlement — withholds the exploitation tools from the model in Community.
+  const enterprise = await isEnterprise();
   // Resume from the persisted conversation if one exists; otherwise start fresh.
   const stored = (session.messages as ChatMessage[] | undefined) ?? [];
   const messages: ChatMessage[] =
@@ -147,7 +150,7 @@ Objective: ${session.objective || "(none given)"}`,
       }
       if (result.toolCalls.length === 0) break;
       const call = result.toolCalls[0];
-      const tool = TOOLS[call.name];
+      const tool = getTool(call.name);
       if (!tool) {
         messages.push({ role: "user", content: `Tool result (${call.name}): unknown tool` });
         continue;
@@ -199,7 +202,7 @@ Objective: ${session.objective || "(none given)"}`,
           await record(sessionId, { role: "event", tool: pending.tool, content: msg }, io);
           messages.push({ role: "user", content: `Tool result (${pending.tool}): ${msg}` });
         } else {
-          const tool = TOOLS[pending.tool];
+          const tool = getTool(pending.tool);
           let output: string;
           if (!tool) output = `Unknown tool: ${pending.tool}`;
           else {
@@ -229,7 +232,14 @@ Objective: ${session.objective || "(none given)"}`,
         await setStatus(sessionId, "stopped", io);
         return;
       }
-      const result = await provider.chat(messages, toolSchemas());
+      // Feed any live operator "chat" instructions into the conversation before the
+      // next model turn. They were already recorded to the transcript by the /steer
+      // route; here we only add them as guidance. Active tools they trigger still go
+      // through the normal scope + approval gate below.
+      for (const text of drainSteer(sessionId)) {
+        messages.push({ role: "user", content: `OPERATOR (live instruction): ${text}` });
+      }
+      const result = await provider.chat(messages, toolSchemas(undefined, { enterprise }));
 
       if (result.text.trim()) {
         await record(sessionId, { role: "assistant", content: result.text }, io);
@@ -247,10 +257,17 @@ Objective: ${session.objective || "(none given)"}`,
 
       // Process the first tool call this step (one tool at a time).
       const call = result.toolCalls[0];
-      const tool = TOOLS[call.name];
+      const tool = getTool(call.name);
       if (!tool) {
         const msg = `Unknown tool: ${call.name}`;
         await record(sessionId, { role: "tool", tool: call.name, content: msg }, io);
+        messages.push({ role: "user", content: `Tool result (${call.name}): ${msg}` });
+        continue;
+      }
+      // Edition gate: exploitation (L4/L5) tools require an Enterprise license.
+      if (tool.edition === "enterprise" && !enterprise) {
+        const msg = `${call.name} requires an Enterprise license (Exploitation tools) — not available in Community.`;
+        await record(sessionId, { role: "event", tool: call.name, content: msg }, io);
         messages.push({ role: "user", content: `Tool result (${call.name}): ${msg}` });
         continue;
       }

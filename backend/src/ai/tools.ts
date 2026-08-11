@@ -6,6 +6,7 @@ import { proxyUrl } from "../integrations/service.js";
 import { audit } from "../audit/service.js";
 import { UPDATE_SOURCES } from "../updates/registry.js";
 import * as updates from "../updates/service.js";
+import { eeHooks } from "../lib/eehooks.js";
 import type { ToolSchema } from "./providers.js";
 
 /**
@@ -33,11 +34,13 @@ export interface ToolDef {
   risk: ToolRisk;
   /** The argument (if any) that names the target, for the scope gate. */
   targetArg?: string;
+  /** "enterprise" → only exposed/executed under a valid Enterprise license. */
+  edition?: "enterprise";
   run(args: Record<string, unknown>, ctx: ToolContext): Promise<string>;
 }
 
-const str = (v: unknown, d = ""): string => (typeof v === "string" ? v : d);
-const clampInt = (v: unknown, d: number, min: number, max: number): number => {
+export const str = (v: unknown, d = ""): string => (typeof v === "string" ? v : d);
+export const clampInt = (v: unknown, d: number, min: number, max: number): number => {
   const n = typeof v === "number" ? v : Number(v);
   if (!Number.isFinite(n)) return d;
   return Math.max(min, Math.min(max, Math.trunc(n)));
@@ -492,7 +495,11 @@ function probePort(host: string, port: number, timeout = 2000): Promise<boolean>
   });
 }
 
-export const TOOLS: Record<string, ToolDef> = {
+// Core tools shipped in every edition. The Enterprise exploitation tools
+// (sqlmap/commix/dalfox/msf) live in the private `ee/` overlay and are merged in
+// at runtime via eeHooks.extraTools — so they are physically ABSENT from the
+// Community build, not merely license-gated.
+const CORE_TOOLS: Record<string, ToolDef> = {
   dns_lookup: dnsLookup,
   http_probe: httpProbe,
   tcp_scan: tcpScan,
@@ -508,7 +515,21 @@ export const TOOLS: Record<string, ToolDef> = {
   generate_report: generateReport,
 };
 
-export const toolSchemas = (only?: string[]): ToolSchema[] =>
-  Object.values(TOOLS)
+/** Core tools + any Enterprise overlay tools present in this build. */
+export const allTools = (): Record<string, ToolDef> => ({ ...CORE_TOOLS, ...eeHooks.extraTools });
+
+/** Look up a tool by name across core + Enterprise overlay. */
+export const getTool = (name: string): ToolDef | undefined => CORE_TOOLS[name] ?? eeHooks.extraTools[name];
+
+/** Is this tool gated behind an Enterprise license? */
+export const isEnterpriseTool = (name: string): boolean => getTool(name)?.edition === "enterprise";
+
+/**
+ * Schemas exposed to the model. Enterprise-only tools are withheld unless
+ * `opts.enterprise` is true, so a Community instance never even sees them.
+ */
+export const toolSchemas = (only?: string[], opts?: { enterprise?: boolean }): ToolSchema[] =>
+  Object.values(allTools())
     .filter((t) => !only || only.includes(t.schema.name))
+    .filter((t) => t.edition !== "enterprise" || opts?.enterprise)
     .map((t) => t.schema);

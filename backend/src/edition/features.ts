@@ -20,6 +20,8 @@ export const ENTERPRISE_FEATURES: FeatureDef[] = [
   { key: "audit.export", label: "Audit export & SIEM", description: "Stream the immutable audit log to a SIEM with retention policies." },
   { key: "feeds.schedule", label: "Scheduled feed updates", description: "Automatic vuln-feed updates across the whole worker fleet." },
   { key: "templates.orgLibrary", label: "Org template library", description: "Shared, signed objective-template library across the team." },
+  { key: "ai.chat", label: "AI Chat control", description: "Conversational chat: drive the assessment step-by-step (propose → confirm → run → log) and steer a running session in natural language." },
+  { key: "tools.exploitation", label: "Exploitation tools (L4–L5)", description: "Automated exploitation/validation tools: SQL injection (sqlmap), OS command injection (commix), XSS (dalfox), and Metasploit vulnerability check." },
 ];
 
 /** Numeric caps applied in Community for otherwise-Enterprise capabilities. */

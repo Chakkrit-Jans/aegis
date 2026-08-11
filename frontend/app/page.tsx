@@ -60,6 +60,8 @@ export default function Console() {
   const [objective, setObjective] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [autoApprove, setAutoApprove] = useState(false);
+  const [chatText, setChatText] = useState("");
+  const [chatBusy, setChatBusy] = useState(false);
   const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([]);
   const [orgTemplates, setOrgTemplates] = useState<OrgTemplate[]>([]);
   const [err, setErr] = useState("");
@@ -131,13 +133,49 @@ export default function Console() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active?.slug]);
 
-  // Open a saved session (read-only history view).
+  // Subscribe to a session's live socket feed (transcript / status / approvals).
+  function subscribeSession(id: string) {
+    socketRef.current?.disconnect();
+    const socket = io(API, { transports: ["websocket", "polling"], auth: { token: loadToken() } });
+    socketRef.current = socket;
+    socket.on("connect", () => socket.emit("join", id));
+    socket.on("transcript", (e: TranscriptEntry) => setTranscript((t) => [...t, e]));
+    socket.on("status", (e: { status: string }) => setStatus(e.status));
+    socket.on("approval", (a: ApprovalReq) => setApprovals((x) => [...x, a]));
+  }
+
+  // Open a saved session. If it's still live, subscribe so the transcript, status
+  // and the live chat echo keep updating; otherwise it's a read-only history view.
   async function viewSession(id: string) {
     socketRef.current?.disconnect();
     setReportText(null);
     setApprovals([]);
     const s = await guard(api.getSession(id));
-    if (s) { setSession(s); setTranscript(s.transcript ?? []); setStatus(s.status); }
+    if (s) {
+      setSession(s); setTranscript(s.transcript ?? []); setStatus(s.status);
+      // Rebuild a still-pending confirmation from the transcript so the plan
+      // bubble reappears when reopening a session that's awaiting approval.
+      if (s.status === "waiting_approval") {
+        const tr = s.transcript ?? [];
+        const ev = [...tr].reverse().find((e) => e.meta?.approvalId);
+        if (ev) {
+          const idx = tr.indexOf(ev);
+          let rationale = "";
+          for (let i = idx - 1; i >= 0; i--) {
+            if (tr[i].role === "assistant") { rationale = tr[i].content; break; }
+          }
+          setApprovals([{
+            approvalId: String(ev.meta?.approvalId),
+            tool: ev.tool || "",
+            args: (ev.meta?.args as Record<string, unknown>) ?? {},
+            rationale,
+          }]);
+        }
+      }
+      // Subscribe unless the session is finished — chat sessions sit at "idle"
+      // between turns and must still receive live proposals/results.
+      if (s.status !== "done" && s.status !== "stopped" && s.status !== "error") subscribeSession(s._id);
+    }
   }
   async function viewReport() {
     if (!active) return;
@@ -293,14 +331,7 @@ export default function Console() {
     if (!s) return;
     setSession(s); setStatus("running");
     api.listSessions(active.slug).then(setSessions).catch(() => {});
-
-    socketRef.current?.disconnect();
-    const socket = io(API, { transports: ["websocket", "polling"], auth: { token: loadToken() } });
-    socketRef.current = socket;
-    socket.on("connect", () => socket.emit("join", s._id));
-    socket.on("transcript", (e: TranscriptEntry) => setTranscript((t) => [...t, e]));
-    socket.on("status", (e: { status: string }) => setStatus(e.status));
-    socket.on("approval", (a: ApprovalReq) => setApprovals((x) => [...x, a]));
+    subscribeSession(s._id);
   }
 
   async function decide(a: ApprovalReq, decision: "approve" | "reject") {
@@ -309,7 +340,47 @@ export default function Console() {
     setApprovals((x) => x.filter((y) => y.approvalId !== a.approvalId));
   }
 
+  // Send a chat message. The agent replies with the command + target it proposes
+  // and waits for confirmation; the transcript entries arrive over the socket, so
+  // we don't append them locally here.
+  async function sendChat() {
+    const text = chatText.trim();
+    if (!session || !text || chatBusy) return;
+    setChatBusy(true);
+    try {
+      await guard(api.chatSession(session._id, text));
+      setChatText("");
+    } finally {
+      setChatBusy(false);
+    }
+  }
+
+  // Start a chat-driven session: no autonomous loop — the operator drives it one
+  // instruction at a time from the chat box, confirming each check/attack.
+  async function chatSpawn() {
+    if (!active) return;
+    setErr(""); setTranscript([]); setApprovals([]); setReportText(null);
+    const s = await guard(api.createSession(active.slug, objective, false, false));
+    if (!s) return;
+    setSession(s); setStatus(s.status ?? "idle");
+    api.listSessions(active.slug).then(setSessions).catch(() => {});
+    subscribeSession(s._id);
+    // Bring the chat input into view and focus it so it's obvious where to type.
+    setTimeout(() => {
+      const ta = document.querySelector<HTMLTextAreaElement>(".chatbar textarea");
+      ta?.scrollIntoView({ block: "center", behavior: "smooth" });
+      ta?.focus();
+    }, 80);
+  }
+
   const authed = active?.authorization?.granted;
+  // AI Chat control is an Enterprise feature.
+  const chatEnabled = edition === "enterprise";
+  // The chat box is live (Enterprise) while a session exists and isn't finished/stopped.
+  const chatLive = chatEnabled && !!session && (status === "idle" || status === "running" || status === "waiting_approval");
+  // Best-effort guess at which arg names the target, for a friendly plan line.
+  const toolTarget = (a: ApprovalReq): string =>
+    ["url", "host", "target", "endpoint"].find((k) => a.args?.[k]) ?? "";
 
   if (booting) return <div className="wrap muted">Loading…</div>;
   if (!me) return <LoginView onSubmit={doLogin} err={err} />;
@@ -518,14 +589,24 @@ export default function Console() {
                   {t("spawn.stop")}
                 </button>
               ) : (
-                <button
-                  className="primary"
-                  style={{ marginTop: 8, width: "100%" }}
-                  disabled={!authed}
-                  onClick={spawnSession}
-                >
-                  {t("spawn.run")}
-                </button>
+                <div className="row" style={{ gap: 6, marginTop: 8 }}>
+                  <button
+                    className="primary"
+                    style={{ flex: 1 }}
+                    disabled={!authed}
+                    onClick={spawnSession}
+                  >
+                    {t("spawn.run")}
+                  </button>
+                  <button
+                    style={{ flex: 1 }}
+                    disabled={!authed || !chatEnabled}
+                    onClick={chatSpawn}
+                    title={chatEnabled ? t("spawn.chatHint") : t("spawn.chatEE")}
+                  >
+                    {t("spawn.chat")}{!chatEnabled && " 🔒"}
+                  </button>
+                </div>
               )}
               {!authed && <div className="warn">{t("spawn.needAuth")}</div>}
 
@@ -675,27 +756,56 @@ export default function Console() {
             </>
           ) : (
             <>
-              {approvals.map((a) => (
-                <div className="approval" key={a.approvalId}>
-                  <div>{t("sess.approvalReq")} <code>{a.tool}</code></div>
-                  <div className="muted" style={{ margin: "4px 0" }}>{a.rationale}</div>
-                  <div><code>{JSON.stringify(a.args)}</code></div>
-                  <div className="row" style={{ marginTop: 8 }}>
-                    <button className="approve" onClick={() => decide(a, "approve")}>{t("sess.approve")}</button>
-                    <button className="reject" onClick={() => decide(a, "reject")}>{t("sess.reject")}</button>
-                  </div>
-                </div>
-              ))}
-
-              <div className="transcript" ref={scrollRef} style={{ flex: 1, minHeight: 320, height: "auto" }}>
+              <div className="transcript" ref={scrollRef} style={{ minHeight: 420, maxHeight: "72vh", overflowY: "auto" }}>
                 {!session && <div className="muted">{t("sess.empty")}</div>}
+                {session && transcript.length === 0 && <div className="muted">{t("chat.ready")}</div>}
                 {transcript.map((e, i) => (
-                  <div key={i} className={`msg ${e.role}`}>
-                    <div className="who">{e.tool ? `${e.role} · ${e.tool}` : e.role}</div>
+                  <div key={i} className={`msg ${e.role}${e.meta?.steer ? " steer" : ""}`}>
+                    <div className="who">{e.meta?.steer ? t("chat.you") : e.tool ? `${e.role} · ${e.tool}` : e.role}</div>
                     {e.content}
                   </div>
                 ))}
+
+                {/* Proposed action(s) awaiting confirmation — shown inline as a plan bubble. */}
+                {approvals.map((a) => (
+                  <div className="msg plan" key={a.approvalId}>
+                    <div className="who">{t("chat.plan")}</div>
+                    <div>{t("chat.planRun")} <code>{a.tool}</code>{a.args?.[toolTarget(a)] ? <> {t("chat.planOn")} <code>{String(a.args[toolTarget(a)])}</code></> : null}</div>
+                    {a.rationale && <div className="muted" style={{ margin: "4px 0" }}>{a.rationale}</div>}
+                    <div className="muted" style={{ fontSize: 11 }}><code>{JSON.stringify(a.args)}</code></div>
+                    <div className="row" style={{ marginTop: 8 }}>
+                      <button className="approve" onClick={() => decide(a, "approve")}>{t("chat.confirm")}</button>
+                      <button className="reject" onClick={() => decide(a, "reject")}>{t("chat.cancel")}</button>
+                    </div>
+                  </div>
+                ))}
               </div>
+
+              {chatLive && (
+                <div className="chatbar">
+                  <textarea
+                    rows={2}
+                    placeholder={t("chat.placeholder")}
+                    value={chatText}
+                    disabled={status === "waiting_approval"}
+                    onChange={(e) => setChatText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        sendChat();
+                      }
+                    }}
+                  />
+                  <button className="primary" disabled={chatBusy || !chatText.trim() || status === "waiting_approval"} onClick={sendChat}>
+                    {t("chat.send")}
+                  </button>
+                </div>
+              )}
+              {chatLive && (
+                <div className="muted" style={{ fontSize: 11, marginTop: 4 }}>
+                  {status === "waiting_approval" ? t("chat.awaitConfirm") : t("chat.hint")}
+                </div>
+              )}
             </>
           )}
         </div>
