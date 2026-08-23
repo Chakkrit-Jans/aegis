@@ -55,6 +55,12 @@ export function Settings({ me }: { me: Me }) {
   // telegram form
   const [botToken, setBotToken] = useState("");
   const [chatId, setChatId] = useState("");
+  // OSINT provider keys (origin-IP discovery)
+  const [osint, setOsint] = useState<import("../lib/api").OsintStatus | null>(null);
+  const [shodanKey, setShodanKey] = useState("");
+  const [censysId, setCensysId] = useState("");
+  const [censysSecret, setCensysSecret] = useState("");
+  const [stKey, setStKey] = useState("");
   // new user form
   const [nEmail, setNEmail] = useState("");
   const [nPass, setNPass] = useState("");
@@ -72,6 +78,8 @@ export function Settings({ me }: { me: Me }) {
     await reloadWorkers();
     const i = await guard(api.getIntegrations());
     if (i) { setInteg(i); setProxyUrl(i.proxy.url); setProxyLabel(i.proxy.label); setChatId(i.telegram.chatId); }
+    const o = await guard(api.getOsint());
+    if (o) setOsint(o);
     const u = await guard(api.listUsers());
     if (u) setUsers(u);
     const a = await guard(api.getAudit());
@@ -159,6 +167,10 @@ export function Settings({ me }: { me: Me }) {
   async function saveTelegram(enabled: boolean) {
     const next = await guard(api.setTelegram({ enabled, botToken, chatId }));
     if (next) { setInteg(next); setBotToken(""); flash("Telegram saved."); }
+  }
+  async function saveOsint() {
+    const next = await guard(api.setOsint({ shodanKey, censysId, censysSecret, securitytrailsKey: stKey }));
+    if (next) { setOsint(next); setShodanKey(""); setCensysId(""); setCensysSecret(""); setStKey(""); flash("OSINT keys saved."); }
   }
   async function testTelegram() {
     const r = await guard(api.testTelegram());
@@ -353,6 +365,34 @@ export function Settings({ me }: { me: Me }) {
           <span className={`pill ${integ?.proxy.enabled ? "ok" : "no"}`}>
             {integ?.proxy.enabled ? `ON → ${integ.proxy.url}` : "OFF"}
           </span>
+        </div>
+      </div>
+
+      {/* OSINT — origin-IP provider keys */}
+      <div className="panel">
+        <h2>OSINT · Origin-IP sources</h2>
+        <div className="muted" style={{ fontSize: 11, marginBottom: 8 }}>
+          Keys for the <code>origin_ip_osint</code> tool (find the real IP behind Cloudflare). Stored server-side; only "set" status is shown. Leave a field blank to keep the current key.
+        </div>
+        <label>Shodan API key {osint?.shodanSet && <span className="pill ok" style={{ fontSize: 9 }}>set</span>}</label>
+        <input type="password" value={shodanKey} onChange={(e) => setShodanKey(e.target.value)} placeholder={osint?.shodanSet ? "•••••• (leave blank to keep)" : "Shodan key"} />
+        <div className="row" style={{ gap: 8 }}>
+          <div style={{ flex: 1 }}>
+            <label>Censys API ID {osint?.censysSet && <span className="pill ok" style={{ fontSize: 9 }}>set</span>}</label>
+            <input value={censysId} onChange={(e) => setCensysId(e.target.value)} placeholder="Censys API ID" />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label>Censys API secret</label>
+            <input type="password" value={censysSecret} onChange={(e) => setCensysSecret(e.target.value)} placeholder={osint?.censysSet ? "•••••• (keep)" : "Censys secret"} />
+          </div>
+        </div>
+        <label>SecurityTrails API key {osint?.securitytrailsSet && <span className="pill ok" style={{ fontSize: 9 }}>set</span>}</label>
+        <input type="password" value={stKey} onChange={(e) => setStKey(e.target.value)} placeholder={osint?.securitytrailsSet ? "•••••• (leave blank to keep)" : "SecurityTrails key"} />
+        <div className="row" style={{ marginTop: 10 }}>
+          <button className="primary" onClick={saveOsint}>Save OSINT keys</button>
+        </div>
+        <div className="muted" style={{ fontSize: 11, marginTop: 6 }}>
+          Sources: SecurityTrails (DNS history — best for origin), Shodan (DNS), Censys (cert search). Any one is enough to start.
         </div>
       </div>
 

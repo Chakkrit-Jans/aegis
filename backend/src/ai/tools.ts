@@ -7,6 +7,7 @@ import { audit } from "../audit/service.js";
 import { UPDATE_SOURCES } from "../updates/registry.js";
 import * as updates from "../updates/service.js";
 import { eeHooks } from "../lib/eehooks.js";
+import { findOrigin } from "../osint/service.js";
 import type { ToolSchema } from "./providers.js";
 
 /**
@@ -379,6 +380,27 @@ const secretScan: ToolDef = {
   },
 };
 
+const originIpOsint: ToolDef = {
+  category: "recon",
+  risk: "active",
+  targetArg: "domain",
+  schema: {
+    name: "origin_ip_osint",
+    description:
+      "Find candidate ORIGIN IPs behind a CDN/WAF (e.g. Cloudflare) for a domain via OSINT: Shodan DNS, Censys certificate search, and SecurityTrails DNS history. It queries those providers (not the target) and flags which candidate IPs are Cloudflare edge vs a likely real origin. Requires an API key configured in Settings → OSINT.",
+    parameters: {
+      type: "object",
+      properties: { domain: { type: "string", description: "Domain to resolve the origin for, e.g. store.example.com" } },
+      required: ["domain"],
+    },
+  },
+  async run(args) {
+    const domain = str(args.domain).replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    if (!domain) return "error: domain required";
+    return findOrigin(domain);
+  },
+};
+
 /* -------------------------------------------------------------------- cred */
 
 const credTest: ToolDef = {
@@ -662,6 +684,7 @@ const CORE_TOOLS: Record<string, ToolDef> = {
   exploit_search: exploitSearch,
   cve_lookup: cveLookup,
   secret_scan: secretScan,
+  origin_ip_osint: originIpOsint,
   cred_test: credTest,
   run_command: runCommand,
   update_feeds: updateFeeds,

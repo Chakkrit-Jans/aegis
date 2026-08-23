@@ -268,6 +268,12 @@ export interface Integrations {
   telegram: { enabled: boolean; chatId: string; botTokenSet: boolean };
 }
 
+export interface OsintStatus {
+  shodanSet: boolean;
+  censysSet: boolean;
+  securitytrailsSet: boolean;
+}
+
 export interface AiProfile {
   id: string;
   name: string;
@@ -375,6 +381,11 @@ export const api = {
   setTelegram: (body: { enabled?: boolean; botToken?: string; chatId?: string }) =>
     post<Integrations>("/api/integrations/telegram", body),
   testTelegram: () => post<{ ok: boolean }>("/api/integrations/telegram/test"),
+
+  // OSINT origin-IP provider keys (admin)
+  getOsint: () => get<OsintStatus>("/api/osint"),
+  setOsint: (body: { shodanKey?: string; censysId?: string; censysSecret?: string; securitytrailsKey?: string }) =>
+    post<OsintStatus>("/api/osint", body),
 
   // users (admin)
   listUsers: () => get<UserRow[]>("/api/users"),
