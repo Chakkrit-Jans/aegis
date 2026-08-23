@@ -270,6 +270,115 @@ const cveLookup: ToolDef = {
   },
 };
 
+/* -------------------------------------------------------- secret scanning */
+// High-signal detectors for secrets that leak in client-side code. group = the
+// capture group holding the value (default: whole match).
+const SECRET_DETECTORS: Array<{ name: string; re: RegExp; group?: number }> = [
+  { name: "AWS access key id", re: /\bAKIA[0-9A-Z]{16}\b/g },
+  { name: "Google API key", re: /\bAIza[0-9A-Za-z\-_]{35}\b/g },
+  { name: "Stripe secret key", re: /\bsk_(?:live|test)_[0-9a-zA-Z]{16,}\b/g },
+  { name: "Stripe publishable key", re: /\b[rp]k_(?:live|test)_[0-9a-zA-Z]{16,}\b/g },
+  { name: "GitHub token", re: /\bgh[pousr]_[0-9A-Za-z]{36,}\b/g },
+  { name: "Slack token", re: /\bxox[baprs]-[0-9A-Za-z-]{10,}\b/g },
+  { name: "JWT", re: /\beyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\b/g },
+  { name: "Private key block", re: /-----BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----/g },
+  { name: "Client env secret (NEXT_PUBLIC_*)", re: /NEXT_PUBLIC_[A-Z0-9_]*?(?:KEY|TOKEN|SECRET|PASS)[A-Z0-9_]*\s*[:=]\s*["'`]?([^"'`\s,;})]{8,})/g, group: 1 },
+  { name: "Generic key/secret assignment", re: /(?:api[_-]?key|apikey|secret|access[_-]?token|auth[_-]?token|client[_-]?secret|password|passwd)["'`]?\s*[:=]\s*["'`]([A-Za-z0-9_\-.]{16,})["'`]/gi, group: 1 },
+];
+
+const maskSecret = (s: string): string =>
+  s.length <= 12 ? `${s.slice(0, 2)}…${s.slice(-2)}` : `${s.slice(0, 6)}…${s.slice(-4)} (len ${s.length})`;
+
+function scanForSecrets(source: string, text: string, out: Map<string, { type: string; value: string; source: string }>): void {
+  for (const d of SECRET_DETECTORS) {
+    d.re.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    let n = 0;
+    while ((m = d.re.exec(text)) !== null && n < 100) {
+      n++;
+      const raw = (d.group ? m[d.group] : m[0]) ?? "";
+      if (raw.length < 8) continue;
+      const key = `${d.name}|${raw}`;
+      if (!out.has(key)) out.set(key, { type: d.name, value: raw, source });
+    }
+  }
+}
+
+async function grabText(url: string, cap = 800_000): Promise<string> {
+  try {
+    const res = await fetch(url, { redirect: "follow", signal: AbortSignal.timeout(15_000) });
+    return (await res.text()).slice(0, cap);
+  } catch {
+    return "";
+  }
+}
+
+const secretScan: ToolDef = {
+  category: "recon",
+  risk: "active",
+  targetArg: "url",
+  schema: {
+    name: "secret_scan",
+    description:
+      "Fetch a web page and its same-origin JavaScript bundles and scan them for leaked secrets / API keys (Stripe, AWS, Google, GitHub, JWTs, NEXT_PUBLIC_* client env vars, generic key assignments). ACTIVE — touches the target. Detection only; values are MASKED and never verified against the vendor. Optionally also scans a few Wayback Machine snapshots for secrets that leaked in the past.",
+    parameters: {
+      type: "object",
+      properties: {
+        url: { type: "string", description: "Target page URL" },
+        include_archive: { type: "boolean", description: "Also scan a few web.archive.org snapshots (default false)" },
+      },
+      required: ["url"],
+    },
+  },
+  async run(args) {
+    const url = str(args.url);
+    if (!url) return "error: url required";
+    const includeArchive = args.include_archive === true;
+    const hits = new Map<string, { type: string; value: string; source: string }>();
+
+    const html = await grabText(url);
+    if (!html) return `error: could not fetch ${url}`;
+    scanForSecrets("page", html, hits);
+
+    // Same-origin linked scripts (Next.js/webpack bundles are where client keys leak).
+    let origin = "";
+    try { origin = new URL(url).origin; } catch { /* ignore */ }
+    const scripts: string[] = [];
+    const sre = /<script[^>]+src=["']([^"']+)["']/gi;
+    let sm: RegExpExecArray | null;
+    while ((sm = sre.exec(html)) !== null && scripts.length < 25) {
+      try {
+        const abs = new URL(sm[1], url).toString();
+        if (origin && abs.startsWith(origin) && !scripts.includes(abs)) scripts.push(abs);
+      } catch { /* ignore */ }
+    }
+    for (const s of scripts) scanForSecrets(`js:${s.split("/").pop() || s}`, await grabText(s), hits);
+
+    // Optional: Wayback Machine snapshots (public archive of the target's past).
+    let snaps = 0;
+    if (includeArchive) {
+      try {
+        const cdx = await grabText(
+          `http://web.archive.org/cdx/search/cdx?url=${encodeURIComponent(url)}&output=json&limit=6&filter=statuscode:200&collapse=digest`,
+          40_000
+        );
+        const rows = JSON.parse(cdx || "[]") as string[][];
+        for (const r of rows.slice(1, 4)) {
+          const [, ts, original] = r;
+          if (!ts || !original) continue;
+          snaps++;
+          scanForSecrets(`archive:${ts}`, await grabText(`http://web.archive.org/web/${ts}id_/${original}`), hits);
+        }
+      } catch { /* ignore */ }
+    }
+
+    const scanned = 1 + scripts.length + snaps;
+    if (hits.size === 0) return `No secrets detected in ${url}${includeArchive ? " (+archive)" : ""} across ${scanned} resource(s).`;
+    const lines = [...hits.values()].slice(0, 60).map((h) => `[${h.type}] ${maskSecret(h.value)}  (${h.source})`);
+    return `Potential leaked secrets in ${url} — ${hits.size} unique across ${scanned} resource(s). Values MASKED; verify manually, do NOT use:\n${lines.join("\n")}`;
+  },
+};
+
 /* -------------------------------------------------------------------- cred */
 
 const credTest: ToolDef = {
@@ -552,6 +661,7 @@ const CORE_TOOLS: Record<string, ToolDef> = {
   web_vuln_scan: webVulnScan,
   exploit_search: exploitSearch,
   cve_lookup: cveLookup,
+  secret_scan: secretScan,
   cred_test: credTest,
   run_command: runCommand,
   update_feeds: updateFeeds,
