@@ -2,6 +2,8 @@ interface RFinding {
   title?: string | null;
   severity?: string | null;
   confidence?: string | null;
+  cve?: string | null;
+  cvss?: number | null;
   asset?: string | null;
   description?: string | null;
   impact?: string | null;
@@ -52,6 +54,8 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
   const confCounts: Record<string, number> = { certain: 0, firm: 0, tentative: 0 };
   for (const f of findings) confCounts[confOf(f)] = (confCounts[confOf(f)] ?? 0) + 1;
   const uniqueAssets = new Set(findings.map((f) => (f.asset ?? "").trim()).filter(Boolean)).size;
+  const uniqueCves = new Set(findings.map((f) => (f.cve ?? "").trim()).filter(Boolean)).size;
+  const maxCvss = findings.reduce((m, f) => (typeof f.cvss === "number" && f.cvss > m ? f.cvss : m), 0);
 
   const overall =
     counts.critical > 0 ? "CRITICAL" : counts.high > 0 ? "HIGH" : counts.medium > 0 ? "MEDIUM" : counts.low > 0 ? "LOW" : "INFORMATIONAL";
@@ -68,6 +72,7 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
     ["Total issues", String(findings.length)],
     ["Unique affected assets", String(uniqueAssets)],
     ["Highest severity", overall],
+    ...(uniqueCves > 0 ? [["Known CVEs", `${uniqueCves}${maxCvss > 0 ? ` (max CVSS ${maxCvss})` : ""}`]] : []),
     ["Confidence — Certain", String(confCounts.certain)],
     ["Confidence — Firm", String(confCounts.firm)],
     ["Confidence — Tentative", String(confCounts.tentative)],
@@ -135,6 +140,7 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
       <div class="fhead">
         <span class="badge" style="background:${COLOR[sev]}">${sev.toUpperCase()}</span>
         <span class="ftitle">${i + 1}. ${esc(f.title ?? "(untitled finding)")}</span>
+        ${f.cve ? `<span class="fcve">${esc(f.cve)}${typeof f.cvss === "number" ? ` · CVSS ${f.cvss}` : ""}</span>` : ""}
         <span class="fconf">Confidence: ${cap(confOf(f))}</span>
       </div>
       ${f.asset ? `<div class="asset"><b>Affected asset:</b> ${esc(f.asset)}</div>` : ""}
@@ -173,6 +179,7 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
   .fhead { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
   .badge { color:#fff; font-size:11px; font-weight:700; letter-spacing:.5px; padding:2px 8px; border-radius:4px; }
   .ftitle { font-size:15px; font-weight:700; color:${accent}; }
+  .fcve { font-size:10px; font-weight:700; color:#7c2d12; background:#fff1e6; border:1px solid #fdba74; padding:1px 7px; border-radius:10px; white-space:nowrap; }
   .fconf { margin-left:auto; color:#8a99a8; font-size:11px; }
   .asset { color:#5a6b7a; margin:4px 0; }
   .detail { white-space:normal; margin-top:6px; }

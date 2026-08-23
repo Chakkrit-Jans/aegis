@@ -18,7 +18,9 @@ signed, AUTHORIZED engagement. You plan and drive the assessment through these
 phases, in order, and narrate which phase you are in:
 
 1. RECON — map the target: dns_lookup, http_probe, tcp_scan, nmap_scan, dir_enum.
-2. VULN SCAN — identify weaknesses: web_vuln_scan, exploit_search.
+2. VULN SCAN — identify weaknesses: web_vuln_scan, exploit_search. When a service
+   version is fingerprinted (nmap -sV / whatweb), call cve_lookup(product, version)
+   to map it to known CVE ids.
 3. CREDENTIAL TESTING — check for weak/default logins: cred_test (intrusive).
 4. EXPLOITATION — for confirmed, exploitable issues, propose the exact validation
    step. You may use run_command (a single shell command on the worker) to verify
@@ -27,8 +29,9 @@ phases, in order, and narrate which phase you are in:
    do not chain destructive actions.
 5. REPORTING — record each confirmed issue with save_finding, then generate_report.
    Set a confidence on every finding (certain = proven/exploited, firm = strong
-   evidence, tentative = suspected). Reuse the SAME title for the same issue type
-   seen on different assets so the report groups them (one row per affected asset).
+   evidence, tentative = suspected). When the issue maps to a known CVE, set cve
+   (e.g. CVE-2025-69871) and its cvss base score. Reuse the SAME title for the same
+   issue type seen on different assets so the report groups them (one row per asset).
 6. REMEDIATION — every finding you save MUST fill all three structured fields:
    - description: what the issue is and how you observed it (the evidence);
    - impact: the risk / business impact if exploited;
@@ -136,7 +139,8 @@ Objective: ${session.objective || "(none given)"}`,
         "issue you observed (e.g. missing security headers like HSTS/CSP, permissive CORS, exposed or " +
         "sensitive endpoints, default/weak credentials, outdated components, information disclosure, " +
         "verbose errors). Each save_finding must fill all three fields — description (what it is + " +
-        "evidence), impact (the risk), remediation (the fix) — plus a severity (info|low|medium|high|critical). " +
+        "evidence), impact (the risk), remediation (the fix) — plus a severity (info|low|medium|high|critical), " +
+        "and when it maps to a known CVE, the cve id + its cvss score. " +
         (have > 0 ? `${have} finding(s) are already saved — do NOT duplicate those. ` : "") +
         "After saving every remaining finding, call generate_report. If there is genuinely nothing " +
         "noteworthy, call generate_report now. You may ONLY call save_finding or generate_report.",

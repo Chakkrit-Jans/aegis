@@ -232,6 +232,44 @@ const exploitSearch: ToolDef = {
   },
 };
 
+const cveLookup: ToolDef = {
+  category: "vuln",
+  risk: "passive",
+  schema: {
+    name: "cve_lookup",
+    description:
+      "Map a product + version to known CVE ids (via searchsploit's Exploit-DB index). Passive discovery — touches no target. Use the returned CVE ids on save_finding (cve field) and fill the cvss score from the CVE. Coverage is limited to CVEs that have a public exploit — for a version with a well-known CVE that has no public exploit, also use your own knowledge.",
+    parameters: {
+      type: "object",
+      properties: {
+        product: { type: "string", description: "Product / software name, e.g. 'Medusa' or 'Apache httpd'" },
+        version: { type: "string", description: "Version string if known, e.g. '2.12.2'" },
+      },
+      required: ["product"],
+    },
+  },
+  async run(args, ctx) {
+    const product = str(args.product);
+    if (!product) return "error: product required";
+    const version = str(args.version);
+    const terms = `${product} ${version}`.trim().split(/\s+/).slice(0, 6);
+    const raw = await workerExec(ctx.worker, "searchsploit", ["-j", ...terms]);
+    let entries: Array<{ Title?: string; Codes?: string }> = [];
+    try {
+      entries = (JSON.parse(raw) as { RESULTS_EXPLOIT?: Array<{ Title?: string; Codes?: string }> }).RESULTS_EXPLOIT ?? [];
+    } catch {
+      return `searchsploit (raw): ${raw.slice(0, 1500)}`;
+    }
+    const cveRe = /CVE-\d{4}-\d{3,7}/g;
+    const seen = new Map<string, string>(); // cve -> first exploit title
+    for (const e of entries) for (const c of (e.Codes ?? "").match(cveRe) ?? []) if (!seen.has(c)) seen.set(c, e.Title ?? "");
+    if (seen.size === 0)
+      return `No CVE mapped from Exploit-DB for "${product} ${version}". Public exploits found: ${entries.length}. If you know a well-known CVE for this product/version, use it from your own knowledge.`;
+    const lines = [...seen.entries()].slice(0, 40).map(([c, t]) => `${c} — ${t}`);
+    return `Known CVEs for ${product} ${version} (from public exploits; set CVSS yourself):\n${lines.join("\n")}`;
+  },
+};
+
 /* -------------------------------------------------------------------- cred */
 
 const credTest: ToolDef = {
@@ -282,6 +320,8 @@ const saveFinding: ToolDef = {
         title: { type: "string", description: "Issue type/name — reuse the SAME title for the same issue on different assets so the report groups them." },
         severity: { type: "string", description: "info|low|medium|high|critical" },
         confidence: { type: "string", description: "How sure you are it is exploitable: certain|firm|tentative (default certain)" },
+        cve: { type: "string", description: "Known CVE id if the issue maps to one, e.g. CVE-2025-69871 (optional)." },
+        cvss: { type: "number", description: "CVSS base score 0.0–10.0 for that CVE (optional)." },
         asset: { type: "string", description: "Affected asset/URL/path" },
         description: { type: "string", description: "Problem summary: what the vulnerability is and how it was observed (evidence)." },
         impact: { type: "string", description: "The risk / business impact if this is exploited." },
@@ -300,6 +340,8 @@ const saveFinding: ToolDef = {
             title: str(args.title),
             severity: str(args.severity, "info"),
             confidence: str(args.confidence, "certain"),
+            cve: str(args.cve),
+            cvss: (() => { const n = Number(args.cvss); return Number.isFinite(n) ? Math.max(0, Math.min(10, n)) : undefined; })(),
             asset: str(args.asset),
             description: str(args.description),
             impact: str(args.impact),
@@ -432,6 +474,8 @@ interface ReportFinding {
   title?: string | null;
   severity?: string | null;
   confidence?: string | null;
+  cve?: string | null;
+  cvss?: number | null;
   asset?: string | null;
   description?: string | null;
   impact?: string | null;
@@ -463,6 +507,7 @@ export function renderReport(eng: ReportEngagement): string {
   for (const f of findings) {
     lines.push(`### [${sev(f).toUpperCase()}] ${f.title ?? "(untitled)"}`);
     if (f.asset) lines.push(`**Asset:** ${f.asset}`);
+    if (f.cve) lines.push(`**CVE:** ${f.cve}${typeof f.cvss === "number" ? ` (CVSS ${f.cvss})` : ""}`);
     lines.push(`**Confidence:** ${(f.confidence ?? "certain").replace(/^\w/, (c) => c.toUpperCase())}`);
     lines.push("");
     if (f.description || f.impact || f.remediation) {
@@ -506,6 +551,7 @@ const CORE_TOOLS: Record<string, ToolDef> = {
   dir_enum: dirEnum,
   web_vuln_scan: webVulnScan,
   exploit_search: exploitSearch,
+  cve_lookup: cveLookup,
   cred_test: credTest,
   run_command: runCommand,
   update_feeds: updateFeeds,

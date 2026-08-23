@@ -33,6 +33,8 @@ const EngagementSchema = new Schema(
           title: String,
           severity: { type: String, default: "info" },
           confidence: { type: String, default: "certain" }, // certain | firm | tentative (Burp-style)
+          cve: String, // e.g. "CVE-2025-69871" (optional; when the issue maps to a known CVE)
+          cvss: Number, // CVSS base score 0.0–10.0 (optional)
           asset: String,
           description: String, // what the issue is (problem summary)
           impact: String, // the risk / business impact if exploited
