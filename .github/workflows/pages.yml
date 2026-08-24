@@ -1,0 +1,39 @@
+name: Deploy manual to GitHub Pages
+
+# Publishes the bilingual manual (frontend/public/manual) as the Pages site root,
+# so it renders at https://<owner>.github.io/aegis/ instead of showing as source.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # Only the public Community repo has Pages — skip elsewhere (e.g. the private EE mirror).
+    if: github.repository == 'Chakkrit-Jans/aegis'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload the manual as the Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/public/manual
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
