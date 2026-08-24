@@ -145,19 +145,18 @@ gated.
 ## Documentation
 
 A three-book bilingual (EN/TH) manual ships with the app — open the **📖 Docs**
-button in the console. GitHub shows `.html` as source, so **read it rendered**
-via the 👁 links below (or browse the source in
-[`frontend/public/manual/`](frontend/public/manual)):
+button in the console, or **read it online** (rendered via GitHub Pages):
 
-| Book | Read (rendered) |
+### 📖 [chakkrit-jans.github.io/aegis](https://chakkrit-jans.github.io/aegis/)
+
+| Book | Read online |
 | --- | --- |
-| 📖 **All books — start here** | [👁 index](https://htmlpreview.github.io/?https://github.com/Chakkrit-Jans/aegis/blob/main/frontend/public/manual/index.html) |
-| **1 · Aegis User Guide** — setup, workflow, editions, troubleshooting | [👁 read](https://htmlpreview.github.io/?https://github.com/Chakkrit-Jans/aegis/blob/main/frontend/public/manual/01-aegis.html) |
-| **2 · WebGoat & Juice Shop** — install the practice targets | [👁 read](https://htmlpreview.github.io/?https://github.com/Chakkrit-Jans/aegis/blob/main/frontend/public/manual/02-targets.html) |
-| **3 · Testing Aegis** — step-by-step scenarios against those targets | [👁 read](https://htmlpreview.github.io/?https://github.com/Chakkrit-Jans/aegis/blob/main/frontend/public/manual/03-testing.html) |
+| **1 · Aegis User Guide** — setup, workflow, editions, troubleshooting | [👁 read](https://chakkrit-jans.github.io/aegis/01-aegis.html) |
+| **2 · WebGoat & Juice Shop** — install the practice targets | [👁 read](https://chakkrit-jans.github.io/aegis/02-targets.html) |
+| **3 · Testing Aegis** — step-by-step scenarios against those targets | [👁 read](https://chakkrit-jans.github.io/aegis/03-testing.html) |
 
-> The 👁 links render through [htmlpreview.github.io](https://htmlpreview.github.io);
-> for the best experience open **📖 Docs** in the running app.
+> The site auto-updates on every push. Source lives in
+> [`frontend/public/manual/`](frontend/public/manual).
 
 ## Tech stack
 
