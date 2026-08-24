@@ -42,12 +42,16 @@ Aegis is the opposite: the AI is fast and tireless, but **you stay in control**.
 
 <table>
   <tr>
-    <td width="50%" valign="top"><img src="docs/screenshots/login.png" width="100%" alt="Sign in"/><br/><sub><b>Sign in</b> — every route and the websocket sit behind JWT auth.</sub></td>
-    <td width="50%" valign="top"><img src="docs/screenshots/console.png" width="100%" alt="Console"/><br/><sub><b>Console</b> — the agent reasons and runs tools, findings stream in, and each active tool waits for your approval.</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/dashboard.png" width="100%" alt="Dashboard"/><br/><sub><b>Dashboard</b> — a cross-engagement overview: KPIs, findings by severity &amp; confidence, session status, pending approvals and live worker health.</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/console.png" width="100%" alt="Console"/><br/><sub><b>Console</b> — set authorization + scope, pick an objective, then run an autonomous session or drive it by chat; findings stream in.</sub></td>
   </tr>
   <tr>
-    <td width="50%" valign="top"><img src="docs/screenshots/report.png" width="100%" alt="Client report"/><br/><sub><b>Client report</b> — overall risk, severity summary, and every finding with evidence, impact &amp; remediation → Save as PDF.</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/chat.png" width="100%" alt="AI Chat control"/><br/><sub><b>AI Chat</b> — the agent proposes the exact command + target and waits for your <b>Confirm</b> before running it (Enterprise).</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/report.png" width="100%" alt="Client report"/><br/><sub><b>Client report</b> — scan statistics (with <b>Known CVEs</b>), grouped issues, and per-finding evidence / impact / remediation → Save as PDF.</sub></td>
+  </tr>
+  <tr>
     <td width="50%" valign="top"><img src="docs/screenshots/about.png" width="100%" alt="About dialog"/><br/><sub><b>About</b> — edition &amp; license, feature matrix, and system/version info.</sub></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/login.png" width="100%" alt="Sign in"/><br/><sub><b>Sign in</b> — every route and the websocket sit behind JWT auth.</sub></td>
   </tr>
 </table>
 
