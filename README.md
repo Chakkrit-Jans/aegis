@@ -32,11 +32,11 @@ Aegis is the opposite: the AI is fast and tireless, but **you stay in control**.
 
 | | |
 | --- | --- |
-| 🧠 **AI-driven** | An agent loop plans in phases (recon → scan → credential test → validate → report), calls real Kali tools, reads results, and continues. |
+| 🧠 **AI-driven** | An agent loop plans in phases (recon → scan → credential test → validate → report), calls real Kali tools, reads results, and continues — **or drive it yourself by chat**: the agent proposes each command + target and waits for your confirm (Enterprise). |
 | 🚦 **Scope gate** | Recorded authorization + include/exclude rules are enforced before any network action — out-of-scope targets are blocked, always. |
 | ✋ **Approval gate** | Passive tools run freely; every **active/intrusive** tool (port scan, dir enum, shell, exploit PoC) pauses for an explicit operator `approve` — the exact command is shown first. |
 | 🧾 **Audit + RBAC** | Admin/operator roles; every approval, command and config change is written to an immutable audit log. |
-| 📄 **Client report** | Findings become a print-ready HTML report (cover, overall risk, severity summary, evidence/impact/risk/remediation) → one-click **Save as PDF**. |
+| 📄 **Client report** | Findings become a print-ready HTML report — Burp-style scan statistics, grouped issues, and per-finding **Description / Impact / Remediation** with **Confidence** and **CVE · CVSS** → one-click **Save as PDF**. |
 
 ## Screenshots
 
@@ -94,6 +94,17 @@ flowchart LR
 
 ## Features
 
+- **Dashboard** — a cross-engagement overview: KPIs, findings by severity &
+  confidence, session status, pending approvals, and live worker health.
+- **Discovery tools** — map a fingerprinted version to known **CVEs**, scan a page
+  and its JavaScript for **leaked API keys** (masked), and OSINT a domain's likely
+  **origin IP behind Cloudflare** (Shodan / Censys / SecurityTrails).
+- **AI Chat control** *(Enterprise)* — drive the assessment conversationally:
+  propose → confirm → run → log, one step at a time, or steer a running session live.
+- **Exploitation & post-exploitation** *(Enterprise, L4–L7)* — SQLi/XSS/command-
+  injection validation (sqlmap, dalfox, commix), Metasploit `check`, offline hash
+  cracking (hashcat), and an Active-Directory suite (NetExec, BloodHound, kerbrute,
+  certipy, secretsdump) — all capped to **proof / enumeration**, scope + approval gated.
 - **Multi-worker** — real tooling runs in isolated Kali containers over a
   token-gated exec agent; assign each engagement its own worker.
 - **Live vuln feeds** — nuclei templates, Exploit-DB and nmap NSE stay current
@@ -115,9 +126,12 @@ pasted in **ⓘ About → Edition & License**:
 
 | Capability | Community | Enterprise |
 | --- | :---: | :---: |
-| Full AI engagements · scope/approval gates · audit · reports · PDF | ✅ | ✅ |
+| Full AI engagements · scope/approval gates · audit · reports (CVE/CVSS) · PDF | ✅ | ✅ |
+| Discovery: CVE mapping · secret scanning · origin-IP OSINT | ✅ | ✅ |
 | Personal objective templates · manual vuln-feed updates | ✅ | ✅ |
 | AI providers · Kali workers | 1 each | multiple |
+| **AI Chat control** (conversational drive + live steer) | 🔒 | ✅ |
+| **Exploitation & post-ex suite (L4–L7)** — SQLi/XSS/cmdi · hashcat · AD (NetExec/BloodHound/…) | 🔒 | ✅ |
 | SSO / OIDC · white-label reports · audit export & SIEM | 🔒 | ✅ |
 | Scheduled feed updates · signed org template library | 🔒 | ✅ |
 
@@ -137,7 +151,13 @@ button in the console, or browse [`frontend/public/manual/`](frontend/public/man
 
 Next.js (App Router) · Express + Socket.IO · MongoDB · Redis · Docker Compose ·
 a token-gated Kali worker (nmap, nuclei, ffuf, gobuster, nikto, whatweb, hydra,
-dig) with an XFCE desktop over noVNC.
+searchsploit, dig) with an XFCE desktop over noVNC. The backend also does its own
+discovery (CVE mapping, client-side secret scanning, origin-IP OSINT).
+
+> The Enterprise **exploitation & post-exploitation suite** (sqlmap, commix, dalfox,
+> Metasploit, hashcat, NetExec, BloodHound, kerbrute, certipy, secretsdump) and the
+> **AI Chat** control live in a private `ee/` overlay and are **stripped from this
+> Community edition** — neither the code nor the worker binaries ship here.
 
 ## License
 
