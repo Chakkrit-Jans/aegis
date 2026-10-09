@@ -53,6 +53,9 @@ Aegis is the opposite: the AI is fast and tireless, but **you stay in control**.
     <td width="50%" valign="top"><img src="docs/screenshots/about.png" width="100%" alt="About dialog"/><br/><sub><b>About</b> — edition &amp; license, feature matrix, and system/version info.</sub></td>
     <td width="50%" valign="top"><img src="docs/screenshots/login.png" width="100%" alt="Sign in"/><br/><sub><b>Sign in</b> — every route and the websocket sit behind JWT auth.</sub></td>
   </tr>
+  <tr>
+    <td colspan="2" align="center" valign="top"><img src="docs/screenshots/wpscan-token.png" width="78%" alt="WPScan API token"/><br/><sub><b>WPScan API token</b> — add a free token in Settings to unlock wpscan vulnerable-plugin/theme/version (CVE) data; it's injected into runs automatically after approval and never shown in the approval card or audit log.</sub></td>
+  </tr>
 </table>
 
 ## Architecture
@@ -113,6 +116,13 @@ flowchart LR
   token-gated exec agent; assign each engagement its own worker.
 - **Live vuln feeds** — nuclei templates, Exploit-DB and nmap NSE stay current
   (manual on every enabled worker).
+- **WordPress scanning** — `wpscan` ships on the worker; add a free **WPScan API
+  token** in Settings to unlock vulnerable-plugin/theme/version (**CVE**) data,
+  injected into runs automatically after approval (never shown in the approval
+  card or audit log).
+- **Client reports** — a Markdown + print-ready **PDF** report (findings with
+  CVE/CVSS, evidence, impact and remediation) plus an automatic **Command Log**
+  appendix capturing the raw worker tool output.
 - **Operator terminal + Kali desktop (noVNC)** — a scoped, audited shell and a
   full XFCE desktop (Burp, Firefox) in the browser.
 - **Telegram gateway** — approve/reject from your phone.

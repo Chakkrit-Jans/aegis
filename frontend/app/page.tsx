@@ -378,6 +378,9 @@ export default function Console() {
   const chatEnabled = edition === "enterprise";
   // The chat box is live (Enterprise) while a session exists and isn't finished/stopped.
   const chatLive = chatEnabled && !!session && (status === "idle" || status === "running" || status === "waiting_approval");
+  // The agent is actively working (running a tool / loop, or a chat turn is in flight) —
+  // used to show an indeterminate progress bar so the operator knows it's not finished/stuck.
+  const working = !!session && reportText === null && (status === "running" || chatBusy);
   // Best-effort guess at which arg names the target, for a friendly plan line.
   const toolTarget = (a: ApprovalReq): string =>
     ["url", "host", "target", "endpoint"].find((k) => a.args?.[k]) ?? "";
@@ -802,8 +805,33 @@ export default function Console() {
                   </button>
                 </div>
               )}
+              {/* Persistent session-state strip — always tells the operator whether the
+                  agent is working, waiting for confirmation, idle, or finished. */}
+              {session && reportText === null && (
+                <div className={`sess-state sess-state-${working ? "working" : status}`} aria-live="polite">
+                  <div className="sess-state-row">
+                    <span className="sess-dot" />
+                    <span className="sess-state-label">
+                      {working
+                        ? t("chat.working")
+                        : status === "waiting_approval"
+                        ? t("state.waiting")
+                        : status === "idle"
+                        ? t("state.idle")
+                        : status === "done"
+                        ? t("state.done")
+                        : status === "stopped"
+                        ? t("state.stopped")
+                        : status === "error"
+                        ? t("state.error")
+                        : status.replace("_", " ")}
+                    </span>
+                  </div>
+                  {working && <div className="work-bar"><span /></div>}
+                </div>
+              )}
               {chatLive && (
-                <div className="muted" style={{ fontSize: 11, marginTop: 4 }}>
+                <div className="muted" style={{ fontSize: 11, marginTop: 6 }}>
                   {status === "waiting_approval" ? t("chat.awaitConfirm") : t("chat.hint")}
                 </div>
               )}

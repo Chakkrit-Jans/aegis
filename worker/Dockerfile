@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       nmap \
       nikto \
       whatweb \
+      wpscan \
       ffuf \
       gobuster \
       hydra \
@@ -22,6 +23,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       dirb \
     && (apt-get install -y --no-install-recommends nuclei || true) \
     && rm -rf /var/lib/apt/lists/*
+
+# The `wordlists` meta-package (installed best-effort above, and bundled with other
+# packages that may fail) normally creates /usr/share/wordlists/dirb -> /usr/share/dirb/wordlists.
+# Guarantee that standard Kali path exists so dir_enum's default wordlist always resolves.
+RUN mkdir -p /usr/share/wordlists \
+    && { [ -e /usr/share/wordlists/dirb ] || ln -s /usr/share/dirb/wordlists /usr/share/wordlists/dirb; }
 
 # Graphical desktop reachable over VNC + noVNC (Burp, Firefox, GUI tooling).
 RUN apt-get update && apt-get install -y --no-install-recommends \

@@ -81,21 +81,85 @@ button:disabled { opacity: .4; cursor: not-allowed; }
 .status-done { color: var(--green); }
 .status-error, .status-stopped { color: var(--red); }
 
-.transcript { height: 60vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.msg { border-left: 2px solid var(--border); padding: 6px 12px; white-space: pre-wrap; word-break: break-word; }
-.msg .who { font-size: 10px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
-.msg.assistant { border-color: var(--cyan-dim); }
-.msg.tool { border-color: var(--green); background: rgba(57,255,136,.03); }
-.msg.event { border-color: var(--amber); color: var(--amber); }
-.msg.user { border-color: var(--border); color: var(--muted); }
-.msg.steer { border-color: var(--cyan); color: var(--text); background: rgba(43,208,229,.05); }
-.msg.steer .who { color: var(--cyan); }
-/* proposed-action (confirm) bubble shown inline in the chat */
-.msg.plan { border-color: var(--amber); background: rgba(255,181,71,.06); border-left-width: 3px; }
+.transcript { height: 60vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+
+/* Chat bubbles — operator messages on the right, agent/system on the left (Line/Messenger style) */
+.msg {
+  max-width: 78%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel2, #0b1120);
+  white-space: pre-wrap;
+  word-break: break-word;
+  align-self: flex-start; /* default: agent/system side (left) */
+}
+.msg .who { font-size: 10px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+
+/* agent / system side (left) */
+.msg.assistant { border-color: var(--cyan-dim); border-bottom-left-radius: 4px; }
+.msg.tool { border-color: var(--green); background: rgba(57,255,136,.05); border-bottom-left-radius: 4px; }
+.msg.event { border-color: var(--amber); color: var(--amber); border-bottom-left-radius: 4px; }
+
+/* operator side (right) */
+.msg.user, .msg.steer {
+  align-self: flex-end;
+  text-align: left;
+  color: var(--text);
+  border-color: var(--cyan-dim);
+  background: rgba(43,208,229,.08);
+  border-bottom-right-radius: 4px;
+}
+.msg.steer { border-color: var(--cyan); background: rgba(43,208,229,.12); }
+.msg.user .who, .msg.steer .who { color: var(--cyan); text-align: right; }
+
+/* proposed-action (confirm) bubble shown inline in the chat — agent/left side */
+.msg.plan { align-self: flex-start; border-color: var(--amber); background: rgba(255,181,71,.08); border-bottom-left-radius: 4px; }
 .msg.plan .who { color: var(--amber); }
 .msg.plan code { color: var(--amber); }
 .msg.plan .approve { background: var(--green); border-color: var(--green); color: #041018; font-weight: 700; }
 .msg.plan .reject { color: var(--amber); }
+
+/* Persistent session-state strip under the transcript — operator always sees whether
+   the agent is working / waiting / idle / finished, plus a live progress bar when busy. */
+.sess-state {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255,255,255,.015);
+}
+.sess-state-row { display: flex; align-items: center; gap: 8px; }
+.sess-state-label { font-size: 12px; letter-spacing: .5px; color: var(--text); }
+.sess-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); flex: none; }
+
+/* per-state accents */
+.sess-state-working { border-color: var(--cyan-dim); }
+.sess-state-working .sess-dot { background: var(--cyan); box-shadow: 0 0 7px var(--cyan); animation: work-pulse 1s ease-in-out infinite; }
+.sess-state-working .sess-state-label { color: var(--cyan); }
+.sess-state-waiting_approval { border-color: var(--amber); background: rgba(255,181,71,.06); }
+.sess-state-waiting_approval .sess-dot { background: var(--amber); box-shadow: 0 0 7px var(--amber); animation: work-pulse 1.4s ease-in-out infinite; }
+.sess-state-waiting_approval .sess-state-label { color: var(--amber); }
+.sess-state-idle .sess-dot { background: var(--green); box-shadow: 0 0 6px rgba(57,255,136,.6); }
+.sess-state-done .sess-dot { background: var(--green); }
+.sess-state-stopped .sess-dot { background: var(--muted); }
+.sess-state-error { border-color: var(--red); }
+.sess-state-error .sess-dot { background: var(--red); }
+.sess-state-error .sess-state-label { color: var(--red); }
+
+/* indeterminate progress bar (shown inside the strip while working) */
+.work-bar { position: relative; height: 4px; border-radius: 3px; background: rgba(34,224,255,.12); overflow: hidden; margin-top: 7px; }
+.work-bar > span {
+  position: absolute; top: 0; left: 0; height: 100%; width: 40%; border-radius: 3px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  animation: work-slide 1.2s ease-in-out infinite;
+}
+@keyframes work-slide { 0% { left: -40%; } 100% { left: 100%; } }
+@keyframes work-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.75); } }
+@media (prefers-reduced-motion: reduce) {
+  .work-bar > span { animation: none; left: 0; width: 100%; opacity: .5; }
+  .sess-dot { animation: none !important; }
+}
 
 /* live operator chat input under the transcript */
 .chatbar { display: flex; gap: 8px; align-items: stretch; margin-top: 10px; }

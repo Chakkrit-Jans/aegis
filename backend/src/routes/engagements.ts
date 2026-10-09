@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Engagement, Session, Approval } from "../db/mongo.js";
-import { renderReport } from "../ai/tools.js";
+import { renderReport, loadReportCommands } from "../ai/tools.js";
 import { renderReportHtml } from "../report/html.js";
 import { eeHooks } from "../lib/eehooks.js";
 import { audit } from "../audit/service.js";
@@ -109,7 +109,8 @@ engagementsRouter.post("/:slug/scope", async (req, res) => {
 engagementsRouter.get("/:slug/report", async (req, res) => {
   const eng = await Engagement.findOne({ slug: req.params.slug }).lean();
   if (!eng) return res.status(404).json({ error: "not found" });
-  res.type("text/markdown").send(renderReport(eng));
+  const commands = await loadReportCommands(String(eng._id));
+  res.type("text/markdown").send(renderReport(eng, commands));
 });
 
 // Print-ready HTML report (the frontend opens it and "Save as PDF").
@@ -118,7 +119,8 @@ engagementsRouter.get("/:slug/report.html", async (req, res) => {
   if (!eng) return res.status(404).json({ error: "not found" });
   const date = new Date().toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" });
   const branding = await eeHooks.effectiveBranding();
-  res.type("text/html").send(renderReportHtml(eng, date, branding));
+  const commands = await loadReportCommands(String(eng._id));
+  res.type("text/html").send(renderReportHtml(eng, date, branding, commands));
 });
 
 engagementsRouter.post("/:slug/findings", async (req, res) => {

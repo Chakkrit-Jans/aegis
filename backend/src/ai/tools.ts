@@ -2,6 +2,7 @@ import net from "node:net";
 import dns from "node:dns/promises";
 import { Engagement, ShellCommand } from "../db/mongo.js";
 import { workerExec, workerShell, type WorkerRef } from "../worker/exec.js";
+import { injectWpscanToken } from "../wpscan/service.js";
 import { proxyUrl } from "../integrations/service.js";
 import { audit } from "../audit/service.js";
 import { UPDATE_SOURCES } from "../updates/registry.js";
@@ -177,11 +178,32 @@ const dirEnum: ToolDef = {
   },
   async run(args, ctx) {
     const url = str(args.url);
-    const wordlist = str(args.wordlist, "/usr/share/wordlists/dirb/common.txt");
-    const ffufArgs = ["-u", url, "-w", wordlist, "-t", "20", "-mc", "200,204,301,302,401,403"];
+    // Canonical path from the `dirb` package — always present on the worker, no symlink
+    // needed (the Kali /usr/share/wordlists/dirb symlink is also provided for agent-supplied paths).
+    const wordlist = str(args.wordlist, "/usr/share/dirb/wordlists/common.txt");
+    // -maxtime 100 keeps ffuf under the worker's 120s exec cap so it exits cleanly and
+    // returns the paths found so far (instead of being hard-killed with a bare "timeout").
+    // -s (silent) prints only matched URLs so the result isn't buried in banner/progress noise.
+    // -t 20: a polite concurrency that avoids tripping target rate-limiters/WAFs (high thread
+    //   counts make some servers return blanket 30x/block responses → all-false-positive hits).
+    // -maxtime 100: stay under the worker's 120s exec cap so ffuf exits cleanly and returns the
+    //   paths found so far instead of being hard-killed with a bare "timeout".
+    // -ac: auto-calibrate against the "not found" response to filter soft-404 / catch-all noise.
+    // -s: silent — print only matched URLs so the result isn't buried in banner/progress output.
+    const ffufArgs = ["-u", url, "-w", wordlist, "-t", "20", "-maxtime", "100", "-mc", "200,204,301,302,401,403", "-ac", "-s"];
     const proxy = await proxyUrl();
     if (proxy) ffufArgs.push("-x", proxy); // route through Burp/Caido
-    return workerExec(ctx.worker, "ffuf", ffufArgs);
+    const out = await workerExec(ctx.worker, "ffuf", ffufArgs);
+    // ffuf prints its entire usage/help text when the wordlist file is missing or an
+    // argument is invalid — noise that confuses the operator. Surface a concise error.
+    if (/no such file or directory/i.test(out) && /wordlist|\.txt|\/usr\/share/i.test(out)) {
+      return `error: wordlist not found on the worker: ${wordlist}. Pick an existing wordlist via the "wordlist" argument (e.g. /usr/share/dirb/wordlists/common.txt, or a SecLists path if installed).`;
+    }
+    const trimmed = out.trim();
+    if (!trimmed) {
+      return `dir_enum completed against ${url} — no paths matched the status filters (200,204,301,302,401,403) within the time budget. Try a different/larger wordlist or a more specific path.`;
+    }
+    return out;
   },
 };
 
@@ -513,7 +535,11 @@ const runCommand: ToolDef = {
       command,
       status: "running",
     });
-    const result = await workerShell(ctx.worker, command);
+    // wpscan vulnerability data needs an API token. If one is configured in the
+    // UI, inject it here (post-approval) as an env var — the original `command`
+    // stays token-free in the DB record and audit log above.
+    const execCommand = await injectWpscanToken(command);
+    const result = await workerShell(ctx.worker, execCommand);
     doc.exitCode = result.code;
     doc.output = result.output;
     doc.status = result.code === -1 ? "error" : "done";
@@ -595,7 +621,8 @@ const generateReport: ToolDef = {
   async run(_args, ctx) {
     const eng = await Engagement.findById(ctx.engagementId).lean();
     if (!eng) return "error: engagement not found";
-    return renderReport(eng);
+    const commands = await loadReportCommands(ctx.engagementId);
+    return renderReport(eng, commands);
   },
 };
 
@@ -619,8 +646,36 @@ interface ReportEngagement {
   scope?: { include?: string[] | null } | null;
   findings?: ReportFinding[] | null;
 }
+export interface ReportCommand {
+  command?: string | null;
+  output?: string | null;
+  exitCode?: number | null;
+  actor?: string | null;
+  createdAt?: string | Date | null;
+}
 
-export function renderReport(eng: ReportEngagement): string {
+const CMD_OUTPUT_MAX = 8000;
+const fmtWhen = (d?: string | Date | null): string =>
+  d ? new Date(d).toISOString().replace("T", " ").slice(0, 19) + " UTC" : "";
+// Strip ANSI escape sequences (colour codes etc.) so console output prints cleanly.
+// eslint-disable-next-line no-control-regex
+const stripAnsi = (s: string): string => s.replace(/\x1b\[[0-9;]*[A-Za-z]/g, "").replace(/\x1b[()][0-9A-Za-z]/g, "");
+const clampOutput = (out?: string | null): string => {
+  const o = stripAnsi(out ?? "").trim();
+  if (!o) return "(no output)";
+  return o.length > CMD_OUTPUT_MAX ? `${o.slice(0, CMD_OUTPUT_MAX)}\n… [truncated, ${o.length - CMD_OUTPUT_MAX} more chars]` : o;
+};
+
+/** Load the worker command transcripts for an engagement, oldest first, so the
+ * report/PDF can carry a raw-evidence appendix. Only commands that actually
+ * produced output are included. */
+export async function loadReportCommands(engagementId: string): Promise<ReportCommand[]> {
+  return (await ShellCommand.find({ engagement: engagementId, output: { $ne: "" } })
+    .sort({ createdAt: 1 })
+    .lean()) as unknown as ReportCommand[];
+}
+
+export function renderReport(eng: ReportEngagement, commands: ReportCommand[] = []): string {
   const order = ["critical", "high", "medium", "low", "info"];
   const sev = (f: ReportFinding) => f.severity ?? "info";
   const findings = [...(eng.findings ?? [])].sort((a, b) => order.indexOf(sev(a)) - order.indexOf(sev(b)));
@@ -648,6 +703,18 @@ export function renderReport(eng: ReportEngagement): string {
       if (f.detail) lines.push(`**Evidence / Notes:** ${f.detail}`, "");
     } else {
       lines.push(f.detail ?? "", ""); // legacy findings: single detail blob
+    }
+  }
+  if (commands.length) {
+    lines.push("", "## Appendix — Command Log", "",
+      "_Raw output of tools run on the worker during this engagement (oldest first)._", "");
+    for (const c of commands) {
+      lines.push(`### \`${(c.command ?? "").slice(0, 400)}\``);
+      const meta = [c.actor ? `actor: ${c.actor}` : "", typeof c.exitCode === "number" ? `exit: ${c.exitCode}` : "", fmtWhen(c.createdAt)]
+        .filter(Boolean)
+        .join(" · ");
+      if (meta) lines.push(`_${meta}_`, "");
+      lines.push("```", clampOutput(c.output), "```", "");
     }
   }
   return lines.join("\n");

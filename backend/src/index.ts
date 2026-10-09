@@ -16,6 +16,7 @@ import { dashboardRouter } from "./routes/dashboard.js";
 import { shellRouter } from "./routes/shell.js";
 import { integrationsRouter } from "./routes/integrations.js";
 import { osintRouter } from "./routes/osint.js";
+import { wpscanRouter } from "./routes/wpscan.js";
 import { workersRouter } from "./routes/workers.js";
 import { templatesRouter } from "./routes/templates.js";
 import { editionRouter } from "./routes/edition.js";
@@ -72,6 +73,7 @@ async function main() {
   app.use("/api/shell", requireAuth, shellRouter(io));
   app.use("/api/integrations", requireAuth, integrationsRouter);
   app.use("/api/osint", requireAuth, osintRouter);
+  app.use("/api/wpscan", requireAuth, wpscanRouter);
   app.use("/api/workers", requireAuth, workersRouter);
   app.use("/api/templates", requireAuth, templatesRouter);
   app.use("/api/edition", requireAuth, editionRouter);

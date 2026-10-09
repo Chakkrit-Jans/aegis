@@ -16,6 +16,13 @@ interface REngagement {
   scope?: { include?: string[] | null; exclude?: string[] | null } | null;
   findings?: RFinding[] | null;
 }
+export interface RCommand {
+  command?: string | null;
+  output?: string | null;
+  exitCode?: number | null;
+  actor?: string | null;
+  createdAt?: string | Date | null;
+}
 
 export interface ReportBranding {
   companyName: string;
@@ -46,7 +53,7 @@ const cap = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 
 /** A polished, print-ready HTML client report. The browser's "Save as PDF" turns it into a PDF.
  * `branding` (Enterprise only) white-labels the cover, accent colour and footer. */
-export function renderReportHtml(eng: REngagement, dateStr: string, branding?: ReportBranding | null): string {
+export function renderReportHtml(eng: REngagement, dateStr: string, branding?: ReportBranding | null, commands: RCommand[] = []): string {
   const accent = branding?.primaryColor || "#0b7285";
   const findings = [...(eng.findings ?? [])].sort((a, b) => ORDER.indexOf(sevOf(a)) - ORDER.indexOf(sevOf(b)));
   const counts: Record<string, number> = { critical: 0, high: 0, medium: 0, low: 0, info: 0 };
@@ -149,6 +156,34 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
           })
           .join("\n");
 
+  // Appendix: raw worker command transcripts (so tool output is captured in the PDF).
+  const CMD_MAX = 8000;
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (s: string) => s.replace(/\x1b\[[0-9;]*[A-Za-z]/g, "").replace(/\x1b[()][0-9A-Za-z]/g, "");
+  const clampOut = (out?: string | null) => {
+    const o = stripAnsi(out ?? "").trim();
+    if (!o) return "(no output)";
+    return o.length > CMD_MAX ? `${o.slice(0, CMD_MAX)}\n… [truncated, ${o.length - CMD_MAX} more chars]` : o;
+  };
+  const fmtWhen = (d?: string | Date | null) => (d ? new Date(d).toISOString().replace("T", " ").slice(0, 19) + " UTC" : "");
+  const commandLog =
+    commands.length === 0
+      ? ""
+      : `
+  <h2>Appendix — Command Log</h2>
+  <p class="muted">Raw output of tools run on the worker during this engagement (oldest first).</p>
+  ${commands
+    .map((c) => {
+      const meta = [c.actor ? `actor: ${c.actor}` : "", typeof c.exitCode === "number" ? `exit ${c.exitCode}` : "", fmtWhen(c.createdAt)]
+        .filter(Boolean)
+        .join(" · ");
+      return `<div class="cmd">
+      <div class="cmdhead"><code>${esc((c.command ?? "").slice(0, 400))}</code>${meta ? `<span class="cmdmeta">${esc(meta)}</span>` : ""}</div>
+      <pre class="cmdout">${esc(clampOut(c.output))}</pre>
+    </div>`;
+    })
+    .join("\n")}`;
+
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"/>
 <title>Report — ${esc(eng.name)}</title>
 <style>
@@ -191,7 +226,12 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
   .muted { color:#5a6b7a; }
   .foot { margin-top:30px; color:#8a99a8; font-size:11px; border-top:1px solid #e2e8f0; padding-top:10px; }
   .cover { border-left:4px solid ${overallColor}; padding-left:14px; }
-  @media print { .noprint { display:none; } }
+  .cmd { margin:12px 0; page-break-inside: avoid; }
+  .cmdhead { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .cmdhead code { font-family:"Cascadia Code","Consolas",monospace; font-size:12px; background:#f1f5f9; color:#1a2430; padding:2px 7px; border-radius:4px; word-break:break-all; }
+  .cmdmeta { color:#8a99a8; font-size:10px; margin-left:auto; white-space:nowrap; }
+  .cmdout { background:#0f172a; color:#e2e8f0; font-family:"Cascadia Code","Consolas",monospace; font-size:10.5px; line-height:1.45; padding:10px 12px; border-radius:6px; margin:4px 0 0; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; }
+  @media print { .noprint { display:none; } .cmdout { white-space:pre-wrap; } }
 </style></head>
 <body><div class="wrap">
   <div class="noprint" style="margin-bottom:14px;text-align:right">
@@ -232,6 +272,7 @@ export function renderReportHtml(eng: REngagement, dateStr: string, branding?: R
 
   <h2>Findings &amp; Remediation</h2>
   ${findingBlocks}
+  ${commandLog}
 
   <div class="foot">${branding?.footer ? esc(branding.footer) : "Aegis — authorized penetration testing only. This report is confidential and intended for the named client."}</div>
 </div></body></html>`;

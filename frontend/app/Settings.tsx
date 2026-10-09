@@ -61,6 +61,9 @@ export function Settings({ me }: { me: Me }) {
   const [censysId, setCensysId] = useState("");
   const [censysSecret, setCensysSecret] = useState("");
   const [stKey, setStKey] = useState("");
+  // WPScan API token (unlocks wpscan vulnerability data)
+  const [wpscan, setWpscan] = useState<import("../lib/api").WpscanStatus | null>(null);
+  const [wpscanToken, setWpscanToken] = useState("");
   // new user form
   const [nEmail, setNEmail] = useState("");
   const [nPass, setNPass] = useState("");
@@ -80,6 +83,8 @@ export function Settings({ me }: { me: Me }) {
     if (i) { setInteg(i); setProxyUrl(i.proxy.url); setProxyLabel(i.proxy.label); setChatId(i.telegram.chatId); }
     const o = await guard(api.getOsint());
     if (o) setOsint(o);
+    const w = await guard(api.getWpscan());
+    if (w) setWpscan(w);
     const u = await guard(api.listUsers());
     if (u) setUsers(u);
     const a = await guard(api.getAudit());
@@ -171,6 +176,10 @@ export function Settings({ me }: { me: Me }) {
   async function saveOsint() {
     const next = await guard(api.setOsint({ shodanKey, censysId, censysSecret, securitytrailsKey: stKey }));
     if (next) { setOsint(next); setShodanKey(""); setCensysId(""); setCensysSecret(""); setStKey(""); flash("OSINT keys saved."); }
+  }
+  async function saveWpscan() {
+    const next = await guard(api.setWpscan({ apiToken: wpscanToken }));
+    if (next) { setWpscan(next); setWpscanToken(""); flash("WPScan token saved."); }
   }
   async function testTelegram() {
     const r = await guard(api.testTelegram());
@@ -393,6 +402,19 @@ export function Settings({ me }: { me: Me }) {
         </div>
         <div className="muted" style={{ fontSize: 11, marginTop: 6 }}>
           Sources: SecurityTrails (DNS history — best for origin), Shodan (DNS), Censys (cert search). Any one is enough to start.
+        </div>
+      </div>
+
+      {/* WPScan API token */}
+      <div className="panel">
+        <h2>WPScan · API token</h2>
+        <div className="muted" style={{ fontSize: 11, marginBottom: 8 }}>
+          Unlocks wpscan vulnerability data — vulnerable plugin/theme enumeration (<code>--enumerate vp,vt</code>) and CVE output. Free token (25 requests/day) from <code>wpscan.com/register</code>. Stored server-side and injected into wpscan runs after approval; only "set" status is shown. Leave blank to keep the current token.
+        </div>
+        <label>WPScan API token {wpscan?.tokenSet && <span className="pill ok" style={{ fontSize: 9 }}>set</span>}</label>
+        <input type="password" value={wpscanToken} onChange={(e) => setWpscanToken(e.target.value)} placeholder={wpscan?.tokenSet ? "•••••• (leave blank to keep)" : "WPScan API token"} />
+        <div className="row" style={{ marginTop: 10 }}>
+          <button className="primary" onClick={saveWpscan}>Save WPScan token</button>
         </div>
       </div>
 

@@ -274,6 +274,10 @@ export interface OsintStatus {
   securitytrailsSet: boolean;
 }
 
+export interface WpscanStatus {
+  tokenSet: boolean;
+}
+
 export interface AiProfile {
   id: string;
   name: string;
@@ -386,6 +390,10 @@ export const api = {
   getOsint: () => get<OsintStatus>("/api/osint"),
   setOsint: (body: { shodanKey?: string; censysId?: string; censysSecret?: string; securitytrailsKey?: string }) =>
     post<OsintStatus>("/api/osint", body),
+
+  // WPScan API token (admin) — unlocks wpscan vulnerability data
+  getWpscan: () => get<WpscanStatus>("/api/wpscan"),
+  setWpscan: (body: { apiToken?: string }) => post<WpscanStatus>("/api/wpscan", body),
 
   // users (admin)
   listUsers: () => get<UserRow[]>("/api/users"),
