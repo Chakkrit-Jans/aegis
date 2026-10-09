@@ -721,7 +721,7 @@ export default function Console() {
         </div>
 
         {/* RIGHT: live session / history / report */}
-        <div className="panel" style={{ display: "flex", flexDirection: "column" }}>
+        <div className="panel" style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 130px)", alignSelf: "start" }}>
           <h2>
             {reportText !== null ? t("sess.report") : t("sess.title")}{" "}
             {reportText === null && session && (
@@ -741,8 +741,9 @@ export default function Console() {
                   whiteSpace: "pre-wrap",
                   wordBreak: "break-word",
                   margin: 0,
-                  height: "auto",
-                  overflow: "visible",
+                  flex: 1,
+                  minHeight: 0,
+                  overflow: "auto",
                   fontSize: 13,
                   lineHeight: 1.6,
                   border: "1px solid var(--border)",
@@ -756,7 +757,7 @@ export default function Console() {
             </>
           ) : (
             <>
-              <div className="transcript" ref={scrollRef} style={{ minHeight: 420, maxHeight: "72vh", overflowY: "auto" }}>
+              <div className="transcript" ref={scrollRef} style={{ flex: 1, minHeight: 0, height: "auto", overflowY: "auto" }}>
                 {!session && <div className="muted">{t("sess.empty")}</div>}
                 {session && transcript.length === 0 && <div className="muted">{t("chat.ready")}</div>}
                 {transcript.map((e, i) => (
